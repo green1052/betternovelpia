@@ -1,0 +1,30 @@
+name: Build And Relase
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: build
+        run: |
+          npm install
+          npm run build
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{secrets.GITHUB_TOKEN}}"
+          prerelease: false
+          files: dist/betternovelpia.user.js
