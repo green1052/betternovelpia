@@ -8,7 +8,7 @@ function Start() {
     $(".am-navicon").on("click", () => {
         const BetterSideView = $("#BetterSideView");
 
-        if (BetterSideView === true)
+        if (BetterSideView.length > 0)
             return BetterSideView.remove();
 
         if ($(document.body).hasClass("show-left"))

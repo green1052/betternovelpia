@@ -1,6 +1,8 @@
 const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
 
+const version = require("./package.json").version;
+
 const header = {
     "name": "BetterNovelpia",
     "namespace": "betternovelpia",
@@ -19,7 +21,7 @@ const header = {
         "GM_setValue",
         "unsafeWindow"
     ],
-    "version": "2.5.4",
+    "version": `${version}`
 };
 
 module.exports = {
@@ -29,19 +31,12 @@ module.exports = {
         rules: [
             {
                 test: /\.js|\.ts/,
-                exclude: /node_modules/,
+                include: /src/,
                 use: {
                     loader: "babel-loader",
                     options: {
                         presets: [
-                            [
-                                "@babel/preset-env",
-                                {
-                                    targets: {
-                                        "browsers": ["last 2 versions"]
-                                    }
-                                }
-                            ],
+                            ["@babel/preset-env", {targets: "last 2 versions"}],
                             "@babel/preset-typescript"
                         ],
                         plugins: [
@@ -58,13 +53,12 @@ module.exports = {
         extensions: [".ts", ".js"]
     },
     output: {
-        path: path.resolve(__dirname, "dist"),
+        path: path.join(__dirname, "dist"),
         filename: "betternovelpia.user.js"
     },
     plugins: [
         new WebpackUserscript({
             metajs: false,
-            pretty: true,
             headers: header
         })
     ]
