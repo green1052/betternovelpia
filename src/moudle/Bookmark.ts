@@ -121,10 +121,10 @@ async function Reader() {
         alert("저장되었습니다.");
     };
 
-    const query = $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
+    const query = document.querySelector("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
 
     if (query)
-        query.insertBefore(td, query.children(6));
+        query.insertBefore(td, query.children[6]);
 
     const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 
