@@ -12,7 +12,7 @@ import Setting from "./moudle/Setting";
 // @ts-ignore
 GM_config.init({
     "id": "betternovelpia",
-    "title": "BetterNovelpia - 2.4.4",
+    "title": "BetterNovelpia - 2.5.4",
     "fields": {
         "BetterSideView": {
             "label": "사이드뷰 개선",
@@ -104,12 +104,3 @@ HideEvent.Start();
 InfoUnfold.Start();
 PreviousBookmark.Start();
 Setting.Start();
-
-/*function SaveFile(fileName: string, content: BlobPart) {
-    const a = document.createElement('a');
-    const file = new Blob([content], {type: 'text/plain'});
-
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
-}*/

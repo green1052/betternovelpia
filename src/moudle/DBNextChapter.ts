@@ -5,7 +5,7 @@ function Start() {
     if (!Config.GetConfig("DBNextChapter") || !location.pathname.includes("/viewer/"))
         return;
 
-    document.querySelector("#novel_drawing")?.addEventListener("dblclick", () => {
+    $("#novel_drawing").on("dblclick", () => {
         const next = $("#next_epi_auto_url").val();
 
         if (!next)

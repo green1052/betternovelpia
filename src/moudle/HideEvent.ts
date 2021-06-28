@@ -8,13 +8,9 @@ function Start() {
 
     const event = $(`span:contains("방금전까지")`).parent();
     event.removeAttr("onclick");
-
     event.css("background-color", "");
     event.css("padding", "");
-
     event.empty();
 
-    document.querySelectorAll("#slider-wrap").forEach(query => {
-        query.remove();
-    });
+    document.querySelectorAll("#slider-wrap").forEach(query => query.remove());
 }

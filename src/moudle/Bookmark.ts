@@ -43,7 +43,7 @@ async function Main() {
     a.innerHTML = img.outerHTML;
 
     const li = document.createElement("li");
-    li.style.cssText = "padding: 10px 25px;";
+    li.style.padding = "10px 25px";
     li.innerHTML = a.outerHTML;
     li.onclick = async () => {
         const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
@@ -85,7 +85,7 @@ async function Main() {
         alert("삭제 됐습니다.");
     };
 
-    document.querySelector(".am-sideleft > div:nth-child(1) > ul:nth-child(1)")?.appendChild(li);
+    $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }
 
 async function Reader() {
@@ -98,7 +98,11 @@ async function Reader() {
     img.src = "https://image.novelpia.com/img/new/icon/count_book.png";
 
     const td = document.createElement("td");
-    td.style.cssText = "text-align:center;font-size:12px;width:63px;z-index:10000;";
+    td.style.textAlign = "center";
+    td.style.fontStyle = "12px";
+    td.style.width = "63px";
+    td.style.zIndex = "10000";
+
     td.innerHTML = img.outerHTML;
     td.onclick = async () => {
         const url = location.href;
@@ -109,18 +113,18 @@ async function Reader() {
 
         const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 
-        const title = document.querySelector("b.cut_line_one")?.textContent ?? undefined;
-        const chapter = document.querySelector("span.cut_line_one > span:nth-child(1)")?.textContent ?? undefined;
+        const title = $("b.cut_line_one").text() ?? "오류";
+        const chapter = $("span.cut_line_one > span:nth-child(1)").text() ?? "오류";
 
-        SetBookmark(bookmarks, url, scrollTop, title ?? "오류", chapter ?? "오류");
+        SetBookmark(bookmarks, url, scrollTop, title, chapter);
 
         alert("저장되었습니다.");
     };
 
-    const query = document.querySelector("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
+    const query = $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
 
     if (query)
-        query.insertBefore(td, query.children[6]);
+        query.insertBefore(td, query.children(6));
 
     const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 

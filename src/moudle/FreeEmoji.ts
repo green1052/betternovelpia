@@ -122,12 +122,18 @@ function Start() {
     const div = document.createElement("div");
     div.id = "FreeEmoticon";
     div.className = "col-sm-12 mg-b-10 emoticon";
-    div.style.cssText = "display:none;border: 1px solid rgba(214, 214, 214, 0.2);padding: 5px;border-radius: 10px;";
+    div.style.display = "none";
+    div.style.border = "1px solid rgba(214, 214, 214, 0.2)";
+    div.style.padding = "5px";
+    div.style.borderRadius = "10px";
 
     emojiList.forEach(emoji => {
         const img = document.createElement("img");
         img.src = emoji;
-        img.style.cssText = "width:30px;margin:3px;cursor:pointer;";
+        img.style.width = "30px";
+        img.style.margin = "3px";
+        img.style.cursor = "pointer";
+
         img.onclick = function () {
             $("#FreeEmoticon").hide();
             $("#imagePreviewframe").show();
@@ -142,11 +148,13 @@ function Start() {
         div.appendChild(img);
     });
 
-    document.querySelector("div.row:nth-child(2) > div:nth-child(2)")?.appendChild(div);
+    $("div.row:nth-child(2) > div:nth-child(2)").append(div);
 
     const img = document.createElement("img");
     img.src = "https://image.novelpia.com/img/emoticon/1/02-smile.png";
-    img.style.cssText = "width:30px;margin:6px 3px 6px 0px;cursor:pointer;";
+    img.style.width = "30px";
+    img.style.margin = "6px 3px 0px";
+    img.style.cursor = "pointer";
 
     const li = document.createElement("li");
     li.className = "nav-item";
@@ -156,5 +164,5 @@ function Start() {
         $("#FreeEmoticon").show();
     };
 
-    document.querySelector("ul.nav:nth-child(2)")?.prepend(li);
+    $("ul.nav:nth-child(2)").prepend(li);
 }

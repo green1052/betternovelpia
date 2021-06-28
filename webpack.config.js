@@ -11,14 +11,15 @@ const header = {
     "rut-at": "document-end",
     "include": "novelpia.com",
     "require": [
-        "https://openuserjs.org/src/libs/sizzle/GM_config.js"
+        "https://openuserjs.org/src/libs/sizzle/GM_config.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     ],
     "grant": [
         "GM_getValue",
         "GM_setValue",
         "unsafeWindow"
     ],
-    "version": "2.4.4",
+    "version": "2.5.4",
 };
 
 module.exports = {
