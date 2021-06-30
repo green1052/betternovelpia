@@ -13,7 +13,7 @@ async function Start() {
     let lastScrollTop: number;
 
     setInterval(() => {
-        const scrollTop = $("#novel_box").scrollTop();
+        const scrollTop = $("#novel_box").scrollTop() ?? 0;
 
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
@@ -30,7 +30,7 @@ async function Start() {
 
     const bookmarks = await Config.GetValue("bookmarks");
 
-    if (!Config.GetConfig("PreviousBookmark_First") && (bookmarks && Object.keys(bookmarks).includes(location.href)))
+    if (!Config.GetConfig("PreviousBookmark_First") && (bookmarks && bookmarks.hasOwnProperty(location.href)))
         return;
 
     if (Config.GetConfig("PreviousBookmark_OnlyUse"))
@@ -39,7 +39,7 @@ async function Start() {
     if (!bookmark.scrollTop)
         return;
 
-    setTimeout(async () => {
+    setTimeout(() => {
         if (!Config.GetConfig("PreviousBookmark_AutoUse"))
             if (!confirm("읽던 부분으로 이동하시겠습니까?"))
                 return;

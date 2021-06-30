@@ -7,7 +7,7 @@ function Start() {
         return;
 
     // @ts-ignore
-    unsafeWindow.up_down_btn_view = function (option: string) {
+    unsafeWindow.up_down_btn_view = function (option) {
         if (option == "on") {
             // @ts-ignore
             if (option_btn_comment == 1) {

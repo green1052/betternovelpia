@@ -134,15 +134,12 @@ function Start() {
         img.style.margin = "3px";
         img.style.cursor = "pointer";
 
-        img.onclick = function () {
+        img.onclick = () => {
             $("#FreeEmoticon").hide();
             $("#imagePreviewframe").show();
 
-            // @ts-ignore
-            $("#imagePreviewA").attr("src", this.src);
-
-            // @ts-ignore
-            $("#comment_img").val(this.src);
+            $("#imagePreviewA").attr("src", emoji);
+            $("#comment_img").val(emoji);
         };
 
         div.appendChild(img);
