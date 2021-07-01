@@ -1,6 +1,5 @@
 const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
-const TerserPlugin = require("terser-webpack-plugin");
 
 const version = require("./package.json").version;
 
@@ -15,8 +14,8 @@ const header = {
     "include": "novelpia.com",
     "require": [
         "https://openuserjs.org/src/libs/sizzle/GM_config.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"],
+        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    ],
     "grant": [
         "GM_getValue",
         "GM_setValue",
@@ -62,18 +61,5 @@ module.exports = {
             metajs: false,
             headers: header
         })
-    ],
-    optimization: {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                terserOptions: {
-                    format: {
-                        comments: false
-                    }
-                },
-                extractComments: false
-            })
-        ]
-    }
+    ]
 };

@@ -12,7 +12,7 @@ import Setting from "./moudle/Setting";
 // @ts-ignore
 GM_config.init({
     "id": "betternovelpia",
-    "title": "BetterNovelpia - 2.6.6",
+    "title": "BetterNovelpia - 2.6.7",
     "fields": {
         "BetterSideView": {
             "label": "사이드뷰 개선",
