@@ -1,10 +1,10 @@
 const texts = ``;
 
-const list: string[] = [];
+const emojiList = [];
 
-texts.split("\n").forEach(text => {
-    if (text.startsWith("https"))
-        list.push(text);
-});
+for (const string of texts.split("\n")) {
+    if (string.startsWith("https"))
+        emojiList.push(string);
+}
 
-console.dir(list, {"maxArrayLength": undefined});
+console.dir(emojiList, {"maxArrayLength": null});

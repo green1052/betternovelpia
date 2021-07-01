@@ -5,21 +5,27 @@ interface Bookmarks {
     [key: string]: Bookmark
 }
 
-type Bookmark = {
+interface Bookmark {
     scrollTop: number,
     title: string,
     chapter: string
 }
 
 function SetBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
-    const json: any = bookmarks ?? {};
-    json[url] = {scrollTop: scrollTop, title: encodeURIComponent(title), chapter: encodeURIComponent(chapter)};
+    const json: Bookmarks = bookmarks ?? {};
+
+    json[url] = {
+        scrollTop: scrollTop,
+        title: encodeURIComponent(title),
+        chapter: encodeURIComponent(chapter)
+    };
 
     Config.SetValue("bookmarks", json);
 }
 
 function RemoveBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
+
     Config.SetValue("bookmarks", bookmarks);
 }
 
@@ -70,16 +76,13 @@ async function Main() {
         if (!input)
             return;
 
-        const number = Number(input);
-
-        if (isNaN(number))
-            return;
-
-        if (number === 0)
-            return;
-
         if (input === "00")
             return Config.SetValue("bookmarks", {});
+
+        const number = Number(input);
+
+        if (isNaN(number) || number === 0)
+            return;
 
         RemoveBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
         alert("삭제 됐습니다.");
@@ -106,7 +109,7 @@ async function Reader() {
     td.innerHTML = img.outerHTML;
     td.onclick = async () => {
         const url = location.href;
-        const scrollTop = $("#novel_box").scrollTop();
+        const scrollTop = $("#novel_box").scrollTop() ?? 0;
 
         if (!scrollTop)
             return;

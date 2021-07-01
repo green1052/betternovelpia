@@ -21,7 +21,7 @@ const header = {
         "GM_setValue",
         "unsafeWindow"
     ],
-    "version": `${version}`
+    "version": version
 };
 
 module.exports = {

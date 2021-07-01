@@ -13,6 +13,7 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/bjos3017us/9.png",
     "https://image.novelpia.com/img/emoticon2/bjos3017us/10.png",
     "https://image.novelpia.com/img/emoticon2/bjos3017us/11.png",
+
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/1.png",
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/2.png",
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/3.png",
@@ -33,6 +34,7 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/18.png",
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/19.png",
     "https://image.novelpia.com/img/emoticon2/noidje1sc0/20.png",
+
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/1.png",
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/2.png",
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/3.png",
@@ -53,6 +55,7 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/18.png",
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/19.png",
     "https://image.novelpia.com/img/emoticon2/nj7haxicm/20.png",
+
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/1.png",
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/2.png",
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/3.png",
@@ -73,6 +76,7 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/18.png",
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/19.png",
     "https://image.novelpia.com/img/emoticon2/cnc92j3n9/20.png",
+
     "https://image.novelpia.com/img/emoticon2/cn183nz04/1.png",
     "https://image.novelpia.com/img/emoticon2/cn183nz04/2.png",
     "https://image.novelpia.com/img/emoticon2/cn183nz04/3.png",
@@ -93,6 +97,7 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/cn183nz04/18.png",
     "https://image.novelpia.com/img/emoticon2/cn183nz04/19.png",
     "https://image.novelpia.com/img/emoticon2/cn183nz04/20.png",
+
     "https://image.novelpia.com/img/emoticon2/ac95n1038/1.png",
     "https://image.novelpia.com/img/emoticon2/ac95n1038/2.png",
     "https://image.novelpia.com/img/emoticon2/ac95n1038/3.png",
@@ -112,7 +117,49 @@ const emojiList = [
     "https://image.novelpia.com/img/emoticon2/ac95n1038/17.png",
     "https://image.novelpia.com/img/emoticon2/ac95n1038/18.png",
     "https://image.novelpia.com/img/emoticon2/ac95n1038/19.png",
-    "https://image.novelpia.com/img/emoticon2/ac95n1038/20.png"
+    "https://image.novelpia.com/img/emoticon2/ac95n1038/20.png",
+
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/1.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/2.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/3.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/4.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/5.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/6.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/7.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/8.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/9.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/10.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/11.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/12.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/13.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/14.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/15.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/16.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/17.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/18.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/19.png",
+    "https://image.novelpia.com/img/emoticon2/fkvm59192f/20.png",
+
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/1.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/2.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/3.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/4.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/5.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/6.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/7.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/8.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/9.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/10.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/11.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/12.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/13.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/14.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/15.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/16.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/17.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/18.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/19.png",
+    "https://image.novelpia.com/img/emoticon2/hncnit834z/20.png"
 ];
 
 function Start() {

@@ -1,7 +1,7 @@
 export default {Start};
 import Config from "../Config";
 
-type Bookmark = {
+interface Bookmark {
     url: string,
     scrollTop: number
 }
