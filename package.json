@@ -1,6 +1,6 @@
 {
   "name": "betternovelpia",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "description": "노벨피아를 더 좋게 바꿔줍니다!",
   "main": "dist/betternovelpia.user.js",
   "scripts": {
