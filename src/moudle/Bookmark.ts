@@ -129,7 +129,6 @@ async function Reader() {
         alert("저장되었습니다.");
     };
 
-
     query.insertBefore(td, query.children[6]);
 
     const bookmarks: Bookmarks = await Config.GetValue("bookmarks");

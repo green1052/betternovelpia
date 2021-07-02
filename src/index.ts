@@ -1,18 +1,21 @@
 import BetterSideView from "./moudle/BetterSideView";
 import Bookmark from "./moudle/Bookmark";
 import DBNextChapter from "./moudle/DBNextChapter";
-import DisableViewerLog from "./moudle/DisableViewerLog";
 import FreeEmoji from "./moudle/FreeEmoji";
 import HideAddNovel from "./moudle/HideAddNovel";
 import HideEvent from "./moudle/HideEvent";
 import InfoUnfold from "./moudle/InfoUnfold";
+import NovelDownload from "./moudle/NovelDownload";
 import PreviousBookmark from "./moudle/PreviousBookmark";
 import Setting from "./moudle/Setting";
+
+import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
+import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 
 // @ts-ignore
 GM_config.init({
     "id": "betternovelpia",
-    "title": "BetterNovelpia - 2.6.7",
+    "title": "BetterNovelpia - 2.7.7",
     "fields": {
         "BetterSideView": {
             "label": "사이드뷰 개선",
@@ -44,8 +47,8 @@ GM_config.init({
             "type": "checkbox",
             "default": false
         },
-        "DisableViewLog": {
-            "label": "뷰어 디버그 로그 제거",
+        "NovelDownload": {
+            "label": "소설 다운로드 사용",
             "type": "checkbox",
             "default": false
         },
@@ -85,6 +88,18 @@ GM_config.init({
             "label": "북마크 자동 이동",
             "type": "checkbox",
             "default": false
+        },
+        "DisableViewLog":
+            {
+                "label": "뷰어 디버그 로그 제거",
+                "type": "checkbox",
+                "default": false,
+                "section": ["디버깅"]
+            },
+        "AbsoluteBlockKey": {
+            "label": "F12와 우클릭 허용",
+            "type": "checkbox",
+            "default": false
         }
     },
     "events": {
@@ -96,10 +111,13 @@ GM_config.init({
 BetterSideView.Start();
 Bookmark.Start();
 DBNextChapter.Start();
-DisableViewerLog.Start();
 FreeEmoji.Start();
 HideAddNovel.Start();
 HideEvent.Start();
 InfoUnfold.Start();
+NovelDownload.Start();
 PreviousBookmark.Start();
 Setting.Start();
+
+AbsoluteBlockKey.Start();
+DisableViewerLog.Start();
