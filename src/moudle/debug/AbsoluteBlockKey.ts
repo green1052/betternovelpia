@@ -12,9 +12,9 @@ function Start() {
     if (!location.pathname.includes("/viewer/"))
         return;
 
-    document.body.attributes.removeNamedItem("ondragstart");
-    document.body.attributes.removeNamedItem("onselectstart");
-    document.body.attributes.removeNamedItem("oncontextmenu");
+    $(document.body).removeAttr("ondragstart");
+    $(document.body).removeAttr("onselectstart");
+    $(document.body).removeAttr("oncontextmenu");
 
     // @ts-ignore
     clearInterval(playAlert);

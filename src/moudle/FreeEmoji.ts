@@ -168,33 +168,7 @@ function Start() {
     if (!Config.GetConfig("FreeEmoji") || !location.pathname.includes("/viewer/"))
         return;
 
-    const div = document.createElement("div");
-    div.id = "FreeEmoticon";
-    div.className = "col-sm-12 mg-b-10 emoticon";
-    div.style.display = "none";
-    div.style.border = "1px solid rgba(214, 214, 214, 0.2)";
-    div.style.padding = "5px";
-    div.style.borderRadius = "10px";
-
-    emojiList.forEach(emoji => {
-        const img = document.createElement("img");
-        img.src = emoji;
-        img.style.width = "30px";
-        img.style.margin = "3px";
-        img.style.cursor = "pointer";
-
-        img.onclick = () => {
-            $("#FreeEmoticon").hide();
-            $("#imagePreviewframe").show();
-
-            $("#imagePreviewA").attr("src", emoji);
-            $("#comment_img").val(emoji);
-        };
-
-        div.appendChild(img);
-    });
-
-    $("div.row:nth-child(2) > div:nth-child(2)").append(div);
+    // 상단 이모지 목록
 
     const img = document.createElement("img");
     img.src = "https://image.novelpia.com/img/emoticon/1/02-smile.png";
@@ -207,11 +181,44 @@ function Start() {
     li.innerHTML = img.outerHTML;
     li.onclick = () => {
         $(".emoticon").hide();
-        $("#FreeEmoticon").show();
+        // @ts-ignore
+        emoticon_open("0");
     };
 
     const query = document.querySelector("ul.nav:nth-child(2)");
 
-    if (query)
-        query.insertBefore(li, query.children[3]);
+    if (!query)
+        return;
+
+    query.insertBefore(li, query.children[3]);
+
+    // 클릭 시 보이는 창
+
+    const div = document.createElement("div");
+    div.id = "emoticon_shop0";
+    div.className = "col-sm-12 mg-b-10 emoticon";
+    div.style.display = "none";
+    div.style.border = "1px solid rgba(214, 214, 214, 0.2)";
+    div.style.padding = "5px";
+    div.style.borderRadius = "10px";
+
+    emojiList.forEach(emoji => {
+        const img = document.createElement("img");
+        img.setAttribute("data-src", emoji);
+        img.src = emoji;
+        img.style.width = "60px";
+        img.style.margin = "3px";
+        img.style.cursor = "pointer";
+
+        img.onclick = () => {
+            $("#emoticon_shop0").hide();
+            $("#imagePreviewframe").show();
+            $("#imagePreviewA").attr("src", emoji);
+            $("#comment_img").val(emoji);
+        };
+
+        div.appendChild(img);
+    });
+
+    $("div.row:nth-child(2) > div:nth-child(2)").append(div);
 }
