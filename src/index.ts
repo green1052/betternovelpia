@@ -15,7 +15,7 @@ import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 // @ts-ignore
 GM_config.init({
     "id": "betternovelpia",
-    "title": "BetterNovelpia - 2.7.8",
+    "title": "BetterNovelpia - 2.7.9",
     "fields": {
         "BetterSideView": {
             "label": "사이드뷰 개선",
@@ -103,8 +103,7 @@ GM_config.init({
         }
     },
     "events": {
-        "save": () =>
-            location.reload()
+        "save": () => location.reload()
     }
 });
 

@@ -30,19 +30,21 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js|\.ts/,
+                test: /\.ts$/,
                 include: /src/,
                 use: {
                     loader: "babel-loader",
                     options: {
                         presets: [
-                            ["@babel/preset-env", {targets: "last 2 versions"}],
+                            [
+                                "@babel/preset-env",
+                                {
+                                    "targets": {
+                                        "browsers": ["last 2 versions"]
+                                    }
+                                }
+                            ],
                             "@babel/preset-typescript"
-                        ],
-                        plugins: [
-                            "@babel/plugin-proposal-class-properties",
-                            "@babel/plugin-proposal-object-rest-spread",
-                            "@babel/plugin-transform-runtime"
                         ]
                     }
                 }
@@ -50,7 +52,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts"]
     },
     output: {
         path: path.join(__dirname, "dist"),

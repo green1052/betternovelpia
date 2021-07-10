@@ -8,7 +8,7 @@ function Start() {
 
     document.querySelectorAll("#slider-wrap").forEach(query => query.remove());
 
-    const event = $(`span:contains("방금전까지")`).parent();
+    const event = $(`span:contains("현재까지")`).parent();
     event.removeAttr("onclick");
     event.css("background-color", "");
     event.css("padding", "");

@@ -43,6 +43,7 @@ function Start() {
                 $("#footer_bar").show();
                 $("#header_bar").show();
                 if (localStorage["viewer_paging"] != 1) {
+                    // @ts-ignore
                     up_down_btn_view("on");
                 }
                 // @ts-ignore
@@ -52,6 +53,7 @@ function Start() {
                 $("#header_bar").hide();
                 $("#theme_box").hide();
                 console.log("navi_view - off");
+                // @ts-ignore
                 up_down_btn_view("off");
                 // @ts-ignore
                 option_btn_theme = 0;
