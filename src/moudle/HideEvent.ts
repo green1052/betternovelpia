@@ -6,7 +6,7 @@ function Start() {
     if (!Config.GetConfig("HideEvent") || location.pathname.includes("/viewer/"))
         return;
 
-    document.querySelectorAll("#slider-wrap").forEach(query => query.remove());
+    $("#slider-wrap[class*=mobile_show]").remove();
 
     const event = $(`span:contains("현재까지")`).parent();
     event.removeAttr("onclick");

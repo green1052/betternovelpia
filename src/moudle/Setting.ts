@@ -1,5 +1,3 @@
-import Config from "../Config";
-
 export default {Start};
 
 function Start() {
@@ -17,7 +15,8 @@ function Start() {
     const li = document.createElement("li");
     li.style.padding = "10px 25px";
     li.innerHTML = a.outerHTML;
-    li.onclick = () => Config.Open();
+    // @ts-ignore
+    li.onclick = () => GM_config.open();
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }

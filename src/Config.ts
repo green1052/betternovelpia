@@ -1,9 +1,4 @@
-export default {Open, GetConfig, GetValue, SetValue};
-
-function Open() {
-    // @ts-ignore
-    GM_config.open();
-}
+export default {GetConfig, GetValue, SetValue};
 
 function GetConfig(key: string) {
     // @ts-ignore

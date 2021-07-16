@@ -54,7 +54,7 @@ async function Main() {
     li.onclick = async () => {
         const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 
-        let str = "숫자를 입력해 북마크 삭제\n00. 전부 삭제\n0. 취소\n";
+        let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
         let index = 0;
 
         for (const key in bookmarks) {
@@ -76,8 +76,10 @@ async function Main() {
         if (!input)
             return;
 
-        if (input === "00")
-            return Config.SetValue("bookmarks", {});
+        if (input === "00") {
+            Config.SetValue("bookmarks", {});
+            return alert("초기화 했습니다.");
+        }
 
         const number = Number(input);
 
@@ -121,8 +123,11 @@ async function Reader() {
 
         const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 
-        const title = $("b.cut_line_one").text() ?? "오류";
-        const chapter = $("span.cut_line_one > span:nth-child(1)").text() ?? "오류";
+        const title = $("b.cut_line_one").text();
+        const chapter = $("span.cut_line_one > span:nth-child(1)").text();
+
+        if (!title || !chapter)
+            return alert("제목 또는 챕터 값이 비어있습니다.");
 
         SetBookmark(bookmarks, url, scrollTop, title, chapter);
 

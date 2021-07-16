@@ -7,7 +7,6 @@ const header = {
     "name": "BetterNovelpia",
     "namespace": "betternovelpia",
     "description": "노벨피아를 더 좋게 바꿔줍니다!",
-    "icon": "https://cdn.novelpia.com/img/favicon/android-icon-192x192.png",
     "author": "green1052",
     "homepageURL": "https://github.com/green1052/betternovelpia",
     "rut-at": "document-end",
@@ -55,7 +54,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".ts"]
+        extensions: [".ts", ".tsx", ".js", ".jsx"]
     },
     output: {
         path: path.join(__dirname, "dist"),
