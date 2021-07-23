@@ -15,7 +15,7 @@ import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 // @ts-ignore
 GM_config.init({
     "id": "betternovelpia",
-    "title": "BetterNovelpia - 3.0.0",
+    "title": "BetterNovelpia - 3.0.1",
     "fields": {
         "BetterSideView": {
             "label": "사이드뷰 개선",
