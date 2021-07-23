@@ -39,11 +39,17 @@ async function Start() {
     if (!bookmark.scrollTop)
         return;
 
-    setTimeout(() => {
+    const observer = new MutationObserver(() => {
+        observer.disconnect();
+
         if (!Config.GetConfig("PreviousBookmark_AutoUse"))
             if (!confirm("읽던 부분으로 이동하시겠습니까?"))
                 return;
 
         $("#novel_box").animate({scrollTop: bookmark.scrollTop});
-    }, 3000);
+    });
+
+    observer.observe(document.querySelector("#novel_drawing")!, {
+        childList: true
+    });
 }

@@ -156,11 +156,18 @@ async function Reader() {
         Config.SetValue("bookmarks", bookmarks);
     }
 
-    setTimeout(() => {
+
+    const observer = new MutationObserver(() => {
+        observer.disconnect();
+
         if (!Config.GetConfig("Bookmark_AutoUse"))
             if (!confirm("저장해두었던 북마크로 이동하시겠습니까?"))
                 return;
 
         $("#novel_box").animate({scrollTop: scrollTop});
-    }, 3000);
+    });
+
+    observer.observe(document.querySelector("#novel_drawing")!, {
+        childList: true
+    });
 }
