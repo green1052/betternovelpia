@@ -1,7 +1,9 @@
-const path = require("path");
-const WebpackUserscript = require("webpack-userscript");
+import path from "path";
 
-const version = require("./package.json").version;
+import WebpackUserscript from "webpack-userscript";
+
+import {version} from "./package.json";
+import webpack from "webpack";
 
 const header = {
     "name": "BetterNovelpia",
@@ -23,7 +25,7 @@ const header = {
     "version": version
 };
 
-module.exports = {
+const config: webpack.Configuration = {
     mode: "production",
     entry: "./src/index.ts",
     module: {
@@ -67,3 +69,5 @@ module.exports = {
         })
     ]
 };
+
+export default config;
