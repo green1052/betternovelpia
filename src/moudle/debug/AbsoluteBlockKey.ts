@@ -19,8 +19,16 @@ function Start() {
     // @ts-ignore
     clearInterval(playAlert);
 
-    const style = document.createElement("style");
-    style.innerHTML = ".no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important}";
+    const style = $("<style>");
+    style.append(`
+        .no-drag { 
+            -ms-user-select:unset !important;
+            -moz-user-select:unset !important;
+            -webkit-user-select:unset !important;
+            -khtml-user-select:unset !important;
+            user-select:unset !important
+        }
+    `);
 
-    document.body.append(style);
+    $(document.body).append(style);
 }

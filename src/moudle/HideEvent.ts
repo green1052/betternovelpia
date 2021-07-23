@@ -9,7 +9,7 @@ function Start() {
     if (location.pathname === "/")
         return $("#slider-wrap[class*=mobile_show]").remove();
 
-    if (location.pathname === "/freestory") {
+    if (location.pathname.includes("/freestory")) {
         const freeParent = $(`img[src*="banner_freestory1_mob.png"]`).parent().parent();
 
         freeParent.removeAttr("class");
@@ -18,7 +18,7 @@ function Start() {
         freeParent.empty();
     }
 
-    if (location.pathname === "/plus") {
+    if (location.pathname.includes("/plus")) {
         const plus = $(`img[src*="plus_banner5.png"]`);
         const plusParent = plus.parent();
 
@@ -30,10 +30,4 @@ function Start() {
     }
 
     $(`span:contains("현재까지")`).parent().remove();
-
-    // const event = $(`span:contains("현재까지")`).parent();
-    // event.removeAttr("onclick");
-    // event.css("background-color", "");
-    // event.css("padding", "");
-    // event.empty();
 }

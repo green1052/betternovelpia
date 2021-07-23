@@ -5,27 +5,29 @@ function Start() {
     if (!Config.GetConfig("BetterSideView") || location.pathname.includes("/viewer/"))
         return;
 
-    const div = document.createElement("div");
-    div.id = "BetterSideView";
-    div.style.position = "fixed";
-    div.style.width = "100vw";
-    div.style.height = "100vh";
-    div.style.zIndex = "2";
-
-    div.onclick = () => {
-        $("#BetterSideView").remove();
+    const div = $(`<div id="BetterSideView">`);
+    div.css("position", "fixed");
+    div.css("width", "100vw");
+    div.css("height", "100vh");
+    div.css("z-index", "2");
+    div.on("click", () => {
         $(document.body).removeClass("show-left");
-    };
+        $("#BetterSideView").hide();
+    });
+
+    div.hide();
+
+    $(document.body).prepend(div);
 
     $(".am-navicon").on("click", () => {
         const BetterSideView = $("#BetterSideView");
 
-        if (BetterSideView.length > 0)
-            return BetterSideView.remove();
+        if (BetterSideView.css("display") !== "none")
+            return BetterSideView.hide();
 
         if ($(document.body).hasClass("show-left"))
             return;
 
-        document.body.prepend(div);
+        BetterSideView.show();
     });
 }

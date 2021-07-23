@@ -5,21 +5,18 @@ function Start() {
     if (!Config.GetConfig("NovelDownload") || !location.pathname.includes("/viewer/"))
         return;
 
-    const query = document.querySelector("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
+    const query = $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
 
-    if (!query)
+    if (!query.length)
         return;
 
-    const h9 = document.createElement("h9");
-    h9.innerHTML = "복사";
-
-    const td = document.createElement("td");
-    td.style.textAlign = "center";
-    td.style.fontStyle = "12px";
-    td.style.width = "63px";
-    td.style.zIndex = "10000";
-    td.innerHTML = h9.outerHTML;
-    td.onclick = () => {
+    const td = $("<td>");
+    td.css("text-align", "center");
+    td.css("font-style", "12px");
+    td.css("width", "63px");
+    td.css("z-index", 10000);
+    td.append("<h9>복사</h9>");
+    td.on("click", () => {
         const textarea = document.createElement("textarea");
         textarea.value = document.querySelector("#novel_drawing")?.textContent ?? "오류";
         textarea.setAttribute("readonly", "");
@@ -31,7 +28,7 @@ function Start() {
         document.body.removeChild(textarea);
 
         alert("복사됐습니다.");
-    };
+    });
 
-    query.insertBefore(td, query.children[6]);
+    query.children().eq(6).before(td);
 }

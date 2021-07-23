@@ -170,54 +170,45 @@ function Start() {
 
     // 상단 이모지 목록
 
-    const img = document.createElement("img");
-    img.src = "https://image.novelpia.com/img/emoticon/1/02-smile.png";
-    img.style.width = "30px";
-    img.style.margin = "6px 3px 0px";
-    img.style.cursor = "pointer";
+    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png" alt="">`);
+    img.css("width", "30px");
+    img.css("margin", "6px 3px 0px");
+    img.css("cursor", "pointer");
 
-    const li = document.createElement("li");
-    li.className = "nav-item";
-    li.innerHTML = img.outerHTML;
-    li.onclick = () => {
+    const li = $(`<li class="nav-ite">`);
+    li.on("click", () => {
         $(".emoticon").hide();
         // @ts-ignore
         emoticon_open("0");
-    };
+    });
 
-    const query = document.querySelector("ul.nav:nth-child(2)");
+    li.append(img);
 
-    if (!query)
-        return;
-
-    query.insertBefore(li, query.children[3]);
+    $("ul.nav:nth-child(2)").children().eq(3).before(li);
 
     // 클릭 시 보이는 창
 
-    const div = document.createElement("div");
-    div.id = "emoticon_shop0";
-    div.className = "col-sm-12 mg-b-10 emoticon";
-    div.style.display = "none";
-    div.style.border = "1px solid rgba(214, 214, 214, 0.2)";
-    div.style.padding = "5px";
-    div.style.borderRadius = "10px";
+    const div = $(`<div id="emoticon_shop0" class="col-sm-12 mg-b-10 emoticon">`);
+    div.css("display", "none");
+    div.css("border", "1px solid rgba(214, 214, 214, 0.2)");
+    div.css("padding", "5px");
+    div.css("border-radius", "10px\"");
 
     emojiList.forEach(emoji => {
-        const img = document.createElement("img");
-        img.setAttribute("data-src", emoji);
-        img.src = emoji;
-        img.style.width = "60px";
-        img.style.margin = "3px";
-        img.style.cursor = "pointer";
+        const img = $(`<img src="${emoji}" alt="">`);
+        img.attr("data-src", emoji);
+        img.css("width", "60px");
+        img.css("margin", "3px");
+        img.css("cursor", "pointer");
 
-        img.onclick = () => {
+        img.on("click", () => {
             $("#emoticon_shop0").hide();
             $("#imagePreviewframe").show();
             $("#imagePreviewA").attr("src", emoji);
             $("#comment_img").val(emoji);
-        };
+        });
 
-        div.appendChild(img);
+        div.append(img);
     });
 
     $("div.row:nth-child(2) > div:nth-child(2)").append(div);

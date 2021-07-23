@@ -1,6 +1,6 @@
 {
     "name": "betternovelpia",
-    "version": "3.0.1",
+    "version": "3.1.1",
     "description": "",
     "main": "src/index.ts",
     "scripts": {
