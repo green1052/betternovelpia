@@ -25,7 +25,6 @@ function SetBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title
 
 function RemoveBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
-
     Config.SetValue("bookmarks", bookmarks);
 }
 
@@ -41,15 +40,14 @@ async function Main() {
     if (location.pathname.includes("/viewer/"))
         return;
 
-    let img = $(`<img src="https://image.novelpia.com/img/new/icon/count_book.png" alt="">`);
-    img.height(25);
+    let img = $(`<img src="https://image.novelpia.com/img/new/icon/count_book.png">`);
+    img.css("height", 25);
 
     const a = $("<a>");
     a.append(img);
 
     const li = $("<li>");
     li.css("padding", "10px 25px");
-    li.append(a);
     li.on("click", async () => {
         const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
 
@@ -88,6 +86,7 @@ async function Main() {
         RemoveBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
         alert("삭제 됐습니다.");
     });
+    li.append(a);
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }
@@ -96,7 +95,7 @@ async function Reader() {
     if (!location.pathname.includes("/viewer/"))
         return;
 
-    const img = $(`<img id="btn_theme" class="footer_btn" src="https://image.novelpia.com/img/new/icon/count_book.png" alt="">`);
+    const img = $(`<img id="btn_theme" class="footer_btn" src="https://image.novelpia.com/img/new/icon/count_book.png">`);
 
     const td = $("<td>");
     td.css("text-align", "center");

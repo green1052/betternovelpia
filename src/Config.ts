@@ -8,6 +8,7 @@ type Config =
     "DBNextChapter" |
     "FreeEmoji" |
     "NovelDownload" |
+    "NovelListFix" |
     "PreviousBookmark" |
     "PreviousBookmark_First" |
     "PreviousBookmark_OnlyUse" |

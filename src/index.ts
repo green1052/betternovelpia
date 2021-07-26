@@ -7,6 +7,7 @@ import HideAddNovel from "./moudle/HideAddNovel";
 import HideEvent from "./moudle/HideEvent";
 import InfoUnfold from "./moudle/InfoUnfold";
 import NovelDownload from "./moudle/NovelDownload";
+import NovelListFix from "./moudle/NovelListFix";
 import PreviousBookmark from "./moudle/PreviousBookmark";
 import Setting from "./moudle/Setting";
 import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
@@ -14,7 +15,7 @@ import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 
 Config.Init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.1.1",
+    title: "BetterNovelpia - 3.2.1",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -49,6 +50,11 @@ Config.Init({
         },
         NovelDownload: {
             label: "소설 다운로드 사용",
+            type: "checkbox",
+            default: false
+        },
+        NovelListFix: {
+            label: "소설 목록 개선",
             type: "checkbox",
             default: false
         },
@@ -115,6 +121,7 @@ HideAddNovel.Start();
 HideEvent.Start();
 InfoUnfold.Start();
 NovelDownload.Start();
+NovelListFix.Start();
 PreviousBookmark.Start();
 Setting.Start();
 

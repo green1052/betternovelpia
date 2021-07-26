@@ -9,7 +9,7 @@ function Start() {
     div.css("position", "fixed");
     div.css("width", "100vw");
     div.css("height", "100vh");
-    div.css("z-index", "2");
+    div.css("z-index", 2);
     div.on("click", () => {
         $(document.body).removeClass("show-left");
         $("#BetterSideView").hide();
@@ -19,7 +19,7 @@ function Start() {
 
     $(document.body).prepend(div);
 
-    $(".am-navicon").on("click", () => {
+    $("#naviconLeftMobile").on("click", () => {
         const BetterSideView = $("#BetterSideView");
 
         if (BetterSideView.css("display") !== "none")

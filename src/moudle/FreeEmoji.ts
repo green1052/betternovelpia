@@ -170,7 +170,7 @@ function Start() {
 
     // 상단 이모지 목록
 
-    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png" alt="">`);
+    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png">`);
     img.css("width", "30px");
     img.css("margin", "6px 3px 0px");
     img.css("cursor", "pointer");
@@ -195,7 +195,7 @@ function Start() {
     div.css("border-radius", "10px\"");
 
     emojiList.forEach(emoji => {
-        const img = $(`<img src="${emoji}" alt="">`);
+        const img = $(`<img src="${emoji}">`);
         img.attr("data-src", emoji);
         img.css("width", "60px");
         img.css("margin", "3px");

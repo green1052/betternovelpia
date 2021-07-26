@@ -4,7 +4,7 @@ function Start() {
     if (location.pathname.includes("/viewer/"))
         return;
 
-    const img = $(`<img src="https://novelpia.com/img/new/viewer/btn_theme.png" alt="">`);
+    const img = $(`<img src="https://novelpia.com/img/new/viewer/btn_theme.png">`);
     img.css("margin-left", "-5px");
     img.css("height", 25);
 
