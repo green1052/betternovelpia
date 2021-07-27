@@ -1,5 +1,4 @@
 export default {Start};
-import Config from "../Config";
 
 const emojiList = [
     "https://image.novelpia.com/img/emoticon2/bjos3017us/1.png",
@@ -165,48 +164,45 @@ const emojiList = [
 ];
 
 function Start() {
-    if (!Config.GetConfig("FreeEmoji") || !location.pathname.includes("/viewer/"))
+    if (!GM_config.get("FreeEmoji") || !location.pathname.includes("/viewer/"))
         return;
 
     // 상단 이모지 목록
 
-    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png">`);
-    img.css("width", "30px");
-    img.css("margin", "6px 3px 0px");
-    img.css("cursor", "pointer");
+    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png">`)
+        .css("width", "30px")
+        .css("margin", "6px 3px 0px")
+        .css("cursor", "pointer");
 
-    const li = $(`<li class="nav-ite">`);
-    li.on("click", () => {
-        $(".emoticon").hide();
-        // @ts-ignore
-        emoticon_open("0");
-    });
-
-    li.append(img);
+    const li = $(`<li class="nav-ite">`)
+        .on("click", () => {
+            $(".emoticon").hide();
+            emoticon_open(0);
+        })
+        .append(img);
 
     $("ul.nav:nth-child(2)").children().eq(3).before(li);
 
     // 클릭 시 보이는 창
 
-    const div = $(`<div id="emoticon_shop0" class="col-sm-12 mg-b-10 emoticon">`);
-    div.css("display", "none");
-    div.css("border", "1px solid rgba(214, 214, 214, 0.2)");
-    div.css("padding", "5px");
-    div.css("border-radius", "10px\"");
+    const div = $(`<div id="emoticon_shop0" class="col-sm-12 mg-b-10 emoticon">`)
+        .css("display", "none")
+        .css("border", "1px solid rgba(214, 214, 214, 0.2)")
+        .css("padding", "5px")
+        .css("border-radius", "10px");
 
     emojiList.forEach(emoji => {
-        const img = $(`<img src="${emoji}">`);
-        img.attr("data-src", emoji);
-        img.css("width", "60px");
-        img.css("margin", "3px");
-        img.css("cursor", "pointer");
-
-        img.on("click", () => {
-            $("#emoticon_shop0").hide();
-            $("#imagePreviewframe").show();
-            $("#imagePreviewA").attr("src", emoji);
-            $("#comment_img").val(emoji);
-        });
+        const img = $(`<img src="${emoji}">`)
+            .attr("data-src", emoji)
+            .css("width", "60px")
+            .css("margin", "3px")
+            .css("cursor", "pointer")
+            .on("click", () => {
+                $("#emoticon_shop0").hide();
+                $("#imagePreviewframe").show();
+                $("#imagePreviewA").attr("src", emoji);
+                $("#comment_img").val(emoji);
+            });
 
         div.append(img);
     });

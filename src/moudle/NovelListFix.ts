@@ -1,17 +1,11 @@
 export default {Start};
-import Config from "../Config";
 
 function Start() {
-    if (!Config.GetConfig("NovelListFix") || location.pathname !== "/")
+    if (!GM_config.get("NovelListFix") || location.pathname !== "/")
         return;
 
-    $(`div[class*="mobile_show"]`).last().children().each((index, element) => {
+    $(`div[class=""][onclick*="location"]`).each((index, element) => {
         const query = $(element);
-        const onclick = query.attr("onclick");
-
-        if (!onclick)
-            return;
-
-        query.attr("onclick", `$(".loads").show(); ${onclick}`);
+        query.attr("onclick", `$(".loads").show(); ${query.attr("onclick")}`);
     });
 }

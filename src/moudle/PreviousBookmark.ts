@@ -1,5 +1,4 @@
 export default {Start};
-import Config from "../Config";
 
 interface Bookmark {
     url: string,
@@ -7,7 +6,7 @@ interface Bookmark {
 }
 
 async function Start() {
-    if (!Config.GetConfig("PreviousBookmark") || !location.pathname.includes("/viewer/"))
+    if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
         return;
 
     let lastScrollTop: number;
@@ -20,21 +19,21 @@ async function Start() {
 
         lastScrollTop = scrollTop;
 
-        Config.SetValue("tempBookmark", {url: location.href, scrollTop: scrollTop});
+        GM.setValue("tempBookmark", {url: location.href, scrollTop: scrollTop});
     }, 1000);
 
-    const bookmark: Bookmark = await Config.GetValue("tempBookmark");
+    const bookmark: Bookmark = await GM.getValue("tempBookmark");
 
     if (!bookmark || location.href !== bookmark.url)
         return;
 
-    const bookmarks = await Config.GetValue("bookmarks");
+    const bookmarks = await GM.getValue("bookmarks");
 
-    if (!Config.GetConfig("PreviousBookmark_First") && (bookmarks && bookmarks.hasOwnProperty(location.href)))
+    if (!GM_config.get("PreviousBookmark_First") && (bookmarks && bookmarks.hasOwnProperty(location.href)))
         return;
 
-    if (Config.GetConfig("PreviousBookmark_OnlyUse"))
-        Config.SetValue("tempBookmark", {});
+    if (GM_config.get("PreviousBookmark_OnlyUse"))
+        GM.setValue("tempBookmark", {});
 
     if (!bookmark.scrollTop)
         return;
@@ -42,7 +41,7 @@ async function Start() {
     const observer = new MutationObserver(() => {
         observer.disconnect();
 
-        if (!Config.GetConfig("PreviousBookmark_AutoUse"))
+        if (!GM_config.get("PreviousBookmark_AutoUse"))
             if (!confirm("읽던 부분으로 이동하시겠습니까?"))
                 return;
 

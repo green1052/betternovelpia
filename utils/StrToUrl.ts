@@ -1,5 +1,4 @@
 const texts = ``;
-
 const emojiList = [];
 
 for (const string of texts.split("\n"))

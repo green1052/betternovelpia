@@ -1,9 +1,7 @@
-import Config from "../../Config";
-
 export default {Start};
 
 function Start() {
-    if (!Config.GetConfig("AbsoluteBlockKey"))
+    if (!GM_config.get("AbsoluteBlockKey"))
         return;
 
     $(`script:contains("/* F12 */")`).remove();
@@ -16,11 +14,9 @@ function Start() {
         $(document.body).removeAttr(attr);
     });
 
-    // @ts-ignore
     clearInterval(playAlert);
 
-    const style = $("<style>");
-    style.append(`
+    const style = $(`<style>
         .no-drag { 
             -ms-user-select:unset !important;
             -moz-user-select:unset !important;
@@ -28,7 +24,7 @@ function Start() {
             -khtml-user-select:unset !important;
             user-select:unset !important
         }
-    `);
+    </style>`);
 
     $(document.body).append(style);
 }

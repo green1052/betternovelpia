@@ -1,8 +1,7 @@
 export default {Start};
-import Config from "../Config";
 
 function Start() {
-    if (!Config.GetConfig("DBNextChapter") || !location.pathname.includes("/viewer/"))
+    if (!GM_config.get("DBNextChapter") || !location.pathname.includes("/viewer/"))
         return;
 
     $("#novel_drawing").on("dblclick", () => {
@@ -11,7 +10,6 @@ function Start() {
         if (!next)
             return;
 
-        // @ts-ignore
         pageload(next, 1);
     });
 }

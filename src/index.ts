@@ -1,4 +1,3 @@
-import Config from "./Config";
 import BetterSideView from "./moudle/BetterSideView";
 import Bookmark from "./moudle/Bookmark";
 import DBNextChapter from "./moudle/DBNextChapter";
@@ -13,9 +12,9 @@ import Setting from "./moudle/Setting";
 import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 
-Config.Init({
+GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.2.1",
+    title: "BetterNovelpia - 3.2.2",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",

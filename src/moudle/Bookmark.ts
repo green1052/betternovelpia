@@ -1,5 +1,4 @@
 export default {Start};
-import Config from "../Config";
 
 interface Bookmarks {
     [key: string]: Bookmark
@@ -20,16 +19,16 @@ function SetBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title
         chapter: encodeURIComponent(chapter)
     };
 
-    Config.SetValue("bookmarks", json);
+    GM.setValue("bookmarks", json);
 }
 
 function RemoveBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
-    Config.SetValue("bookmarks", bookmarks);
+    GM.setValue("bookmarks", bookmarks);
 }
 
 async function Start() {
-    if (!Config.GetConfig("Bookmark"))
+    if (!GM_config.get("Bookmark"))
         return;
 
     await Main();
@@ -40,53 +39,53 @@ async function Main() {
     if (location.pathname.includes("/viewer/"))
         return;
 
-    let img = $(`<img src="https://image.novelpia.com/img/new/icon/count_book.png">`);
-    img.css("height", 25);
+    const img = $(`<img src="https://image.novelpia.com/img/new/icon/count_book.png">`)
+        .css("height", 25);
 
-    const a = $("<a>");
-    a.append(img);
+    const a = $("<a>")
+        .append(img);
 
-    const li = $("<li>");
-    li.css("padding", "10px 25px");
-    li.on("click", async () => {
-        const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
+    const li = $("<li>")
+        .css("padding", "10px 25px")
+        .on("click", async () => {
+            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
-        let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
-        let index = 0;
+            let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
+            let index = 0;
 
-        for (const key in bookmarks) {
-            if (!bookmarks.hasOwnProperty(key))
-                continue;
+            for (const key in bookmarks) {
+                if (!bookmarks.hasOwnProperty(key))
+                    continue;
 
-            index++;
+                index++;
 
-            const bookmark: Bookmark = bookmarks[key];
+                const bookmark: Bookmark = bookmarks[key];
 
-            const title = decodeURIComponent(bookmark.title);
-            const chapter = decodeURIComponent(bookmark.chapter);
+                const title = decodeURIComponent(bookmark.title);
+                const chapter = decodeURIComponent(bookmark.chapter);
 
-            str += `${index}. ${title} - ${chapter}\n`;
-        }
+                str += `${index}. ${title} - ${chapter}\n`;
+            }
 
-        const input = prompt(str);
+            const input = prompt(str);
 
-        if (!input)
-            return;
+            if (!input)
+                return;
 
-        if (input === "00") {
-            Config.SetValue("bookmarks", {});
-            return alert("초기화 했습니다.");
-        }
+            if (input === "00") {
+                GM.setValue("bookmarks", {});
+                return alert("초기화 했습니다.");
+            }
 
-        const number = Number(input);
+            const number = Number(input);
 
-        if (isNaN(number) || number === 0)
-            return;
+            if (isNaN(number) || number === 0)
+                return;
 
-        RemoveBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
-        alert("삭제 됐습니다.");
-    });
-    li.append(a);
+            RemoveBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
+            alert("삭제 됐습니다.");
+        })
+        .append(a);
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }
@@ -97,37 +96,36 @@ async function Reader() {
 
     const img = $(`<img id="btn_theme" class="footer_btn" src="https://image.novelpia.com/img/new/icon/count_book.png">`);
 
-    const td = $("<td>");
-    td.css("text-align", "center");
-    td.css("font-style", "12px");
-    td.css("width", 63);
-    td.css("z-index", 10000);
-    td.on("click", async () => {
-        const url = location.href;
-        const scrollTop = $("#novel_box").scrollTop() ?? 0;
+    const td = $("<td>")
+        .css("text-align", "center")
+        .css("font-style", "12px")
+        .css("width", 63)
+        .css("z-index", 10000)
+        .on("click", async () => {
+            const url = location.href;
+            const scrollTop = $("#novel_box").scrollTop() ?? 0;
 
-        if (!scrollTop)
-            return;
+            if (!scrollTop)
+                return;
 
-        const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
+            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
-        const title = $("b.cut_line_one").text();
-        const chapter = $("span.cut_line_one > span:nth-child(1)").text();
+            const title = $("b.cut_line_one").text();
+            const chapter = $("span.cut_line_one > span:nth-child(1)").text();
 
-        if (!title || !chapter)
-            return alert("제목 또는 챕터 값이 비어있습니다.");
+            if (!title || !chapter)
+                return alert("제목 또는 챕터 값이 비어있습니다.");
 
-        SetBookmark(bookmarks, url, scrollTop, title, chapter);
+            SetBookmark(bookmarks, url, scrollTop, title, chapter);
 
-        alert("저장되었습니다.");
-    });
-
-    td.append(img);
+            alert("저장되었습니다.");
+        })
+        .append(img);
 
     $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)")
         .children().eq(6).before(td);
 
-    const bookmarks: Bookmarks = await Config.GetValue("bookmarks");
+    const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
     if (!bookmarks)
         return;
@@ -137,20 +135,20 @@ async function Reader() {
     if (!scrollTop)
         return;
 
-    const tempBookmark: { url: string, scrollTop: number } = await Config.GetValue("tempBookmark");
+    const tempBookmark: { url: string, scrollTop: number } = await GM.getValue("tempBookmark");
 
-    if (Config.GetConfig("PreviousBookmark_First") && tempBookmark)
+    if (GM_config.get("PreviousBookmark_First") && tempBookmark)
         return;
 
-    if (Config.GetConfig("Bookmark_OnlyUse")) {
+    if (GM_config.get("Bookmark_OnlyUse")) {
         RemoveBookmark(bookmarks, location.href);
-        Config.SetValue("bookmarks", bookmarks);
+        GM.setValue("bookmarks", bookmarks);
     }
 
     const observer = new MutationObserver(() => {
         observer.disconnect();
 
-        if (!Config.GetConfig("Bookmark_AutoUse"))
+        if (!GM_config.get("Bookmark_AutoUse"))
             if (!confirm("저장해두었던 북마크로 이동하시겠습니까?"))
                 return;
 

@@ -1,8 +1,7 @@
 export default {Start};
-import Config from "../Config";
 
 function Start() {
-    if (!Config.GetConfig("NovelDownload") || !location.pathname.includes("/viewer/"))
+    if (!GM_config.get("NovelDownload") || !location.pathname.includes("/viewer/"))
         return;
 
     const query = $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
@@ -10,25 +9,29 @@ function Start() {
     if (!query.length)
         return;
 
-    const td = $("<td>");
-    td.css("text-align", "center");
-    td.css("font-style", "12px");
-    td.css("width", "63px");
-    td.css("z-index", 10000);
-    td.append("<h9>복사</h9>");
-    td.on("click", () => {
-        const textarea = document.createElement("textarea");
-        textarea.value = document.querySelector("#novel_drawing")?.textContent ?? "오류";
-        textarea.setAttribute("readonly", "");
-        textarea.style.position = "absolute";
-        textarea.style.left = "-9999px";
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
+    const td = $("<td>")
+        .css("text-align", "center")
+        .css("font-style", "12px")
+        .css("width", "63px")
+        .css("z-index", 10000)
+        .append("<h9>복사</h9>")
+        .on("click", () => {
+            const textarea = $("<textarea>")
+                .val($("#novel_drawing").text().replace("다음화 보기", "") ?? "오류")
+                .attr("readonly", "")
+                .css("position", "absolute")
+                .css("left", "-9999px");
 
-        alert("복사됐습니다.");
-    });
+            $(document.body).prepend(textarea);
+
+            textarea.select();
+
+            document.execCommand("copy");
+
+            textarea.remove();
+
+            alert("복사됐습니다.");
+        });
 
     query.children().eq(6).before(td);
 }
