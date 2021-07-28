@@ -14,7 +14,7 @@ const header = {
     "rut-at": "document-end",
     "include": "novelpia.com",
     "require": [
-        "https://openuserjs.org/src/libs/sizzle/GM_config.js",
+        "https://raw.githubusercontent.com/green1052/GM_config/master/gm_config.min.js",
         "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     ],
     "grant": [

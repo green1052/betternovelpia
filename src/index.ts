@@ -8,13 +8,14 @@ import InfoUnfold from "./moudle/InfoUnfold";
 import NovelDownload from "./moudle/NovelDownload";
 import NovelListFix from "./moudle/NovelListFix";
 import PreviousBookmark from "./moudle/PreviousBookmark";
+import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import Setting from "./moudle/Setting";
 import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.2.2",
+    title: "BetterNovelpia - 3.3.2",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -54,6 +55,11 @@ GM_config.init({
         },
         NovelListFix: {
             label: "소설 목록 개선",
+            type: "checkbox",
+            default: false
+        },
+        PrivateNovelBypass: {
+            label: "공개 예정 소설 보기",
             type: "checkbox",
             default: false
         },
@@ -122,6 +128,7 @@ InfoUnfold.Start();
 NovelDownload.Start();
 NovelListFix.Start();
 PreviousBookmark.Start();
+PrivateNovelBypass.Start();
 Setting.Start();
 
 AbsoluteBlockKey.Start();

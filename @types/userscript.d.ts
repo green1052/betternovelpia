@@ -7,6 +7,7 @@ type Config =
     "FreeEmoji" |
     "NovelDownload" |
     "NovelListFix" |
+    "PrivateNovelBypass" |
     "PreviousBookmark" |
     "PreviousBookmark_First" |
     "PreviousBookmark_OnlyUse" |
