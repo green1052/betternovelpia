@@ -13,10 +13,11 @@ import Setting from "./moudle/Setting";
 import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
+import Eval from "./moudle/debug/Eval";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.4.2",
+    title: "BetterNovelpia - 3.5.2",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -131,6 +132,11 @@ GM_config.init({
             label: "F12와 우클릭 허용",
             type: "checkbox",
             default: false
+        },
+        Eval: {
+            label: "Eval 사용",
+            type: "checkbox",
+            default: false
         }
     },
     events: {
@@ -139,7 +145,6 @@ GM_config.init({
 });
 
 jQuery(() => {
-    Setting.Start();
     BetterSideView.Start();
     Bookmark.Start();
     DBNextChapter.Start();
@@ -154,4 +159,6 @@ jQuery(() => {
     PrivateNovelBypass.Start();
     AbsoluteBlockKey.Start();
     DisableViewerLog.Start();
+    Setting.Start();
+    Eval.Start();
 });

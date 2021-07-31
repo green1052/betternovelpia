@@ -19,7 +19,8 @@ type Config =
     "AbsoluteBlockKey" |
     "ViewNovelToCookie" |
     "ViewNoelToCookie_LOGINKEY" |
-    "ViewNoelToCookie_USERKEY";
+    "ViewNoelToCookie_USERKEY" |
+    "Eval";
 
 interface Field {
     label: string,
