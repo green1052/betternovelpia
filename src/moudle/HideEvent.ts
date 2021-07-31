@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 function Start() {
     if (!GM_config.get("HideEvent"))
@@ -25,5 +26,9 @@ function Start() {
             .children()
             .remove();
 
-    $(`span:contains("현재까지")`).parent().remove();
+    $(`div[onclick="$('.loads').show();location='/notice/all/view_171726';"]`)
+        .removeAttr("class")
+        .removeAttr("style")
+        .css("margin", "15px")
+        .empty();
 }

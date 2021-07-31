@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 function Start() {
     if (!GM_config.get("PrivateNovelBypass") || !location.pathname.includes("/viewer/"))

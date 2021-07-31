@@ -16,27 +16,33 @@ type Config =
     "Bookmark_OnlyUse" |
     "Bookmark_AutoUse" |
     "DisableViewLog" |
-    "AbsoluteBlockKey";
+    "AbsoluteBlockKey" |
+    "ViewNovelToCookie" |
+    "ViewNoelToCookie_LOGINKEY" |
+    "ViewNoelToCookie_USERKEY";
 
 interface Field {
     label: string,
     section?: any[],
 }
 
-interface Text extends Field {
+interface Texts extends Field {
     type: "text",
     title: string,
-    size: number
+    size: number,
+    default: any
 }
 
 interface Int extends Field {
     type: "int",
     min: number,
-    max: number
+    max: number,
+    default: number
 }
 
 interface Float extends Field {
-    type: "unsigned float"
+    type: "unsigned float",
+    default: number
 }
 
 interface Checkbox extends Field {
@@ -76,7 +82,7 @@ interface Configs {
     id: string,
     title: string,
     fields: {
-        [key in Config]: Text | Int | Float | Checkbox | Select | Radio | Textarea | Hidden | Button
+        [key in Config]: Texts | Int | Float | Checkbox | Select | Radio | Textarea | Hidden | Button
     },
     events: {
         init?: Function<void>,
@@ -95,7 +101,7 @@ declare const GM: {
 };
 
 declare const GM_config: {
-    init(option: Configs): any,
-    get(key: Config): any,
+    init(option: Configs): void,
+    get(key: Config, defaults?: any): string,
     open(): void
 };

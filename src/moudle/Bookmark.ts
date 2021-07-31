@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 interface Bookmarks {
     [key: string]: Bookmark

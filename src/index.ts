@@ -12,10 +12,11 @@ import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import Setting from "./moudle/Setting";
 import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
+import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.3.2",
+    title: "BetterNovelpia - 3.4.2",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -62,6 +63,25 @@ GM_config.init({
             label: "공개 예정 소설 보기",
             type: "checkbox",
             default: false
+        },
+        ViewNovelToCookie: {
+            label: "다른 쿠키로 소설 보기",
+            type: "checkbox",
+            default: false
+        },
+        ViewNoelToCookie_LOGINKEY: {
+            label: "LOGINKEY",
+            title: "2",
+            type: "text",
+            size: 10,
+            default: undefined
+        },
+        ViewNoelToCookie_USERKEY: {
+            label: "USERKEY",
+            title: "4",
+            type: "text",
+            size: 10,
+            default: undefined
         },
         PreviousBookmark:
             {
@@ -118,18 +138,20 @@ GM_config.init({
     }
 });
 
-BetterSideView.Start();
-Bookmark.Start();
-DBNextChapter.Start();
-FreeEmoji.Start();
-HideAddNovel.Start();
-HideEvent.Start();
-InfoUnfold.Start();
-NovelDownload.Start();
-NovelListFix.Start();
-PreviousBookmark.Start();
-PrivateNovelBypass.Start();
-Setting.Start();
-
-AbsoluteBlockKey.Start();
-DisableViewerLog.Start();
+jQuery(() => {
+    Setting.Start();
+    BetterSideView.Start();
+    Bookmark.Start();
+    DBNextChapter.Start();
+    FreeEmoji.Start();
+    HideAddNovel.Start();
+    HideEvent.Start();
+    InfoUnfold.Start();
+    NovelDownload.Start();
+    NovelListFix.Start();
+    PreviousBookmark.Start();
+    ViewNovelToCookie.Start();
+    PrivateNovelBypass.Start();
+    AbsoluteBlockKey.Start();
+    DisableViewerLog.Start();
+});

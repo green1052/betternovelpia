@@ -3,7 +3,7 @@ import path from "path";
 import WebpackUserscript from "webpack-userscript";
 
 import {version} from "./package.json";
-import webpack from "webpack";
+import {Configuration} from "webpack";
 
 const header = {
     "name": "BetterNovelpia",
@@ -11,11 +11,10 @@ const header = {
     "description": "노벨피아를 더 좋게 바꿔줍니다!",
     "author": "green1052",
     "homepageURL": "https://github.com/green1052/betternovelpia",
-    "rut-at": "document-end",
+    "rut-at": "document-start",
     "include": "novelpia.com",
     "require": [
-        "https://raw.githubusercontent.com/green1052/GM_config/master/gm_config.min.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        "https://raw.githubusercontent.com/green1052/GM_config/master/gm_config.min.js"
     ],
     "grant": [
         "GM_getValue",
@@ -25,9 +24,9 @@ const header = {
     "version": version
 };
 
-const config: webpack.Configuration = {
+const config: Configuration = {
     mode: "production",
-    entry: "./src/index.ts",
+    entry: path.join(__dirname, "src", "index.ts"),
     module: {
         rules: [
             {

@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 function Start() {
     if (!GM_config.get("DBNextChapter") || !location.pathname.includes("/viewer/"))

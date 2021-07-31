@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 function Start() {
     if (!GM_config.get("BetterSideView") || location.pathname.includes("/viewer/"))
@@ -18,14 +19,12 @@ function Start() {
     $(document.body).prepend(div);
 
     $("#naviconLeftMobile").on("click", () => {
-        const BetterSideView = $("#BetterSideView");
+        if (div.css("display") !== "none")
+            return div.hide();
 
-        if (BetterSideView.css("display") !== "none")
-            return BetterSideView.hide();
-
-        if ($(document.body).hasClass("show-left"))
+        if (!$(document.body).hasClass("show-left"))
             return;
 
-        BetterSideView.show();
+        div.show();
     });
 }

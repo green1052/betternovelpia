@@ -1,4 +1,5 @@
 export default {Start};
+import $ from "jquery";
 
 const emojiList = [
     "https://image.novelpia.com/img/emoticon2/bjos3017us/1.png",
