@@ -20,7 +20,8 @@ type Config =
     "ViewNovelToCookie" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
-    "Eval";
+    "Eval" |
+    "PrivateMode";
 
 interface Field {
     label: string,

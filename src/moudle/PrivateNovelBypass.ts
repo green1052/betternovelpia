@@ -5,9 +5,9 @@ function Start() {
     if (!GM_config.get("PrivateNovelBypass") || !location.pathname.includes("/viewer/"))
         return;
 
-    const locked = $(".ion-locked");
+    const locked = $(".ion-locked").parent();
 
-    if (!locked.length)
+    if (!locked.text().includes("아직 공개되지 않은 소설입니다."))
         return;
 
     $.ajax({
@@ -20,7 +20,7 @@ function Start() {
             const json_m: { text: string, size: number, align: string }[] = [];
 
             for (const string of data["s"]) {
-                const json_t: { text: string, size: number, align: string } = {
+                const json_t = {
                     text: string["text"],
                     size: 11,
                     align: "left"
@@ -33,10 +33,9 @@ function Start() {
 
             locked
                 .parent()
-                .parent()
                 .append(`<ol id="novel_drawing" class="no-drag np" onclick="navi_view();" style="padding:0px;margin:0px;">`);
 
-            locked.parent().remove();
+            locked.remove();
 
             setTimeout(() => {
                 data_load = 1;

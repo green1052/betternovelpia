@@ -1,6 +1,5 @@
-import $ from "jquery";
-
 export default {Start};
+import $ from "jquery";
 
 function Start() {
     if (!GM_config.get("Eval") || location.pathname.includes("/viewer/"))

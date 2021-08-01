@@ -14,10 +14,12 @@ import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
 import Eval from "./moudle/debug/Eval";
+import $ from "jquery";
+import PrivateMode from "./moudle/PrivateMode";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.5.2",
+    title: "BetterNovelpia - 3.6.2",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -66,7 +68,7 @@ GM_config.init({
             default: false
         },
         ViewNovelToCookie: {
-            label: "다른 쿠키로 소설 보기",
+            label: "다른 쿠키로 Plus 소설 보기",
             type: "checkbox",
             default: false
         },
@@ -83,6 +85,11 @@ GM_config.init({
             type: "text",
             size: 10,
             default: undefined
+        },
+        PrivateMode: {
+            label: "프라이빗 모드",
+            type: "checkbox",
+            default: false
         },
         PreviousBookmark:
             {
@@ -144,7 +151,7 @@ GM_config.init({
     }
 });
 
-jQuery(() => {
+$(() => {
     BetterSideView.Start();
     Bookmark.Start();
     DBNextChapter.Start();
@@ -159,6 +166,7 @@ jQuery(() => {
     PrivateNovelBypass.Start();
     AbsoluteBlockKey.Start();
     DisableViewerLog.Start();
-    Setting.Start();
+    PrivateMode.Start();
     Eval.Start();
+    Setting.Start();
 });

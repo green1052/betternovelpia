@@ -12,7 +12,12 @@ function ResetCookie(name: string, value: string) {
 }
 
 function Start() {
-    if (!GM_config.get("ViewNovelToCookie") || !location.pathname.includes("/novel/"))
+    if (!GM_config.get("ViewNovelToCookie") || !location.pathname.includes("/viewer/"))
+        return;
+
+    const locked = $(".ion-locked").parent();
+
+    if (!locked.text().includes("Plus멤버십 가입하기"))
         return;
 
     const loginKey = GM_config.get("ViewNoelToCookie_LOGINKEY");
@@ -24,46 +29,44 @@ function Start() {
     const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
     const oldUserKey = Cookies.get("USERKEY") ?? "";
 
-    const observer = new MutationObserver(() => {
-        $("#episode_list > table:nth-child(1) > tbody:nth-child(1) tr").each((index, element) => {
-            const td = $(element).children().eq(1);
-            const onclick = td.attr("onclick");
+    ResetCookie("LOGINKEY", loginKey);
+    ResetCookie("USERKEY", userKey);
 
-            if (!onclick)
-                return;
+    $.ajax({
+        data: {"size": "14"},
+        type: "POST",
+        dataType: "JSON",
+        url: `/proc/viewer_data/${location.pathname.substring(8)}`,
+        cache: false,
+        success: (data) => {
+            const json_m: { text: string, size: number, align: string }[] = [];
 
-            const click = onclick.substring(39, onclick.length - 2);
+            for (const string of data["s"]) {
+                const json_t = {
+                    text: string["text"],
+                    size: 11,
+                    align: "left"
+                };
 
-            td
-                .removeAttr("onclick")
-                .on("click", () => {
-                    ResetCookie("LOGINKEY", loginKey);
-                    ResetCookie("USERKEY", userKey);
+                json_m.push(json_t);
+            }
 
-                    $.ajax({
-                        data: {"size": "14"},
-                        type: "POST",
-                        dataType: "JSON",
-                        url: `https://novelpia.com/proc/viewer_data/${click}`,
-                        cache: false,
-                        success: (data) => {
-                            let result = "";
+            novel_data = json_m;
 
-                            for (const string of data["s"]) {
-                                result += string["text"].replace(/&nbsp;/g, "");
-                            }
+            locked
+                .parent()
+                .append(`<ol id="novel_drawing" class="no-drag np" onclick="navi_view();" style="padding:0px;margin:0px;">`);
 
-                            alert(result);
+            locked.remove();
 
-                            ResetCookie("LOGINKEY", oldLoginKey);
-                            ResetCookie("USERKEY", oldUserKey);
-                        }
-                    });
-                });
-        });
-    });
-
-    observer.observe(document.querySelector("#episode_list")!, {
-        childList: true
+            setTimeout(() => {
+                data_load = 1;
+                novel_drawing(novel_data);
+            }, 10);
+        },
+        complete: () => {
+            ResetCookie("LOGINKEY", oldLoginKey);
+            ResetCookie("USERKEY", oldUserKey);
+        }
     });
 }
