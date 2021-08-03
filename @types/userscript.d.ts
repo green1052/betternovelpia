@@ -16,7 +16,7 @@ type Config =
     "Bookmark_OnlyUse" |
     "Bookmark_AutoUse" |
     "DisableViewLog" |
-    "AbsoluteBlockKey" |
+    "AbsoluteViewerDrag" |
     "ViewNovelToCookie" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
@@ -97,13 +97,15 @@ interface Configs {
 
 declare const unsafeWindow: any;
 
+type GMDefault = string | number | boolean | undefined;
+
 declare const GM: {
-    getValue(name: any): Promise<any>
-    setValue(name: any, value: any): any
+    getValue(name: GMDefault): Promise<GMDefault>
+    setValue(name: GMDefault, value: any): void
 };
 
 declare const GM_config: {
     init(option: Configs): void,
-    get(key: Config, defaults?: any): string,
+    get(key: Config, defaults?: any): GMDefault,
     open(): void
 };

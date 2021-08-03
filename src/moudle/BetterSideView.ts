@@ -22,9 +22,7 @@ function Start() {
         if (div.css("display") !== "none")
             return div.hide();
 
-        if (!$(document.body).hasClass("show-left"))
-            return;
-
-        div.show();
+        if ($(document.body).hasClass("show-left"))
+            div.show();
     });
 }

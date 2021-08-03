@@ -49,7 +49,7 @@ async function Main() {
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
-            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
+            const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
 
             let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
             let index = 0;
@@ -109,7 +109,7 @@ async function Reader() {
             if (!scrollTop)
                 return;
 
-            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
+            const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
 
             const title = $("b.cut_line_one").text();
             const chapter = $("span.cut_line_one > span:nth-child(1)").text();
@@ -126,7 +126,7 @@ async function Reader() {
     $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)")
         .children().eq(6).before(td);
 
-    const bookmarks: Bookmarks = await GM.getValue("bookmarks");
+    const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
 
     if (!bookmarks)
         return;
@@ -136,7 +136,7 @@ async function Reader() {
     if (!scrollTop)
         return;
 
-    const tempBookmark: { url: string, scrollTop: number } = await GM.getValue("tempBookmark");
+    const tempBookmark = await GM.getValue("tempBookmark") as unknown as { url: string, scrollTop: number };
 
     if (GM_config.get("PreviousBookmark_First") && tempBookmark)
         return;
@@ -156,7 +156,10 @@ async function Reader() {
         $("#novel_box").animate({scrollTop: scrollTop});
     });
 
-    observer.observe(document.querySelector("#novel_drawing")!, {
-        childList: true
-    });
+    const novelDrawing = document.querySelector("#novel_drawing");
+
+    if (novelDrawing)
+        observer.observe(novelDrawing, {
+            childList: true
+        });
 }

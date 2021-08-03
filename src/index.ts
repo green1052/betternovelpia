@@ -10,7 +10,7 @@ import NovelListFix from "./moudle/NovelListFix";
 import PreviousBookmark from "./moudle/PreviousBookmark";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import Setting from "./moudle/Setting";
-import AbsoluteBlockKey from "./moudle/debug/AbsoluteBlockKey";
+import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
 import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
 import Eval from "./moudle/debug/Eval";
@@ -19,7 +19,7 @@ import PrivateMode from "./moudle/PrivateMode";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.6.3",
+    title: "BetterNovelpia - 3.7.3",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -91,6 +91,11 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
+        AbsoluteViewerDrag: {
+            label: "뷰어 드래그 허용",
+            type: "checkbox",
+            default: false
+        },
         PreviousBookmark:
             {
                 label: "이전 회차 북마크 개선",
@@ -135,11 +140,6 @@ GM_config.init({
                 default: false,
                 "section": ["디버깅"]
             },
-        AbsoluteBlockKey: {
-            label: "F12와 우클릭 허용",
-            type: "checkbox",
-            default: false
-        },
         Eval: {
             label: "Eval 사용",
             type: "checkbox",
@@ -164,9 +164,9 @@ $(() => {
     PreviousBookmark.Start();
     ViewNovelToCookie.Start();
     PrivateNovelBypass.Start();
-    AbsoluteBlockKey.Start();
     DisableViewerLog.Start();
     PrivateMode.Start();
+    AbsoluteViewerDrag.Start();
     Eval.Start();
     Setting.Start();
 });

@@ -23,7 +23,7 @@ async function Start() {
         GM.setValue("tempBookmark", {url: location.href, scrollTop: scrollTop});
     }, 1000);
 
-    const bookmark: Bookmark = await GM.getValue("tempBookmark");
+    const bookmark = await GM.getValue("tempBookmark") as unknown as Bookmark;
 
     if (!bookmark || location.href !== bookmark.url)
         return;
@@ -49,7 +49,10 @@ async function Start() {
         $("#novel_box").animate({scrollTop: bookmark.scrollTop});
     });
 
-    observer.observe(document.querySelector("#novel_drawing")!, {
-        childList: true
-    });
+    const novelDrawing = document.querySelector("#novel_drawing");
+
+    if (novelDrawing)
+        observer.observe(novelDrawing, {
+            childList: true
+        });
 }

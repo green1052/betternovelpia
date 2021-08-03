@@ -1,6 +1,6 @@
-declare function pageload(url: any, option: number): void
+declare function pageload(url: string, option: number): void
 
-declare function emoticon_open(idx: any): void
+declare function emoticon_open(idx: string): void
 
 declare function up_down_btn_view(option: any): void
 
@@ -16,4 +16,4 @@ declare var novel_data: [] | { text: string, size: number, align: string }[];
 
 declare var data_load: 0 | 1;
 
-declare function novel_drawing(novel_d): void;
+declare function novel_drawing(novel_d: { text: string, size: number, align: string }[]): void;

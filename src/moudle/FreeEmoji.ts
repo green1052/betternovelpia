@@ -178,7 +178,7 @@ function Start() {
     const li = $(`<li class="nav-ite">`)
         .on("click", () => {
             $(".emoticon").hide();
-            emoticon_open(0);
+            emoticon_open("0");
         })
         .append(img);
 

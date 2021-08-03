@@ -5,18 +5,20 @@ function Start() {
     if (!GM_config.get("DisableViewLog") || !location.pathname.includes("/viewer/"))
         return;
 
-    unsafeWindow.up_down_btn_view = function (option: any) {
-        if (option !== "on") {
+    unsafeWindow.up_down_btn_view = (option: "on" | "off") => {
+        if (option === "off") {
             $("#scroll_up_btn").hide();
-            return $("#scroll_down_btn").hide();
+            $("#scroll_down_btn").hide();
+
+            return;
         }
 
-        let currentPercentage;
+        const commentBox = $("#comment_box");
+        const novelBox = $("#novel_box");
 
-        if (option_btn_comment == 1)
-            currentPercentage = ($("#comment_box").scrollTop()! / ($("#comment_load").outerHeight()! - $("#comment_box").height()!)) * 100;
-        else
-            currentPercentage = ($("#novel_box").scrollTop()! / ($("#novel_text").outerHeight()! - $("#novel_box").height()!)) * 100;
+        const currentPercentage = option_btn_comment == 1
+            ? (commentBox.scrollTop()! / ($("#comment_load").outerHeight()! - commentBox.height()!)) * 100
+            : (novelBox.scrollTop()! / ($("#novel_text").outerHeight()! - novelBox.height()!)) * 100;
 
         if (currentPercentage < 10) {
             $("#scroll_up_btn").hide();
@@ -30,7 +32,7 @@ function Start() {
         }
     };
 
-    unsafeWindow.navi_view = function () {
+    unsafeWindow.navi_view = () => {
         if (option_btn_comment == 1)
             return;
 

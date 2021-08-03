@@ -5,8 +5,6 @@ function Start() {
     if (!GM_config.get("Eval") || location.pathname.includes("/viewer/"))
         return;
 
-    const h5 = $("<h5>eval</h5>");
-
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", () => {
@@ -21,7 +19,7 @@ function Start() {
                 alert(`오류:\n${e}`);
             }
         })
-        .append(h5);
+        .append("<h5>eval</h5>");
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }

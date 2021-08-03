@@ -23,7 +23,7 @@ function Start() {
                         data: {"size": "14"},
                         type: "POST",
                         dataType: "JSON",
-                        url: `https://novelpia.com/proc/viewer_data/${click}`,
+                        url: `/proc/viewer_data/${click}`,
                         cache: false,
                         success: (data) => {
                             let result = "";

@@ -23,8 +23,7 @@ function Start() {
             .removeAttr("class")
             .removeAttr("style")
             .css("margin", "15px")
-            .children()
-            .remove();
+            .empty();
 
     $(`div[onclick="$('.loads').show();location='/notice/all/view_171726';"]`)
         .removeAttr("class")

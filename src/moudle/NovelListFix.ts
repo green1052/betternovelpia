@@ -7,6 +7,6 @@ function Start() {
 
     $(`div[class=""][onclick*="location"]`).each((index, element) => {
         const query = $(element);
-        query.attr("onclick", `$(".loads").show(); ${query.attr("onclick")}`);
+        query.attr("onclick", `$('.loads').show();${query.attr("onclick")}`);
     });
 }
