@@ -59,12 +59,12 @@ function Start() {
 
             locked.remove();
 
+            data_load = 1;
+            novel_drawing(novel_data);
+
             const next = $(`img[src*="btn_next.png"]`)
                 .parent()
                 .attr("onclick");
-
-            data_load = 1;
-            novel_drawing(novel_data);
 
             if (next)
                 $("#novel_drawing")
