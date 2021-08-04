@@ -95,17 +95,17 @@ interface Configs {
     }
 }
 
-declare const unsafeWindow: any;
-
-type GMDefault = string | number | boolean | undefined;
+declare const unsafeWindow: {
+    [key: string]: any
+};
 
 declare const GM: {
-    getValue(name: GMDefault): Promise<GMDefault>
-    setValue(name: GMDefault, value: any): void
+    getValue(name: any): Promise<any>
+    setValue(name: any, value: any): void
 };
 
 declare const GM_config: {
     init(option: Configs): void,
-    get(key: Config, defaults?: any): GMDefault,
+    get(key: Config, defaults?: any): any,
     open(): void
 };

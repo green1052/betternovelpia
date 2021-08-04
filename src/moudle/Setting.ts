@@ -1,7 +1,8 @@
-export default {Start};
 import $ from "jquery";
 
-function Start() {
+export default {start};
+
+function start() {
     if (location.pathname.includes("/viewer/"))
         return;
 

@@ -1,9 +1,9 @@
 import path from "path";
-
 import WebpackUserscript from "webpack-userscript";
-
-import {version} from "./package.json";
+import TerserPlugin from "terser-webpack-plugin";
+import {cpus} from "os";
 import {Configuration} from "webpack";
+import {version} from "./package.json";
 
 const header = {
     "name": "BetterNovelpia",
@@ -24,38 +24,20 @@ const header = {
     "version": version
 };
 
-const config: Configuration = {
+export default {
     mode: "production",
     entry: path.join(__dirname, "src", "index.ts"),
     module: {
         rules: [
             {
                 test: /\.ts$/,
-                include: /src/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                            [
-                                "@babel/preset-env",
-                                {
-                                    "targets": {
-                                        "browsers": ["last 2 versions"]
-                                    }
-                                }
-                            ],
-                            "@babel/preset-typescript"
-                        ],
-                        plugins: [
-                            "@babel/transform-runtime"
-                        ]
-                    }
-                }
+                use: "ts-loader",
+                include: /src/
             }
         ]
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx"]
+        extensions: [".ts", ".js"]
     },
     output: {
         path: path.join(__dirname, "dist"),
@@ -66,7 +48,19 @@ const config: Configuration = {
             metajs: false,
             headers: header
         })
-    ]
-};
-
-export default config;
+    ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    format: {
+                        comments: false
+                    }
+                },
+                extractComments: false,
+                parallel: cpus().length - 1
+            })
+        ]
+    }
+} as Configuration;

@@ -19,7 +19,7 @@ import PrivateMode from "./moudle/PrivateMode";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.7.4",
+    title: "BetterNovelpia - 3.8.4",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -152,21 +152,21 @@ GM_config.init({
 });
 
 $(() => {
-    BetterSideView.Start();
-    Bookmark.Start();
-    DBNextChapter.Start();
-    FreeEmoji.Start();
-    HideAddNovel.Start();
-    HideEvent.Start();
-    InfoUnfold.Start();
-    NovelDownload.Start();
-    NovelListFix.Start();
-    PreviousBookmark.Start();
-    ViewNovelToCookie.Start();
-    PrivateNovelBypass.Start();
-    DisableViewerLog.Start();
-    PrivateMode.Start();
-    AbsoluteViewerDrag.Start();
-    Eval.Start();
-    Setting.Start();
+    BetterSideView.start();
+    Bookmark.start();
+    DBNextChapter.start();
+    FreeEmoji.start();
+    HideAddNovel.start();
+    HideEvent.start();
+    InfoUnfold.start();
+    NovelDownload.start();
+    NovelListFix.start();
+    PreviousBookmark.start();
+    ViewNovelToCookie.start();
+    PrivateNovelBypass.start();
+    DisableViewerLog.start();
+    PrivateMode.start();
+    AbsoluteViewerDrag.start();
+    Eval.start();
+    Setting.start();
 });

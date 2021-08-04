@@ -1,6 +1,6 @@
-const id = "";
-const count = 1;
-const type = "";
+const id: string = "";
+const count: number = 0;
+const type: "png" | "jpg" | "gif" | "" = "";
 
 for (let i = 1; i <= count; i++)
-    console.log(`https://image.novelpia.com/img/emoticon2/${id}/${i}.${type}`);
+    console.log(`${id}/${i}.${type}`);

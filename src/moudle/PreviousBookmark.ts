@@ -1,12 +1,14 @@
-export default {Start};
 import $ from "jquery";
+import {Bookmarks} from "./Bookmark";
 
-interface Bookmark {
+export default {start};
+
+export interface PreviousBookmark {
     url: string,
     scrollTop: number
 }
 
-async function Start() {
+async function start() {
     if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
         return;
 
@@ -23,12 +25,12 @@ async function Start() {
         GM.setValue("tempBookmark", {url: location.href, scrollTop: scrollTop});
     }, 1000);
 
-    const bookmark = await GM.getValue("tempBookmark") as unknown as Bookmark;
+    const bookmark: PreviousBookmark = await GM.getValue("tempBookmark");
 
     if (!bookmark || location.href !== bookmark.url)
         return;
 
-    const bookmarks = await GM.getValue("bookmarks");
+    const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
     if (!GM_config.get("PreviousBookmark_First") && (bookmarks && bookmarks.hasOwnProperty(location.href)))
         return;

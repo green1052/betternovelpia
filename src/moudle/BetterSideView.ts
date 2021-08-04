@@ -1,7 +1,8 @@
-export default {Start};
 import $ from "jquery";
 
-function Start() {
+export default {start};
+
+function start() {
     if (!GM_config.get("BetterSideView") || location.pathname.includes("/viewer/"))
         return;
 

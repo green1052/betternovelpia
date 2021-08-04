@@ -1,7 +1,9 @@
-export default {Start};
 import $ from "jquery";
+import {PreviousBookmark} from "./PreviousBookmark";
 
-interface Bookmarks {
+export default {start};
+
+export interface Bookmarks {
     [key: string]: Bookmark
 }
 
@@ -11,7 +13,7 @@ interface Bookmark {
     chapter: string
 }
 
-function SetBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
+function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
     const json: Bookmarks = bookmarks ?? {};
 
     json[url] = {
@@ -23,20 +25,20 @@ function SetBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title
     GM.setValue("bookmarks", json);
 }
 
-function RemoveBookmark(bookmarks: Bookmarks, url: string) {
+function removeBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
     GM.setValue("bookmarks", bookmarks);
 }
 
-async function Start() {
+async function start() {
     if (!GM_config.get("Bookmark"))
         return;
 
-    await Main();
-    await Reader();
+    await main();
+    await reader();
 }
 
-async function Main() {
+async function main() {
     if (location.pathname.includes("/viewer/"))
         return;
 
@@ -49,7 +51,7 @@ async function Main() {
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
-            const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
+            const bookmarks = await GM.getValue("bookmarks");
 
             let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
             let index = 0;
@@ -83,7 +85,7 @@ async function Main() {
             if (isNaN(number) || number === 0)
                 return;
 
-            RemoveBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
+            removeBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
             alert("삭제 됐습니다.");
         })
         .append(a);
@@ -91,7 +93,7 @@ async function Main() {
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }
 
-async function Reader() {
+async function reader() {
     if (!location.pathname.includes("/viewer/"))
         return;
 
@@ -109,7 +111,7 @@ async function Reader() {
             if (!scrollTop)
                 return;
 
-            const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
+            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
             const title = $("b.cut_line_one").text();
             const chapter = $("span.cut_line_one > span:nth-child(1)").text();
@@ -117,7 +119,7 @@ async function Reader() {
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
 
-            SetBookmark(bookmarks, url, scrollTop, title, chapter);
+            setBookmark(bookmarks, url, scrollTop, title, chapter);
 
             alert("저장되었습니다.");
         })
@@ -126,7 +128,7 @@ async function Reader() {
     $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)")
         .children().eq(6).before(td);
 
-    const bookmarks = await GM.getValue("bookmarks") as unknown as Bookmarks;
+    const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
     if (!bookmarks)
         return;
@@ -136,13 +138,13 @@ async function Reader() {
     if (!scrollTop)
         return;
 
-    const tempBookmark = await GM.getValue("tempBookmark") as unknown as { url: string, scrollTop: number };
+    const tempBookmark: PreviousBookmark = await GM.getValue("tempBookmark");
 
     if (GM_config.get("PreviousBookmark_First") && tempBookmark)
         return;
 
     if (GM_config.get("Bookmark_OnlyUse")) {
-        RemoveBookmark(bookmarks, location.href);
+        removeBookmark(bookmarks, location.href);
         GM.setValue("bookmarks", bookmarks);
     }
 
