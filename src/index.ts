@@ -7,7 +7,6 @@ import HideEvent from "./moudle/HideEvent";
 import InfoUnfold from "./moudle/InfoUnfold";
 import NovelDownload from "./moudle/NovelDownload";
 import NovelListFix from "./moudle/NovelListFix";
-import PreviousBookmark from "./moudle/PreviousBookmark";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import Setting from "./moudle/Setting";
 import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
@@ -161,7 +160,6 @@ $(() => {
     InfoUnfold.start();
     NovelDownload.start();
     NovelListFix.start();
-    PreviousBookmark.start();
     ViewNovelToCookie.start();
     PrivateNovelBypass.start();
     DisableViewerLog.start();

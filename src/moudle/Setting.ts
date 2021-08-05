@@ -15,9 +15,7 @@ function start() {
 
     const li = $("<li>")
         .css("padding", "10px 25px")
-        .on("click", () => {
-            GM_config.open();
-        })
+        .on("click", () => GM_config.open())
         .append(a);
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);

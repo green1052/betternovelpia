@@ -47,7 +47,7 @@ function start() {
         });
     });
 
-    observer.observe(document.querySelector("#episode_list")!, {
+    observer.observe($("#episode_list").get(0), {
         childList: true
     });
 }

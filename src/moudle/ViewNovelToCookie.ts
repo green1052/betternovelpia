@@ -1,6 +1,5 @@
-import Cookies from "js-cookie";
 import $ from "jquery";
-
+import Cookies from "js-cookie";
 import {fakeViewer} from "../util/FakeViewer";
 
 export default {start};

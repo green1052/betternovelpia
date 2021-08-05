@@ -1,4 +1,3 @@
-export default {fakeViewer};
 import $ from "jquery";
 
 export function fakeViewer(locked: JQuery, novelData: { text: string, size: number, align: string }[]) {
@@ -7,7 +6,6 @@ export function fakeViewer(locked: JQuery, novelData: { text: string, size: numb
     locked
         .parent()
         .append(`<ol id="novel_drawing" class="no-drag np" onclick="navi_view();" style="padding:0px;margin:0px;">`);
-
     locked.remove();
 
     data_load = 1;
