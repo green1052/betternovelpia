@@ -18,7 +18,7 @@ import PrivateMode from "./moudle/PrivateMode";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.8.4",
+    title: "BetterNovelpia - 3.9.4",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
