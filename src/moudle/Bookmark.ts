@@ -1,16 +1,20 @@
 import $ from "jquery";
-import {PreviousBookmark} from "./PreviousBookmark";
 
 export default {start};
-
-export interface Bookmarks {
-    [key: string]: Bookmark
-}
 
 interface Bookmark {
     scrollTop: number,
     title: string,
     chapter: string
+}
+
+interface Bookmarks {
+    [key: string]: Bookmark
+}
+
+interface PreviousBookmark {
+    url: string,
+    scrollTop: number;
 }
 
 function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
@@ -30,28 +34,83 @@ function removeBookmark(bookmarks: Bookmarks, url: string) {
     GM.setValue("bookmarks", bookmarks);
 }
 
-async function start() {
-    if (!GM_config.get("Bookmark"))
+function waitNovelDrawing(dom: HTMLElement, code: Function) {
+    if (!dom)
         return;
 
-    await main();
-    await reader();
+    const observer = new MutationObserver(() => {
+        observer.disconnect();
+        code();
+    });
+
+    observer.observe(dom, {childList: true});
 }
 
-async function main() {
-    if (location.pathname.includes("/viewer/"))
+async function isFirst(who: "previous" | "bookmark"): Promise<boolean> {
+    const bookmarks: Bookmarks = await GM.getValue("bookmarks");
+    const previousBookmark: PreviousBookmark = await GM.getValue("previousBookmark");
+
+    if (who === "previous")
+        return GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined ? true : !(bookmarks && bookmarks.hasOwnProperty(location.href));
+
+    return !GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined;
+}
+
+async function start() {
+    await previousBookmark();
+
+    addMainBookmarkButton();
+    await addViewerBookmarkButton();
+}
+
+async function previousBookmark() {
+    if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
         return;
 
-    const img = $(`<img src="https://image.novelpia.com/img/new/icon/count_book.png">`)
-        .css("height", 25);
+    const bookmark = await GM.getValue("previousBookmark") as PreviousBookmark;
 
-    const a = $("<a>")
-        .append(img);
+    let lastScrollTop: number;
+
+    setInterval(() => {
+        const scrollTop = $("#novel_box").scrollTop()!;
+
+        if (!scrollTop || scrollTop === lastScrollTop)
+            return;
+
+        lastScrollTop = scrollTop;
+
+        GM.setValue("previousBookmark", {url: location.href, scrollTop: lastScrollTop} as PreviousBookmark);
+    }, 500);
+
+    if (!bookmark || location.href !== bookmark.url)
+        return;
+
+    if (!await isFirst("previous"))
+        return;
+
+    if (GM_config.get("PreviousBookmark_OnlyUse"))
+        GM.setValue("previousBookmark", {});
+
+    if (!bookmark.scrollTop)
+        return;
+
+    waitNovelDrawing($("#novel_drawing").get(0), () => {
+        if (!GM_config.get("PreviousBookmark_AutoUse"))
+            if (!confirm("읽던 부분으로 이동하시겠습니까?"))
+                return;
+
+        $("#novel_box").animate({scrollTop: bookmark.scrollTop}, 0);
+    });
+}
+
+function addMainBookmarkButton() {
+    if (!GM_config.get("Bookmark") || location.pathname.includes("/viewer/"))
+        return;
 
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
-            const bookmarks = await GM.getValue("bookmarks");
+            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
             let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
             let index = 0;
@@ -88,13 +147,13 @@ async function main() {
             removeBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
             alert("삭제 됐습니다.");
         })
-        .append(a);
+        .append(`<a><img height="25" src="https://image.novelpia.com/img/new/icon/count_book.png"></a>`);
 
     $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
 }
 
-async function reader() {
-    if (!location.pathname.includes("/viewer/"))
+async function addViewerBookmarkButton() {
+    if (!GM_config.get("Bookmark") || !location.pathname.includes("/viewer/"))
         return;
 
     const img = $(`<img id="btn_theme" class="footer_btn" src="https://image.novelpia.com/img/new/icon/count_book.png">`);
@@ -105,11 +164,13 @@ async function reader() {
         .css("width", 63)
         .css("z-index", 10000)
         .on("click", async () => {
-            const url = location.href;
-            const scrollTop = $("#novel_box").scrollTop() ?? 0;
+            const scrollTop = $("#novel_box").scrollTop();
 
-            if (!scrollTop)
+            if (scrollTop === undefined)
                 return;
+
+            if (scrollTop === 0)
+                return alert("스크롤을 해야 저장할 수 있습니다.");
 
             const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
@@ -119,7 +180,7 @@ async function reader() {
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
 
-            setBookmark(bookmarks, url, scrollTop, title, chapter);
+            setBookmark(bookmarks, location.href, scrollTop, title, chapter);
 
             alert("저장되었습니다.");
         })
@@ -138,9 +199,7 @@ async function reader() {
     if (!scrollTop)
         return;
 
-    const tempBookmark: PreviousBookmark = await GM.getValue("tempBookmark");
-
-    if (GM_config.get("PreviousBookmark_First") && tempBookmark)
+    if (!await isFirst("bookmark"))
         return;
 
     if (GM_config.get("Bookmark_OnlyUse")) {
@@ -148,20 +207,11 @@ async function reader() {
         GM.setValue("bookmarks", bookmarks);
     }
 
-    const observer = new MutationObserver(() => {
-        observer.disconnect();
-
+    waitNovelDrawing($("#novel_drawing").get(0), () => {
         if (!GM_config.get("Bookmark_AutoUse"))
             if (!confirm("저장해두었던 북마크로 이동하시겠습니까?"))
                 return;
 
-        $("#novel_box").animate({scrollTop: scrollTop});
+        $("#novel_box").animate({scrollTop: scrollTop}, 0);
     });
-
-    const novelDrawing = document.querySelector("#novel_drawing");
-
-    if (novelDrawing)
-        observer.observe(novelDrawing, {
-            childList: true
-        });
 }
