@@ -1,24 +1,23 @@
+import $ from "jquery";
+import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
 import BetterSideView from "./moudle/BetterSideView";
 import Bookmark from "./moudle/Bookmark";
 import DBNextChapter from "./moudle/DBNextChapter";
+import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 import FreeEmoji from "./moudle/FreeEmoji";
 import HideAddNovel from "./moudle/HideAddNovel";
 import HideEvent from "./moudle/HideEvent";
 import InfoUnfold from "./moudle/InfoUnfold";
 import NovelDownload from "./moudle/NovelDownload";
 import NovelListFix from "./moudle/NovelListFix";
+import PrivateMode from "./moudle/PrivateMode";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import Setting from "./moudle/Setting";
-import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
-import DisableViewerLog from "./moudle/debug/DisableViewerLog";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
-import Eval from "./moudle/debug/Eval";
-import $ from "jquery";
-import PrivateMode from "./moudle/PrivateMode";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.9.5",
+    title: "BetterNovelpia - 3.10.5",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -100,7 +99,7 @@ GM_config.init({
                 label: "이전 회차 북마크 개선",
                 type: "checkbox",
                 default: false,
-                "section": ["북마크 설정"]
+                section: ["북마크 설정"]
             },
         PreviousBookmark_First: {
             label: "이전 회차 북마크 우선",
@@ -137,13 +136,8 @@ GM_config.init({
                 label: "뷰어 디버그 로그 제거",
                 type: "checkbox",
                 default: false,
-                "section": ["디버깅"]
-            },
-        Eval: {
-            label: "Eval 사용",
-            type: "checkbox",
-            default: false
-        }
+                section: ["디버깅"]
+            }
     },
     events: {
         save: () => location.reload()
@@ -151,6 +145,11 @@ GM_config.init({
 });
 
 $(() => {
+    // core
+    Setting.start();
+
+    // module
+    AbsoluteViewerDrag.start();
     BetterSideView.start();
     Bookmark.start();
     DBNextChapter.start();
@@ -160,11 +159,10 @@ $(() => {
     InfoUnfold.start();
     NovelDownload.start();
     NovelListFix.start();
-    ViewNovelToCookie.start();
-    PrivateNovelBypass.start();
-    DisableViewerLog.start();
     PrivateMode.start();
-    AbsoluteViewerDrag.start();
-    Eval.start();
-    Setting.start();
+    PrivateNovelBypass.start();
+    ViewNovelToCookie.start();
+
+    // debug
+    DisableViewerLog.start();
 });

@@ -22,7 +22,7 @@ function start() {
             const json_m: { text: string, size: number, align: string }[] = [];
 
             for (const string of data["s"]) {
-                const json_t = {
+                const json_t: { text: string, size: number, align: string } = {
                     text: string["text"],
                     size: 11,
                     align: "left"

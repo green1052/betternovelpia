@@ -1,27 +1,26 @@
 type Config =
+    "AbsoluteViewerDrag" |
     "BetterSideView" |
-    "HideEvent" |
-    "HideAddNovel" |
-    "InfoUnfold" |
+    "Bookmark" |
+    "Bookmark_AutoUse" |
+    "Bookmark_OnlyUse" |
     "DBNextChapter" |
+    "DisableViewLog" |
     "FreeEmoji" |
+    "HideAddNovel" |
+    "HideEvent" |
+    "InfoUnfold" |
     "NovelDownload" |
     "NovelListFix" |
-    "PrivateNovelBypass" |
     "PreviousBookmark" |
+    "PreviousBookmark_AutoUse" |
     "PreviousBookmark_First" |
     "PreviousBookmark_OnlyUse" |
-    "PreviousBookmark_AutoUse" |
-    "Bookmark" |
-    "Bookmark_OnlyUse" |
-    "Bookmark_AutoUse" |
-    "DisableViewLog" |
-    "AbsoluteViewerDrag" |
-    "ViewNovelToCookie" |
+    "PrivateMode" |
+    "PrivateNovelBypass" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
-    "Eval" |
-    "PrivateMode";
+    "ViewNovelToCookie";
 
 interface Field {
     label: string,
