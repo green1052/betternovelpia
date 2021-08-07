@@ -21,7 +21,7 @@ function start() {
             const textarea = $("<textarea>")
                 .val($("#novel_drawing").text()
                     .replace("다음화 보기", "")
-                    .replace("", "여기까지가 등록된 마지막 회차입니다"))
+                    .replace("여기까지가 등록된 마지막 회차입니다", ""))
                 .attr("readonly", "")
                 .css("position", "absolute")
                 .css("left", "-9999px");

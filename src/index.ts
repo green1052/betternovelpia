@@ -72,14 +72,14 @@ GM_config.init({
         },
         ViewNoelToCookie_LOGINKEY: {
             label: "LOGINKEY",
-            title: "2",
+            title: "LOGINKEY",
             type: "text",
             size: 10,
             default: undefined
         },
         ViewNoelToCookie_USERKEY: {
             label: "USERKEY",
-            title: "4",
+            title: "USERKEY",
             type: "text",
             size: 10,
             default: undefined
@@ -144,14 +144,14 @@ GM_config.init({
     }
 });
 
-$(() => {
+$(async () => {
     // core
     Setting.start();
 
     // module
     AbsoluteViewerDrag.start();
     BetterSideView.start();
-    Bookmark.start();
+    await Bookmark.start();
     DBNextChapter.start();
     FreeEmoji.start();
     HideAddNovel.start();
