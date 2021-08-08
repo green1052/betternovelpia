@@ -144,14 +144,14 @@ GM_config.init({
     }
 });
 
-$(async () => {
+$(() => {
     // core
     Setting.start();
 
     // module
     AbsoluteViewerDrag.start();
     BetterSideView.start();
-    await Bookmark.start();
+    Bookmark.start();
     DBNextChapter.start();
     FreeEmoji.start();
     HideAddNovel.start();

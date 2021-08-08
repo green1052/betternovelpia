@@ -4,4 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 5
+      timezone: Asia/Seoul
+    reviewers:
+      - "green1052
+    open-pull-requests-limit: 10
