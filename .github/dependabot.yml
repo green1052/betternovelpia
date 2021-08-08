@@ -6,5 +6,5 @@ updates:
       interval: daily
       timezone: Asia/Seoul
     reviewers:
-      - "green1052
+      - "green1052"
     open-pull-requests-limit: 10
