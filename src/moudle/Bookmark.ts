@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {waitElement} from "../util/WaitElement";
 
 export default {start};
 
@@ -32,18 +33,6 @@ function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title
 function removeBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
     GM.setValue("bookmarks", bookmarks);
-}
-
-function waitNovelDrawing(dom: HTMLElement, code: Function) {
-    if (!dom)
-        return;
-
-    const observer = new MutationObserver(() => {
-        observer.disconnect();
-        code();
-    });
-
-    observer.observe(dom, {childList: true});
 }
 
 async function isFirst(who: "previous" | "bookmark"): Promise<boolean> {
@@ -94,7 +83,7 @@ async function previousBookmark() {
     if (!bookmark.scrollTop)
         return;
 
-    waitNovelDrawing($("#novel_drawing").get(0), () => {
+    waitElement($("#novel_drawing").get(0), () => {
         if (!GM_config.get("PreviousBookmark_AutoUse"))
             if (!confirm("읽던 부분으로 이동하시겠습니까?"))
                 return;
@@ -207,7 +196,7 @@ async function addViewerBookmarkButton() {
         GM.setValue("bookmarks", bookmarks);
     }
 
-    waitNovelDrawing($("#novel_drawing").get(0), () => {
+    waitElement($("#novel_drawing").get(0), () => {
         if (!GM_config.get("Bookmark_AutoUse"))
             if (!confirm("저장해두었던 북마크로 이동하시겠습니까?"))
                 return;

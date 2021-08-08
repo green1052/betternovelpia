@@ -1,4 +1,5 @@
 import $ from "jquery";
+import Setting from "./core/Setting";
 import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
 import BetterSideView from "./moudle/BetterSideView";
 import Bookmark from "./moudle/Bookmark";
@@ -12,12 +13,12 @@ import NovelDownload from "./moudle/NovelDownload";
 import NovelListFix from "./moudle/NovelListFix";
 import PrivateMode from "./moudle/PrivateMode";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
-import Setting from "./moudle/Setting";
+import UrlPrettier from "./moudle/UrlPrettier";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.10.5",
+    title: "BetterNovelpia - 3.11.5",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -62,6 +63,11 @@ GM_config.init({
         },
         PrivateNovelBypass: {
             label: "공개 예정 소설 보기",
+            type: "checkbox",
+            default: false
+        },
+        UrlPrettier: {
+            label: "URL a href 적용",
             type: "checkbox",
             default: false
         },
@@ -161,6 +167,7 @@ $(() => {
     NovelListFix.start();
     PrivateMode.start();
     PrivateNovelBypass.start();
+    UrlPrettier.start();
     ViewNovelToCookie.start();
 
     // debug

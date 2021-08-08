@@ -31,13 +31,14 @@ export default {
         rules: [
             {
                 test: /\.ts$/,
-                use: "ts-loader",
+                use: "swc-loader",
                 include: /src/
             }
         ]
     },
     resolve: {
-        extensions: [".ts"]
+        modules: ["node_modules"],
+        extensions: [".js", ".ts"]
     },
     output: {
         path: path.join(__dirname, "dist"),

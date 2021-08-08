@@ -18,6 +18,7 @@ type Config =
     "PreviousBookmark_OnlyUse" |
     "PrivateMode" |
     "PrivateNovelBypass" |
+    "UrlPrettier" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
     "ViewNovelToCookie";

@@ -1,0 +1,15 @@
+{
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "tsx": false,
+            "decorators": false,
+            "dynamicImport": false
+        }
+    },
+    "env": {
+        "targets": "last 2 versions",
+        "mode": "entry",
+        "coreJs": 3
+    }
+}
