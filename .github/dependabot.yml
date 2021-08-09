@@ -5,6 +5,4 @@ updates:
     schedule:
       interval: daily
       timezone: Asia/Seoul
-    reviewers:
-      - "green1052"
     open-pull-requests-limit: 10

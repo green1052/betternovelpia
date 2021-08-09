@@ -15,10 +15,10 @@ jobs:
           node-version: 16
 
       - name: Install
-        run: npm install --force
+        run: yarn install
 
       - name: Build
-        run: npm run build
+        run: yarn run build
 
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
