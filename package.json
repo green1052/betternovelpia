@@ -20,7 +20,7 @@
     "homepage": "https://github.com/green1052/betternovelpia#readme",
     "packageManager": "yarn@3.0.0",
     "devDependencies": {
-        "@swc/core": "^1.2.75",
+        "@swc/core": "^1.2.76",
         "@types/jquery": "^3.5.6",
         "@types/js-cookie": "^2.2.7",
         "@types/terser-webpack-plugin": "^5.0.4",
