@@ -1,6 +1,7 @@
 import urlRegex from "url-regex";
 import {waitElement} from "../util/WaitElement";
 import $ from "jquery";
+import {NOVEL_DRAWING} from "../util/Selectors";
 
 export default {start};
 
@@ -8,12 +9,14 @@ function start() {
     if (!GM_config.get("UrlPrettier") || !location.pathname.includes("/viewer/"))
         return;
 
-    waitElement($("#novel_drawing").get(0), () => {
-        const novelDrawing = $("#novel_drawing");
+    waitElement($(NOVEL_DRAWING).get(0), () => {
+        const novelDrawing = $(NOVEL_DRAWING);
 
-        for (const str of novelDrawing.text().match(urlRegex({strict: false})) ?? []) {
-            $(`#novel_drawing font:contains("${str}")`)
-                .wrapAll(`<a target="_blank" href="${str}">`);
-        }
+        const match = novelDrawing.text().match(urlRegex({strict: false}));
+
+        if (match)
+            for (const str of match)
+                $(`${NOVEL_DRAWING} font:contains("${str}")`)
+                    .wrapAll(`<a target="_blank" href="${str}">`);
     });
 }

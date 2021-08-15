@@ -1,6 +1,8 @@
 import $ from "jquery";
 import Cookies from "js-cookie";
 import {fakeViewer} from "../util/FakeViewer";
+import {LOCKED} from "../util/Selectors";
+import {viewerData} from "../util/ViewerData";
 
 export default {start};
 
@@ -17,7 +19,7 @@ function start() {
     if (!GM_config.get("ViewNovelToCookie") || !location.pathname.includes("/viewer/"))
         return;
 
-    const locked = $(".ion-locked").parent();
+    const locked = $(LOCKED).parent();
 
     if (!locked.text().includes("Plus멤버십 가입하기") && !locked.text().includes("열람에 회원가입/로그인이 필요한 회차입니다"))
         return;
@@ -34,30 +36,10 @@ function start() {
     resetCookie("LOGINKEY", loginKey);
     resetCookie("USERKEY", userKey);
 
-    $.ajax({
-        data: {"size": "14"},
-        type: "POST",
-        dataType: "JSON",
-        url: `/proc/viewer_data/${location.pathname.substring(8)}`,
-        cache: false,
-        success: (data) => {
-            const json_m: { text: string, size: number, align: string }[] = [];
-
-            for (const string of data["s"]) {
-                const json_t = {
-                    text: string["text"],
-                    size: 11,
-                    align: "left"
-                };
-
-                json_m.push(json_t);
-            }
-
-            fakeViewer(locked, json_m);
-        },
-        complete: () => {
-            resetCookie("LOGINKEY", oldLoginKey);
-            resetCookie("USERKEY", oldUserKey);
-        }
+    const data = viewerData(location.pathname.substring(8), () => {
+        resetCookie("LOGINKEY", oldLoginKey);
+        resetCookie("USERKEY", oldUserKey);
     });
+
+    fakeViewer(locked, data);
 }

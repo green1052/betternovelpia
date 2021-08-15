@@ -18,7 +18,7 @@ import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.11.5",
+    title: "BetterNovelpia - 3.12.5",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -155,20 +155,30 @@ $(() => {
     Setting.start();
 
     // module
-    AbsoluteViewerDrag.start();
-    BetterSideView.start();
-    Bookmark.start();
-    DBNextChapter.start();
-    FreeEmoji.start();
-    HideAddNovel.start();
-    HideEvent.start();
-    InfoUnfold.start();
-    NovelDownload.start();
-    NovelListFix.start();
-    PrivateMode.start();
-    PrivateNovelBypass.start();
-    UrlPrettier.start();
-    ViewNovelToCookie.start();
+    const modules = [
+        AbsoluteViewerDrag,
+        BetterSideView,
+        Bookmark,
+        DBNextChapter,
+        FreeEmoji,
+        HideAddNovel,
+        HideEvent,
+        InfoUnfold,
+        NovelDownload,
+        NovelListFix,
+        PrivateMode,
+        PrivateNovelBypass,
+        UrlPrettier,
+        ViewNovelToCookie
+    ];
+
+    for (const module of modules) {
+        try {
+            module.start();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     // debug
     DisableViewerLog.start();

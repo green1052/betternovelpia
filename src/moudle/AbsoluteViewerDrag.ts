@@ -8,8 +8,10 @@ function start() {
 
     clearInterval(playAlert);
 
-    for (const attr of ["ondragstart", "onselectstart", "oncontextmenu"])
-        $(document.body).removeAttr(attr);
+    const body = $(document.body);
 
-    $(document.body).prepend($(`<style>.no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important}</style>`));
+    for (const attr of ["ondragstart", "onselectstart", "oncontextmenu"])
+        body.removeAttr(attr);
+
+    body.prepend("<style>.no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important}</style>");
 }

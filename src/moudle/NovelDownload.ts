@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {HEADER_BAR, NOVEL_DRAWING} from "../util/Selectors";
 
 export default {start};
 
@@ -6,7 +7,7 @@ function start() {
     if (!GM_config.get("NovelDownload") || !location.pathname.includes("/viewer/"))
         return;
 
-    const query = $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)");
+    const query = $(HEADER_BAR);
 
     if (!query.length)
         return;
@@ -19,7 +20,7 @@ function start() {
         .append("<h9>복사</h9>")
         .on("click", () => {
             const textarea = $("<textarea>")
-                .val($("#novel_drawing").text()
+                .val($(NOVEL_DRAWING).text()
                     .replace("다음화 보기", "")
                     .replace("여기까지가 등록된 마지막 회차입니다", ""))
                 .attr("readonly", "")

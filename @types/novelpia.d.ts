@@ -1,7 +1,5 @@
 declare function emoticon_open(idx: string): void
 
-declare function up_down_btn_view(option: any): void
-
 declare var playAlert: number | undefined;
 
 declare var data_load: 0 | 1;

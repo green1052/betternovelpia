@@ -16,7 +16,7 @@ jobs:
 
       - name: Install
         run: |
-          yarn set version berry
+          yarn -v
           yarn install
 
       - name: Build

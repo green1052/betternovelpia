@@ -1,5 +1,6 @@
 import $ from "jquery";
 import {waitElement} from "../util/WaitElement";
+import {HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../util/Selectors";
 
 export default {start};
 
@@ -19,13 +20,13 @@ interface PreviousBookmark {
 }
 
 function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
-    const json: Bookmarks = bookmarks ?? {};
+    const json = bookmarks ?? {};
 
     json[url] = {
         scrollTop: scrollTop,
         title: encodeURIComponent(title),
         chapter: encodeURIComponent(chapter)
-    };
+    } as Bookmark;
 
     GM.setValue("bookmarks", json);
 }
@@ -56,12 +57,12 @@ async function previousBookmark() {
     if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
         return;
 
-    const bookmark = await GM.getValue("previousBookmark") as PreviousBookmark;
+    const bookmark: PreviousBookmark = await GM.getValue("previousBookmark");
 
     let lastScrollTop: number;
 
     setInterval(() => {
-        const scrollTop = $("#novel_box").scrollTop()!;
+        const scrollTop = $(NOVEL_BOX).scrollTop();
 
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
@@ -69,7 +70,7 @@ async function previousBookmark() {
         lastScrollTop = scrollTop;
 
         GM.setValue("previousBookmark", {url: location.href, scrollTop: lastScrollTop} as PreviousBookmark);
-    }, 500);
+    }, 1000);
 
     if (!bookmark || location.href !== bookmark.url)
         return;
@@ -83,12 +84,12 @@ async function previousBookmark() {
     if (!bookmark.scrollTop)
         return;
 
-    waitElement($("#novel_drawing").get(0), () => {
+    waitElement($(NOVEL_DRAWING).get(0), () => {
         if (!GM_config.get("PreviousBookmark_AutoUse"))
             if (!confirm("읽던 부분으로 이동하시겠습니까?"))
                 return;
 
-        $("#novel_box").animate({scrollTop: bookmark.scrollTop}, 0);
+        $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
     });
 }
 
@@ -138,7 +139,7 @@ function addMainBookmarkButton() {
         })
         .append(`<a><img height="25" src="https://image.novelpia.com/img/new/icon/count_book.png"></a>`);
 
-    $(".am-sideleft > div:nth-child(1) > ul:nth-child(1)").append(li);
+    $(SIDE_LEFT).append(li);
 }
 
 async function addViewerBookmarkButton() {
@@ -153,7 +154,7 @@ async function addViewerBookmarkButton() {
         .css("width", 63)
         .css("z-index", 10000)
         .on("click", async () => {
-            const scrollTop = $("#novel_box").scrollTop();
+            const scrollTop = $(NOVEL_BOX).scrollTop();
 
             if (scrollTop === undefined)
                 return;
@@ -163,8 +164,8 @@ async function addViewerBookmarkButton() {
 
             const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
-            const title = $("b.cut_line_one").text();
-            const chapter = $("span.cut_line_one > span:nth-child(1)").text();
+            const title = $(NOVEL_TITLE).text();
+            const chapter = $(NOVEL_EP).text();
 
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
@@ -175,8 +176,7 @@ async function addViewerBookmarkButton() {
         })
         .append(img);
 
-    $("#header_bar > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1)")
-        .children().eq(6).before(td);
+    $(HEADER_BAR).children().eq(6).before(td);
 
     const bookmarks: Bookmarks = await GM.getValue("bookmarks");
 
@@ -196,11 +196,11 @@ async function addViewerBookmarkButton() {
         GM.setValue("bookmarks", bookmarks);
     }
 
-    waitElement($("#novel_drawing").get(0), () => {
+    waitElement($(NOVEL_DRAWING).get(0), () => {
         if (!GM_config.get("Bookmark_AutoUse"))
             if (!confirm("저장해두었던 북마크로 이동하시겠습니까?"))
                 return;
 
-        $("#novel_box").animate({scrollTop: scrollTop}, 0);
+        $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
     });
 }

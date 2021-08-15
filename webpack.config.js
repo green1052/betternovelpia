@@ -1,9 +1,8 @@
-import path from "path";
-import WebpackUserscript from "webpack-userscript";
-import TerserPlugin from "terser-webpack-plugin";
-import {cpus} from "os";
-import {Configuration} from "webpack";
-import {version} from "./package.json";
+const path = require("path");
+const WebpackUserscript = require("webpack-userscript");
+const TerserPlugin = require("terser-webpack-plugin");
+const {cpus} = require("os");
+const {version} = require("./package.json");
 
 const header = {
     "name": "BetterNovelpia",
@@ -24,7 +23,7 @@ const header = {
     "version": version
 };
 
-export default {
+module.exports = {
     mode: "production",
     entry: path.join(__dirname, "src", "index.ts"),
     module: {
@@ -63,4 +62,4 @@ export default {
             })
         ]
     }
-} as Configuration;
+};

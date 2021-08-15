@@ -3,7 +3,8 @@ import $ from "jquery";
 export default {start};
 
 function hide(jquery: JQuery) {
-    jquery.removeAttr("class")
+    jquery
+        .removeAttr("class")
         .removeAttr("style")
         .css("margin", "15px")
         .empty();

@@ -126,7 +126,7 @@ function start() {
         })
         .append(img);
 
-    $("ul.nav:nth-child(2)").children().eq(3).before(li);
+    $("#submenu_bar").children().eq(3).before(li);
 
     // 클릭 시 보이는 창
 
@@ -150,7 +150,7 @@ function start() {
         const letter = split[3] ?? "";
 
         for (let i = min; i <= max; i++) {
-            const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
+            const emoji = `https://image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
 
             const img = $(`<img src="${emoji}">`)
                 .attr("data-src", emoji)
@@ -168,5 +168,5 @@ function start() {
         }
     }
 
-    $("div.row:nth-child(2) > div:nth-child(2)").append(div);
+    $("div.col-sm-12:nth-child(2)").append(div);
 }

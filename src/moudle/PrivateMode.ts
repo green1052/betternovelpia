@@ -1,4 +1,7 @@
 import $ from "jquery";
+import {waitElement} from "../util/WaitElement";
+import {NOVEL_EP_LIST} from "../util/Selectors";
+import {viewerData} from "../util/ViewerData";
 
 export default {start};
 
@@ -6,8 +9,8 @@ function start() {
     if (!GM_config.get("PrivateMode") || !location.pathname.includes("/novel/"))
         return;
 
-    const observer = new MutationObserver(() => {
-        $("#episode_list > table:nth-child(1) > tbody:nth-child(1) tr").each((index, element) => {
+    waitElement($("#episode_list").get(0), () => {
+        $(NOVEL_EP_LIST).each((index, element) => {
             const td = $(element).children().eq(1);
 
             const onclick = td.attr("onclick");
@@ -20,34 +23,20 @@ function start() {
             td
                 .removeAttr("onclick")
                 .on("click", () => {
-                    $.ajax({
-                        data: {"size": "14"},
-                        type: "POST",
-                        dataType: "JSON",
-                        url: `/proc/viewer_data/${click}`,
-                        cache: false,
-                        success: (data) => {
-                            let result = "";
+                    const data = viewerData(click);
+                    let content = "";
 
-                            for (const string of data["s"])
-                                result += string["text"];
+                    for (const str of data) {
+                        content += str.text.replace(/&nbsp;/g, "")
+                            .replace(/&amp;/g, "&")
+                            .replace(/&lt;/g, "<")
+                            .replace(/&gt;/g, ">")
+                            .replace(/&#39;/g, "'")
+                            .replace(/&quot;/g, `"`);
+                    }
 
-                            result = result
-                                .replace(/&nbsp;/g, "")
-                                .replace(/&amp;/g, "&")
-                                .replace(/&lt;/g, "<")
-                                .replace(/&gt;/g, ">")
-                                .replace(/&#39;/g, "'")
-                                .replace(/&quot;/g, `"`);
-
-                            alert(result);
-                        }
-                    });
+                    alert(content);
                 });
         });
-    });
-
-    observer.observe($("#episode_list").get(0), {
-        childList: true
     });
 }
