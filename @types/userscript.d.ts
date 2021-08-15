@@ -21,7 +21,8 @@ type Config =
     "UrlPrettier" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
-    "ViewNovelToCookie";
+    "ViewNovelToCookie" |
+    "Eval";
 
 interface Field {
     label: string,

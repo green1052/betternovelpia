@@ -15,10 +15,11 @@ import PrivateMode from "./moudle/PrivateMode";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import UrlPrettier from "./moudle/UrlPrettier";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
+import Eval from "./core/Eval";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.12.5",
+    title: "BetterNovelpia - 3.12.6",
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -143,7 +144,12 @@ GM_config.init({
                 type: "checkbox",
                 default: false,
                 section: ["디버깅"]
-            }
+            },
+        Eval: {
+            label: "Eval 사용",
+            type: "checkbox",
+            default: false
+        }
     },
     events: {
         save: () => location.reload()
@@ -182,4 +188,5 @@ $(() => {
 
     // debug
     DisableViewerLog.start();
+    Eval.Start();
 });

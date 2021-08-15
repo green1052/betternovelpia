@@ -4,7 +4,7 @@ interface JsonData {
     align: string
 }
 
-export function viewerData(url: string, complete?: Function) {
+export function viewerData(url: string, func?: Function) {
     const json: JsonData[] = [];
 
     $.ajax({
@@ -24,9 +24,11 @@ export function viewerData(url: string, complete?: Function) {
 
                 json.push(json_t);
             }
-        },
-        complete: () => complete
+        }
     });
+
+    if (func)
+        func();
 
     return json;
 }
