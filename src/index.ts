@@ -15,11 +15,11 @@ import PrivateMode from "./moudle/PrivateMode";
 import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
 import UrlPrettier from "./moudle/UrlPrettier";
 import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
-import Eval from "./core/Eval";
+import Eval from "./moudle/debug/Eval";
 
 GM_config.init({
     id: "betternovelpia",
-    title: "BetterNovelpia - 3.12.6",
+    title: `BetterNovelpia - ${VERSION}`,
     fields: {
         BetterSideView: {
             label: "사이드뷰 개선",
@@ -113,7 +113,7 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
-        PreviousBookmark_OnlyUse: {
+        PreviousBookmark_OneUse: {
             label: "이전 회차 북마크 한번만 사용",
             type: "checkbox",
             default: false
@@ -128,7 +128,7 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
-        Bookmark_OnlyUse: {
+        Bookmark_OneUse: {
             label: "북마크 한번만 사용",
             type: "checkbox",
             default: false

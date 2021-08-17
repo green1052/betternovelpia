@@ -1,13 +1,11 @@
 import $ from "jquery";
-import {SIDE_LEFT} from "../util/Selectors";
+import {SIDE_LEFT} from "../../util/Selectors";
 
 export default {Start};
 
 function Start() {
     if (!GM_config.get("Eval") || location.pathname.includes("/viewer/"))
         return;
-
-    const h5 = $("<h5>eval</h5>");
 
     const li = $("<li>")
         .css("padding", "10px 25px")
@@ -23,7 +21,7 @@ function Start() {
                 alert(`오류:\n${e}`);
             }
         })
-        .append(h5);
+        .append("<h5>eval</h5>");
 
     $(SIDE_LEFT).append(li);
 }

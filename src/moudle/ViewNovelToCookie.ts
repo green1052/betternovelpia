@@ -11,7 +11,7 @@ function resetCookie(name: string, value: string) {
     Cookies.set(name, value, {
         domain: ".novelpia.com",
         path: "/",
-        expires: 7
+        expires: new Date().setFullYear(new Date().getFullYear() + 1)
     });
 }
 

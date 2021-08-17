@@ -13,7 +13,7 @@ function start() {
         .css("z-index", 2)
         .on("click", () => {
             $(document.body).removeClass("show-left");
-            $("#BetterSideView").hide();
+            div.hide();
         })
         .hide();
 

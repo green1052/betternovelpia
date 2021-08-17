@@ -4,8 +4,7 @@ export default {start};
 
 function start() {
     if (GM_config.get("NovelListFix") && location.pathname === "/")
-        $(`div[class=""][onclick*="location"]`).each((index, element) => {
-            const query = $(element);
-            query.attr("onclick", `$('.loads').show();${query.attr("onclick")}`);
+        $(`div[class=""][onclick*="location"]`).attr("onclick", function (index, value) {
+            $(this).attr("onclick", `$('.loads').show();${value}`);
         });
 }

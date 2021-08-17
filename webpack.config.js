@@ -2,6 +2,7 @@ const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
 const TerserPlugin = require("terser-webpack-plugin");
 const {cpus} = require("os");
+const {DefinePlugin} = require("webpack");
 const {version} = require("./package.json");
 
 const header = {
@@ -30,8 +31,8 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                use: "swc-loader",
-                include: /src/
+                include: /src/,
+                use: "swc-loader"
             }
         ]
     },
@@ -46,6 +47,9 @@ module.exports = {
         new WebpackUserscript({
             metajs: false,
             headers: header
+        }),
+        new DefinePlugin({
+            VERSION: JSON.stringify(version)
         })
     ],
     optimization: {

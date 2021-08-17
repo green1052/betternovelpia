@@ -7,11 +7,6 @@ function start() {
     if (!GM_config.get("NovelDownload") || !location.pathname.includes("/viewer/"))
         return;
 
-    const query = $(HEADER_BAR);
-
-    if (!query.length)
-        return;
-
     const td = $("<td>")
         .css("text-align", "center")
         .css("font-style", "12px")
@@ -38,5 +33,5 @@ function start() {
             alert("복사됐습니다.");
         });
 
-    query.children().eq(6).before(td);
+    $(HEADER_BAR).children().eq(6).before(td);
 }

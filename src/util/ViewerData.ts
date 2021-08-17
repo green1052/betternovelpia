@@ -27,8 +27,7 @@ export function viewerData(url: string, func?: Function) {
         }
     });
 
-    if (func)
-        func();
+    func?.();
 
     return json;
 }

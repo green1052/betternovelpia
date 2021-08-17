@@ -3,9 +3,10 @@ type Config =
     "BetterSideView" |
     "Bookmark" |
     "Bookmark_AutoUse" |
-    "Bookmark_OnlyUse" |
+    "Bookmark_OneUse" |
     "DBNextChapter" |
     "DisableViewLog" |
+    "Eval" |
     "FreeEmoji" |
     "HideAddNovel" |
     "HideEvent" |
@@ -15,14 +16,13 @@ type Config =
     "PreviousBookmark" |
     "PreviousBookmark_AutoUse" |
     "PreviousBookmark_First" |
-    "PreviousBookmark_OnlyUse" |
+    "PreviousBookmark_OneUse" |
     "PrivateMode" |
     "PrivateNovelBypass" |
     "UrlPrettier" |
     "ViewNoelToCookie_LOGINKEY" |
     "ViewNoelToCookie_USERKEY" |
-    "ViewNovelToCookie" |
-    "Eval";
+    "ViewNovelToCookie";
 
 interface Field {
     label: string,
@@ -110,3 +110,5 @@ declare const GM_config: {
     get(key: Config, defaults?: any): any,
     open(): void
 };
+
+declare const VERSION: string;

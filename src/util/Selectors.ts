@@ -10,6 +10,4 @@ export const NOVEL_TITLE = "b.cut_line_one";
 
 export const NOVEL_EP = "span.cut_line_one > span";
 
-export const NOVEL_EP_LIST = "#episode_list > table > tbody tr";
-
 export const LOCKED = ".ion-locked";

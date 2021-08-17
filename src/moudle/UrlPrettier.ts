@@ -1,4 +1,4 @@
-import urlRegex from "url-regex";
+import urlRegex from "url-regex-safe";
 import {waitElement} from "../util/WaitElement";
 import $ from "jquery";
 import {NOVEL_DRAWING} from "../util/Selectors";

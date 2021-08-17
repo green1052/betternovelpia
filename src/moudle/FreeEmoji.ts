@@ -142,8 +142,8 @@ function start() {
         const id = split[0];
         const minMax = split[1].split("-");
 
-        let min = Number(minMax[0]);
-        let max = Number(minMax[1]);
+        const min = Number(minMax[0]);
+        const max = Number(minMax[1]);
 
         const type = split[2] as "png" | "jpg" | "gif";
 
