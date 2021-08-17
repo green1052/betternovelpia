@@ -14,8 +14,7 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install
-        uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1
         with:
           useRollingCache: true
           install-command: yarn --frozen-lockfile --silent
