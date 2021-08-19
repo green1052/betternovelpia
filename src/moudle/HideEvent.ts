@@ -25,5 +25,5 @@ function start() {
 
     $(`div.swiper-container[class*="mobile_show"]`).remove();
 
-    hide($(`div[onclick="$('.loads').show();location='/notice/all/view_171726';"]`));
+    hide($(`div[onclick*="/notice/all/view_171726"]`));
 }

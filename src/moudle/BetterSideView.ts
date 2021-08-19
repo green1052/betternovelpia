@@ -7,6 +7,7 @@ function start() {
         return;
 
     const div = $(`<div id="BetterSideView">`)
+        .css("display", "none")
         .css("position", "fixed")
         .css("width", "100vw")
         .css("height", "100vh")
@@ -14,8 +15,7 @@ function start() {
         .on("click", () => {
             $(document.body).removeClass("show-left");
             div.hide();
-        })
-        .hide();
+        });
 
     $(document.body).prepend(div);
 

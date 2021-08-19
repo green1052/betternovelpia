@@ -90,7 +90,7 @@ function addMainBookmarkButton() {
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
-            const bookmarks: Bookmarks = await GM.getValue("bookmarks");
+            const bookmarks: Bookmarks = await GM.getValue("bookmarks") ?? {};
 
             let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
 

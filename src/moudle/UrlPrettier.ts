@@ -10,9 +10,7 @@ function start() {
         return;
 
     waitElement($(NOVEL_DRAWING).get(0), () => {
-        const novelDrawing = $(NOVEL_DRAWING);
-
-        const match = novelDrawing.text().match(urlRegex({strict: false}));
+        const match = $(NOVEL_DRAWING).text().match(urlRegex({strict: false}));
 
         if (match)
             for (const str of match)
