@@ -4,8 +4,12 @@ declare var playAlert: number | undefined;
 
 declare var data_load: 0 | 1;
 
-type novelData = { text: string, size: number, align: string }[];
+interface NovelData {
+    text: string,
+    size: number,
+    align: string
+}
 
-declare var novel_data: novelData | [];
+declare var novel_data: NovelData[] | [];
 
-declare function novel_drawing(novel_d: novelData): void;
+declare function novel_drawing(novel_d: NovelData[]): void;
