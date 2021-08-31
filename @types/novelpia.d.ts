@@ -4,10 +4,6 @@ declare var playAlert: number | undefined;
 
 declare var data_load: 0 | 1;
 
-declare var this_page: number;
-
-declare function page_goto(goto_page: number): void;
-
 interface NovelData {
     text: string,
     size: number,

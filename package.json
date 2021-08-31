@@ -1,6 +1,6 @@
 {
   "name": "betternovelpia",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
