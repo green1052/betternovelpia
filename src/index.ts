@@ -1,21 +1,20 @@
 import $ from "jquery";
 import Setting from "./core/Setting";
-import AbsoluteViewerDrag from "./moudle/AbsoluteViewerDrag";
-import BetterSideView from "./moudle/BetterSideView";
-import Bookmark from "./moudle/Bookmark";
-import DBNextChapter from "./moudle/DBNextChapter";
-import DisableViewerLog from "./moudle/debug/DisableViewerLog";
-import FreeEmoji from "./moudle/FreeEmoji";
-import HideAddNovel from "./moudle/HideAddNovel";
-import HideEvent from "./moudle/HideEvent";
-import InfoUnfold from "./moudle/InfoUnfold";
-import NovelDownload from "./moudle/NovelDownload";
-import NovelListFix from "./moudle/NovelListFix";
-import PrivateMode from "./moudle/PrivateMode";
-import PrivateNovelBypass from "./moudle/PrivateNovelBypass";
-import UrlPrettier from "./moudle/UrlPrettier";
-import ViewNovelToCookie from "./moudle/ViewNovelToCookie";
-import Eval from "./moudle/debug/Eval";
+import AbsoluteViewerDrag from "./module/AbsoluteViewerDrag";
+import BetterSideView from "./module/BetterSideView";
+import Bookmark from "./module/Bookmark";
+import DBNextChapter from "./module/DBNextChapter";
+import DisableViewerLog from "./module/debug/DisableViewerLog";
+import FreeEmoji from "./module/FreeEmoji";
+import HideAddNovel from "./module/HideAddNovel";
+import HideEvent from "./module/HideEvent";
+import InfoUnfold from "./module/InfoUnfold";
+import NovelDownload from "./module/NovelDownload";
+import NovelListFix from "./module/NovelListFix";
+import PrivateMode from "./module/PrivateMode";
+import UrlPrettier from "./module/UrlPrettier";
+import ViewNovelToCookie from "./module/ViewNovelToCookie";
+import Eval from "./module/debug/Eval";
 
 GM_config.init({
     id: "betternovelpia",
@@ -59,11 +58,6 @@ GM_config.init({
         },
         NovelListFix: {
             label: "소설 목록 개선",
-            type: "checkbox",
-            default: false
-        },
-        PrivateNovelBypass: {
-            label: "공개 예정 소설 보기",
             type: "checkbox",
             default: false
         },
@@ -161,30 +155,19 @@ $(() => {
     Setting.start();
 
     // module
-    const modules = [
-        AbsoluteViewerDrag,
-        BetterSideView,
-        Bookmark,
-        DBNextChapter,
-        FreeEmoji,
-        HideAddNovel,
-        HideEvent,
-        InfoUnfold,
-        NovelDownload,
-        NovelListFix,
-        PrivateMode,
-        PrivateNovelBypass,
-        UrlPrettier,
-        ViewNovelToCookie
-    ];
-
-    for (const module of modules) {
-        try {
-            module.start();
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    AbsoluteViewerDrag.start();
+    BetterSideView.start();
+    Bookmark.start();
+    DBNextChapter.start();
+    FreeEmoji.start();
+    HideAddNovel.start();
+    HideEvent.start();
+    InfoUnfold.start();
+    NovelDownload.start();
+    NovelListFix.start();
+    PrivateMode.start();
+    UrlPrettier.start();
+    ViewNovelToCookie.start();
 
     // debug
     DisableViewerLog.start();
