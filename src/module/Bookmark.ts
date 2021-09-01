@@ -1,6 +1,6 @@
 import $ from "jquery";
 import {waitElement} from "../util/WaitElement";
-import {HEADER_BAR, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../util/Selectors";
+import {HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../util/Selectors";
 
 export default {start};
 
@@ -9,21 +9,21 @@ interface Bookmarks {
 }
 
 interface Bookmark {
-    page: number,
+    scrollTop: number,
     title: string,
     chapter: string
 }
 
 interface PreviousBookmark {
     url: string,
-    page: number
+    scrollTop: number
 }
 
-function setBookmark(bookmarks: Bookmarks, url: string, page: number, title: string, chapter: string) {
+function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
     const bookmark: Bookmarks = bookmarks ?? {};
 
     bookmark[url] = {
-        page: page,
+        scrollTop: scrollTop,
         title: encodeURIComponent(title),
         chapter: encodeURIComponent(chapter)
     };
@@ -57,14 +57,16 @@ async function previousBookmark() {
     if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
         return;
 
-    let lastPage = 0;
+    let lastScrollTop = 0;
 
     setInterval(() => {
-        if (this_page === lastPage)
+        const scrollTop = $("#novel_box").scrollTop()!;
+
+        if (!scrollTop || scrollTop === lastScrollTop)
             return;
 
-        GM.setValue("previousBookmark", {url: location.href, page: this_page} as PreviousBookmark);
-        lastPage = this_page;
+        GM.setValue("previousBookmark", {url: location.href, scrollTop: scrollTop} as PreviousBookmark);
+        lastScrollTop = scrollTop;
     }, 1000);
 
     const bookmark: PreviousBookmark = await GM.getValue("previousBookmark");
@@ -77,7 +79,8 @@ async function previousBookmark() {
 
     const goto = () => {
         if (!GM_config.get("PreviousBookmark_AutoUse") && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
-        page_goto(bookmark.page);
+
+        $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
     };
 
     if ($(NOVEL_DRAWING).children().length > 0) {
@@ -140,6 +143,14 @@ async function addViewerBookmarkButton() {
         .css("width", 63)
         .css("z-index", 10000)
         .on("click", async () => {
+            const scrollTop = $("#novel_box").scrollTop();
+
+            if (scrollTop === undefined)
+                return;
+
+            if (scrollTop === 0)
+                return alert("스크롤을 해야 저장할 수 있습니다.");
+
             const bookmarks: Bookmarks = await GM.getValue("bookmarks") ?? {};
 
             const title = $(NOVEL_TITLE).text();
@@ -148,7 +159,7 @@ async function addViewerBookmarkButton() {
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
 
-            setBookmark(bookmarks, location.href, this_page, title, chapter);
+            setBookmark(bookmarks, location.href, scrollTop, title, chapter);
 
             alert("저장되었습니다.");
         })
@@ -161,9 +172,9 @@ async function addViewerBookmarkButton() {
     if (!bookmarks)
         return;
 
-    const page = bookmarks[location.href]?.page;
+    const scrollTop = bookmarks[location.href]?.scrollTop;
 
-    if (!page || !await isFirst("bookmark"))
+    if (!scrollTop || !await isFirst("bookmark"))
         return;
 
     if (GM_config.get("Bookmark_OneUse"))
@@ -171,8 +182,7 @@ async function addViewerBookmarkButton() {
 
     const goto = () => {
         if (!GM_config.get("Bookmark_AutoUse") && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-
-        page_goto(page);
+        $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
     };
 
     if ($(NOVEL_DRAWING).children().length > 0) {
