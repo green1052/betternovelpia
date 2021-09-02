@@ -60,7 +60,7 @@ async function previousBookmark() {
     let lastScrollTop = 0;
 
     setInterval(() => {
-        const scrollTop = $("#novel_box").scrollTop()!;
+        const scrollTop = $(NOVEL_BOX).scrollTop()!;
 
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
