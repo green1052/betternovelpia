@@ -9,7 +9,7 @@
     "@swc/core": "^1.2.83",
     "@types/jquery": "^3.5.6",
     "@types/js-cookie": "^2.2.7",
-    "@types/terser-webpack-plugin": "^5.0.4",
+    "@types/terser-webpack-plugin": "^5.2.0",
     "@types/url-regex-safe": "^1.0.0",
     "browserslist": "^4.16.8",
     "jquery": "^3.6.0",
