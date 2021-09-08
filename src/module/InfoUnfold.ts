@@ -8,6 +8,4 @@ function start() {
 
     $("#more_info_btn").hide();
     $(".more_info").show();
-
-    $(document).unbind("keydown");
 }
