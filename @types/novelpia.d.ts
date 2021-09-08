@@ -1,8 +1,12 @@
 declare function emoticon_open(idx: string): void
 
+declare function EmoticonView(group: string, url: string, emNo: string, fav: string, onoff: string): void
+
 declare var playAlert: number | undefined;
 
 declare var data_load: 0 | 1;
+
+declare var favoriDepth: number;
 
 interface NovelData {
     text: string,

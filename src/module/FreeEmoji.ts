@@ -112,29 +112,11 @@ function start() {
     if (!GM_config.get("FreeEmoji") || !location.pathname.includes("/viewer/"))
         return;
 
-    // 상단 이모지 목록
+    $("#submenu_bar .nav-item").before(`<img src="//image.novelpia.com/img/emoticon/1/02-smile.png" style="width:35px;margin:3px 8px 3px 0;cursor:pointer;" onclick="$('.favorite_box img').attr('src','/img/new/viewer/favorites_0.png');favoriDepth = 1;$('.emoticon').hide();emoticon_open('0');" alt="">`);
 
-    const img = $(`<img src="https://image.novelpia.com/img/emoticon/1/02-smile.png">`)
-        .css("width", "30px")
-        .css("margin", "6px 3px 0px")
-        .css("cursor", "pointer");
+    const div = $(`<div class="col-sm-12 mg-b-10 emoticon" style="display:none;padding: 10px 15px;background-color: #F8F9FA;border-top: 1px solid #e8e8e8;margin-bottom: 0;" id="emoticon_shop0">`);
 
-    const li = $(`<li class="nav-ite">`)
-        .on("click", () => {
-            $(".emoticon").hide();
-            emoticon_open("0");
-        })
-        .append(img);
-
-    $("#submenu_bar").children().eq(3).before(li);
-
-    // 클릭 시 보이는 창
-
-    const div = $(`<div id="emoticon_shop0" class="col-sm-12 mg-b-10 emoticon">`)
-        .css("display", "none")
-        .css("border", "1px solid rgba(214, 214, 214, 0.2)")
-        .css("padding", "5px")
-        .css("border-radius", "10px");
+    const div2 = $(`<div style="display: grid;flex-wrap: nowrap;grid-template-columns: repeat(auto-fill, 60px);gap: 14px 14px;justify-content: space-between;">`);
 
     for (const value of emojiList) {
         const split = value.split("|");
@@ -150,23 +132,12 @@ function start() {
         const letter = split[3] ?? "";
 
         for (let i = min; i <= max; i++) {
-            const emoji = `https://image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
-
-            const img = $(`<img src="${emoji}">`)
-                .attr("data-src", emoji)
-                .css("width", "60px")
-                .css("margin", "3px")
-                .css("cursor", "pointer")
-                .on("click", () => {
-                    $("#emoticon_shop0").hide();
-                    $("#imagePreviewframe").show();
-                    $("#imagePreviewA").attr("src", emoji);
-                    $("#comment_img").val(emoji);
-                });
-
-            div.append(img);
+            const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
+            div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');" alt="">`);
         }
     }
 
-    $("div.col-sm-12:nth-child(2)").append(div);
+    div.append(div2);
+
+    $("#comment_box > div > div > div.row.mg-t-5 > div:nth-child(2)").append(div);
 }

@@ -3,7 +3,7 @@ import Setting from "./core/Setting";
 import AbsoluteViewerDrag from "./module/AbsoluteViewerDrag";
 import BetterSideView from "./module/BetterSideView";
 import Bookmark from "./module/Bookmark";
-import DBNextChapter from "./module/DBNextChapter";
+import ClickNextChapter from "./module/ClickNextChapter";
 import DisableViewerLog from "./module/debug/DisableViewerLog";
 import FreeEmoji from "./module/FreeEmoji";
 import HideAddNovel from "./module/HideAddNovel";
@@ -43,6 +43,11 @@ GM_config.init({
         },
         DBNextChapter: {
             label: "더블 클릭으로 다음 회차",
+            type: "checkbox",
+            default: false
+        },
+        TripleNextChapter: {
+            label: "트리플 클릭으로 다음 회차",
             type: "checkbox",
             default: false
         },
@@ -158,7 +163,7 @@ $(() => {
     AbsoluteViewerDrag.start();
     BetterSideView.start();
     Bookmark.start();
-    DBNextChapter.start();
+    ClickNextChapter.start();
     FreeEmoji.start();
     HideAddNovel.start();
     HideEvent.start();

@@ -19,18 +19,6 @@ interface PreviousBookmark {
     scrollTop: number
 }
 
-function setBookmark(bookmarks: Bookmarks, url: string, scrollTop: number, title: string, chapter: string) {
-    const bookmark: Bookmarks = bookmarks ?? {};
-
-    bookmark[url] = {
-        scrollTop: scrollTop,
-        title: encodeURIComponent(title),
-        chapter: encodeURIComponent(chapter)
-    };
-
-    GM.setValue("bookmarks", bookmark);
-}
-
 function removeBookmark(bookmarks: Bookmarks, url: string) {
     delete bookmarks[url];
     GM.setValue("bookmarks", bookmarks);
@@ -60,7 +48,7 @@ async function previousBookmark() {
     let lastScrollTop = 0;
 
     setInterval(() => {
-        const scrollTop = $(NOVEL_BOX).scrollTop()!;
+        const scrollTop = $(NOVEL_BOX).scrollTop();
 
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
@@ -79,7 +67,6 @@ async function previousBookmark() {
 
     const goto = () => {
         if (!GM_config.get("PreviousBookmark_AutoUse") && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
-
         $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
     };
 
@@ -127,7 +114,7 @@ function addMainBookmarkButton() {
             removeBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
             alert("삭제 됐습니다.");
         })
-        .append(`<a><img height="25" src="https://image.novelpia.com/img/new/icon/count_book.png"></a>`);
+        .append(`<a><img height="25" src="https://image.novelpia.com/img/new/icon/count_book.png" alt=""></a>`);
 
     $(SIDE_LEFT).append(li);
 }
@@ -159,7 +146,13 @@ async function addViewerBookmarkButton() {
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
 
-            setBookmark(bookmarks, location.href, scrollTop, title, chapter);
+            bookmarks[location.href] = {
+                scrollTop: scrollTop,
+                title: encodeURIComponent(title),
+                chapter: encodeURIComponent(chapter)
+            };
+
+            GM.setValue("bookmarks", bookmarks);
 
             alert("저장되었습니다.");
         })
