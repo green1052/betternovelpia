@@ -151,7 +151,10 @@ GM_config.init({
         }
     },
     events: {
-        save: () => location.reload()
+        save: () => {
+            $(".loads").show();
+            location.reload();
+        }
     }
 });
 

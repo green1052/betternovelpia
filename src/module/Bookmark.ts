@@ -82,39 +82,67 @@ function addMainBookmarkButton() {
     if (!GM_config.get("Bookmark") || location.pathname.includes("/viewer/"))
         return;
 
+    /*
+      <div id="Bookmark" style="overflow: auto; bottom: 0; position: fixed; z-index: 1001; width: 100vw; height: 100vh; background-color: white;">
+             <div style="margin-top: 5px; text-align: center;">
+                <h2>북마크 관리</h2>
+             </div>
+
+            <div style="height: 20px;"></div>
+
+            <ol id="BookmarkList" style="font-size: 20px; margin-left: 5px;">
+                <li>레후</li>
+            </ol>
+
+            <div style="position: absolute; right: 0; bottom: 0; margin-right: 5px; margin-bottom: 5px;">
+                <button id="Reset">초기화</button>
+                <button id="Close">닫기</button>
+            </div>
+        </div>
+     */
+
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
+            const bookmarkHtml = $(`<div id="Bookmark" style="overflow: auto; bottom: 0; position: fixed; z-index: 1001; width: 100vw; height: 100vh; background-color: white;"> <div style="margin-top: 5px; text-align: center;"> <h2>북마크 관리</h2> </div><div style="height: 20px;"></div><ol id="BookmarkList" style="font-size: 20px; margin-left: 5px;"></ol> <div style="position: absolute; right: 0; bottom: 0; margin-right: 5px; margin-bottom: 5px;"> <button id="Reset">초기화</button> <button id="Close">닫기</button> </div></div>`);
             const bookmarks: Bookmarks = await GM.getValue("bookmarks") ?? {};
 
-            let str = "숫자를 입력해 북마크 삭제\n00. 초기화\n0. 취소\n";
+            $(document.body).prepend(bookmarkHtml);
 
             Object.values(bookmarks).forEach((bookmark, index) => {
                 const title = decodeURIComponent(bookmark.title);
                 const chapter = decodeURIComponent(bookmark.chapter);
 
-                str += `${index + 1}. ${title} - ${chapter}\n`;
+                const $li = $(`<li><div><a href="${Object.keys(bookmarks)[index]}">${title} - ${chapter}</a></div></li>`);
+
+                $li.children("div")
+                    .css("display", "flex")
+                    .css("align-items", "center");
+
+                $("#BookmarkList").append($li);
+
+                const $a = $(`<a href="#">X</a>`)
+                    .css("color", "red")
+                    .css("margin-left", "10px")
+                    .css("font-size", "15px")
+                    .on("click", function () {
+                        const $li = $(this).parent().parent();
+
+                        removeBookmark(bookmarks, Object.keys(bookmarks)[$li.index()]);
+                        $li.remove();
+                    });
+
+                $li.children("div").append($a);
             });
 
-            const input = prompt(str);
-
-            if (!input)
-                return;
-
-            if (input === "00") {
+            $("#Reset").on("click", () => {
                 GM.setValue("bookmarks", {});
-                return alert("초기화 했습니다.");
-            }
+                $("#BookmarkList").empty();
+            });
 
-            const number = Number(input);
-
-            if (isNaN(number) || number === 0)
-                return;
-
-            removeBookmark(bookmarks, Object.keys(bookmarks)[number - 1]);
-            alert("삭제 됐습니다.");
+            $("#Close").on("click", () => $("#Bookmark").remove());
         })
-        .append(`<a><img height="25" src="https://image.novelpia.com/img/new/icon/count_book.png" alt=""></a>`);
+        .append(`<a><img height="25" src="//image.novelpia.com/img/new/icon/count_book.png" alt=""></a>`);
 
     $(SIDE_LEFT).append(li);
 }
@@ -178,10 +206,8 @@ async function addViewerBookmarkButton() {
         $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
     };
 
-    if ($(NOVEL_DRAWING).children().length > 0) {
-        goto();
-        return;
-    }
+    if ($(NOVEL_DRAWING).children().length > 0)
+        return goto();
 
     waitElement($(NOVEL_DRAWING).get(0), () => goto());
 }

@@ -13,9 +13,7 @@ const header = {
     "homepageURL": "https://github.com/green1052/betternovelpia",
     "rut-at": "document-start",
     "include": "novelpia.com",
-    "require": [
-        "https://raw.githubusercontent.com/green1052/GM_config/master/gm_config.min.js"
-    ],
+    "require": ["https://openuserjs.org/src/libs/sizzle/GM_config.js"],
     "grant": [
         "GM_getValue",
         "GM_setValue",
