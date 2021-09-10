@@ -1,5 +1,6 @@
 const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
+const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const {cpus} = require("os");
 const {DefinePlugin} = require("webpack");
@@ -48,6 +49,10 @@ module.exports = {
         }),
         new DefinePlugin({
             VERSION: JSON.stringify(version)
+        }),
+        new CleanTerminalPlugin({
+            skipFirstRun: true,
+            beforeCompile: true
         })
     ],
     optimization: {
