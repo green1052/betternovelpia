@@ -103,6 +103,7 @@ declare const unsafeWindow: {
 declare const GM: {
     getValue(name: any): Promise<any>
     setValue(name: any, value: any): void
+    setClipboard(text: string): void;
 };
 
 declare const GM_config: {

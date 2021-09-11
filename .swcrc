@@ -1,17 +1,12 @@
 {
-    "jsc": {
-        "parser": {
-            "syntax": "typescript",
-            "tsx": false,
-            "decorators": false,
-            "dynamicImport": false
-        },
-        "target": "es2016",
-        "loose": true
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": false,
+      "dynamicImport": false
     },
-    "env": {
-        "targets": "last 2 versions",
-        "mode": "entry",
-        "coreJs": 3
-    }
+    "target": "es2016",
+    "loose": true
+  }
 }

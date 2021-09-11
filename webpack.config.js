@@ -2,7 +2,6 @@ const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
 const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const {cpus} = require("os");
 const {DefinePlugin} = require("webpack");
 const {version} = require("./package.json");
 
@@ -16,6 +15,9 @@ const header = {
     "include": "novelpia.com",
     "require": ["https://openuserjs.org/src/libs/sizzle/GM_config.js"],
     "grant": [
+        "GM.getValue",
+        "GM.setValue",
+        "GM.setClipboard",
         "GM_getValue",
         "GM_setValue",
         "unsafeWindow"
@@ -65,7 +67,7 @@ module.exports = {
                     }
                 },
                 extractComments: false,
-                parallel: cpus().length - 1
+                parallel: true
             })
         ]
     }
