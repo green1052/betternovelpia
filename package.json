@@ -13,7 +13,6 @@
     "clean-terminal-webpack-plugin": "^3.0.0",
     "jquery": "^3.6.0",
     "js-cookie": "^3.0.1",
-    "regenerator-runtime": "^0.13.9",
     "swc-loader": "^0.1.15",
     "terser-webpack-plugin": "^5.2.4",
     "typescript": "^4.4.3",
