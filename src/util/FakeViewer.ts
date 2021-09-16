@@ -1,7 +1,7 @@
 import $ from "jquery";
 import {NOVEL_DRAWING} from "./Selectors";
 
-export function fakeViewer(locked: JQuery, novelData: { text: string, size: number, align: string }[]) {
+export function fakeViewer(locked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
     novel_data = novelData;
 
     locked

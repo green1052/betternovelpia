@@ -156,7 +156,7 @@ function addMainBookmarkButton() {
                 refresh(await GM.getValue("bookmarks") ?? {});
             });
         })
-        .append(`<a><img height="25" src="//image.novelpia.com/img/new/icon/count_book.png" alt=""></a>`);
+        .append(`<a><img height="25" src="//image.novelpia.com/img/new/icon/count_book.png"></a>`);
 
     $(SIDE_LEFT).append(li);
 }

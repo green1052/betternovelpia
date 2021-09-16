@@ -112,7 +112,7 @@ function start() {
     if (!GM_config.get("FreeEmoji") || !location.pathname.includes("/viewer/"))
         return;
 
-    $("#submenu_bar .nav-item").before(`<img src="//image.novelpia.com/img/emoticon/1/02-smile.png" style="width:35px;margin:3px 8px 3px 0;cursor:pointer;" onclick="$('.favorite_box img').attr('src','/img/new/viewer/favorites_0.png');favoriDepth = 1;$('.emoticon').hide();emoticon_open('0');" alt="">`);
+    $("#submenu_bar .nav-item").before(`<img src="//image.novelpia.com/img/emoticon/1/02-smile.png" style="width:35px;margin:3px 8px 3px 0;cursor:pointer;" onclick="$('.favorite_box img').attr('src','/img/new/viewer/favorites_0.png');favoriDepth = 1;$('.emoticon').hide();emoticon_open('0');">`);
 
     const div = $(`<div class="col-sm-12 mg-b-10 emoticon" style="display:none;padding: 10px 15px;background-color: #F8F9FA;border-top: 1px solid #e8e8e8;margin-bottom: 0;" id="emoticon_shop0">`);
 
@@ -133,7 +133,7 @@ function start() {
 
         for (let i = min; i <= max; i++) {
             const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
-            div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');" alt="">`);
+            div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');">`);
         }
     }
 
