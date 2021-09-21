@@ -15,7 +15,7 @@ function resetCookie(name: string, value: string) {
     });
 }
 
-function start() {
+async function start() {
     if (!GM_config.get("ViewNovelToCookie") || !location.pathname.includes("/viewer/"))
         return;
 

@@ -1,9 +1,9 @@
 import $ from "jquery";
 import {SIDE_LEFT} from "../../util/Selectors";
 
-export default {Start};
+export default {start};
 
-function Start() {
+function start() {
     if (!GM_config.get("Eval") || location.pathname.includes("/viewer/"))
         return;
 

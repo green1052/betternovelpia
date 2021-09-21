@@ -119,19 +119,10 @@ function start() {
     const div2 = $(`<div style="display: grid;flex-wrap: nowrap;grid-template-columns: repeat(auto-fill, 60px);gap: 14px 14px;justify-content: space-between;">`);
 
     for (const value of emojiList) {
-        const split = value.split("|");
+        const [id, minMax, type, letter] = value.split("|");
+        const [min, max] = minMax.split("-");
 
-        const id = split[0];
-        const minMax = split[1].split("-");
-
-        const min = Number(minMax[0]);
-        const max = Number(minMax[1]);
-
-        const type = split[2] as "png" | "jpg" | "gif";
-
-        const letter = split[3] ?? "";
-
-        for (let i = min; i <= max; i++) {
+        for (let i = Number(min); i <= Number(max); i++) {
             const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
             div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');">`);
         }

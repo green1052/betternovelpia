@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Setting from "./core/Setting";
 import AbsoluteViewerDrag from "./module/AbsoluteViewerDrag";
+import BetterLastNovel from "./module/BetterLastNovel";
 import BetterSideView from "./module/BetterSideView";
 import Bookmark from "./module/Bookmark";
 import ClickNextChapter from "./module/ClickNextChapter";
@@ -26,6 +27,11 @@ GM_config.init({
             default: false,
             section: ["일반 설정"]
         },
+        BetterLastNovel: {
+            label: "이전 회차 알림 개선",
+            type: "checkbox",
+            default: false
+        },
         HideEvent: {
             label: "이벤트 숨기기",
             type: "checkbox",
@@ -41,6 +47,18 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
+        NovelListFix: {
+            label: "소설 목록 개선",
+            type: "checkbox",
+            default: false
+        },
+
+        AbsoluteViewerDrag: {
+            label: "뷰어 드래그 허용",
+            type: "checkbox",
+            default: false,
+            section: ["뷰어 설정"]
+        },
         DBNextChapter: {
             label: "더블 클릭으로 다음 회차",
             type: "checkbox",
@@ -51,23 +69,23 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
-        FreeEmoji: {
-            label: "유로 이모지 무료 사용",
-            type: "checkbox",
-            default: false
-        },
         NovelDownload: {
             label: "소설 다운로드 사용",
             type: "checkbox",
             default: false
         },
-        NovelListFix: {
-            label: "소설 목록 개선",
+        UrlPrettier: {
+            label: "URL a href 적용",
             type: "checkbox",
             default: false
         },
-        UrlPrettier: {
-            label: "URL a href 적용",
+        PrivateMode: {
+            label: "프라이빗 모드",
+            type: "checkbox",
+            default: false
+        },
+        FreeEmoji: {
+            label: "유로 이모지 무료 사용",
             type: "checkbox",
             default: false
         },
@@ -90,23 +108,13 @@ GM_config.init({
             size: 10,
             default: undefined
         },
-        PrivateMode: {
-            label: "프라이빗 모드",
+
+        PreviousBookmark: {
+            label: "이전 회차 북마크 개선",
             type: "checkbox",
-            default: false
+            default: false,
+            section: ["북마크 설정"]
         },
-        AbsoluteViewerDrag: {
-            label: "뷰어 드래그 허용",
-            type: "checkbox",
-            default: false
-        },
-        PreviousBookmark:
-            {
-                label: "이전 회차 북마크 개선",
-                type: "checkbox",
-                default: false,
-                section: ["북마크 설정"]
-            },
         PreviousBookmark_First: {
             label: "이전 회차 북마크 우선",
             type: "checkbox",
@@ -137,15 +145,15 @@ GM_config.init({
             type: "checkbox",
             default: false
         },
-        DisableViewLog:
-            {
-                label: "뷰어 디버그 로그 제거",
-                type: "checkbox",
-                default: false,
-                section: ["디버깅"]
-            },
+
+        DisableViewLog: {
+            label: "뷰어 디버그 로그 제거",
+            type: "checkbox",
+            default: false,
+            section: ["디버깅"]
+        },
         Eval: {
-            label: "Eval 사용",
+            label: "eval 사용",
             type: "checkbox",
             default: false
         }
@@ -159,25 +167,29 @@ GM_config.init({
 });
 
 $(() => {
-    // core
-    Setting.start();
-
-    // module
-    AbsoluteViewerDrag.start();
-    BetterSideView.start();
-    Bookmark.start();
-    ClickNextChapter.start();
-    FreeEmoji.start();
-    HideAddNovel.start();
-    HideEvent.start();
-    InfoUnfold.start();
-    NovelDownload.start();
-    NovelListFix.start();
-    PrivateMode.start();
-    UrlPrettier.start();
-    ViewNovelToCookie.start();
-
-    // debug
-    DisableViewerLog.start();
-    Eval.Start();
+    for (const module of [
+        Setting,
+        AbsoluteViewerDrag,
+        BetterLastNovel,
+        BetterSideView,
+        Bookmark,
+        ClickNextChapter,
+        FreeEmoji,
+        HideAddNovel,
+        HideEvent,
+        InfoUnfold,
+        NovelDownload,
+        NovelListFix,
+        PrivateMode,
+        UrlPrettier,
+        ViewNovelToCookie,
+        DisableViewerLog,
+        Eval
+    ]) {
+        try {
+            module.start();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 });

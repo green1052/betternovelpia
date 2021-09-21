@@ -83,26 +83,7 @@ function addMainBookmarkButton() {
     const li = $("<li>")
         .css("padding", "10px 25px")
         .on("click", async () => {
-            const bookmarkHtml = $(
-                `
-<div id="Bookmark"
-     style="overflow: auto; bottom: 0; position: fixed; z-index: 99999; width: 100vw; height: 100vh; background-color: white;">
-
-    <h2 style="margin-top: 10px; text-align: center;">북마크 관리</h2>
-
-    <ol id="BookmarkList" style="font-size: 15px; margin-left: 5px;"></ol>
-
-    <div style="position: absolute; bottom: 50px; right: 15px;">
-        <button id="Reset">초기화</button>
-        <button id="Close" onclick="$('#Bookmark').remove();">닫기</button>
-    </div>
-
-    <div style="display: flex; position:absolute; bottom: 0; right: 15px;">
-        <h5 id="Backup">백업</h5>
-        <h5 id="Restore" style="margin-left: 5px;">복원</h5>
-    </div>
-</div>
-                `);
+            const bookmarkHtml = $(`<div style=overflow:auto;bottom:0;position:fixed;z-index:99999;width:100vw;height:100vh;background-color:#fff id=Bookmark><style>.no-drag{-ms-user-select:none;-moz-user-select:-moz-none;-webkit-user-select:none;-khtml-user-select:none;user-select:none}.bookmark div{display:flex;align-items:center}.bookmark h5{color:red;margin-left:10px;margin-right:5px}</style><h2 style=margin-top:10px;text-align:center>북마크 관리</h2><ol class="bookmark no-drag"id=BookmarkList style=font-size:15px;margin-left:5px></ol><div style=display:flex;position:absolute;bottom:35px;right:5px><h5 id=Backup>백업</h5><h5 id=Restore style=margin-left:5px>복원</h5></div><div style=position:absolute;bottom:5px;right:5px><button id=Reset>초기화</button> <button id=Close onclick='$("#Bookmark").remove()'>닫기</button></div></div>`);
 
             $(document.body).prepend(bookmarkHtml);
 
@@ -113,22 +94,14 @@ function addMainBookmarkButton() {
 
                     const $li = $(`<li><div><a href="${Object.keys(bookmarks)[index]}">${title} - ${chapter}</a></div></li>`);
 
-                    $li.children("div")
-                        .css("display", "flex")
-                        .css("align-items", "center");
-
                     $("#BookmarkList").append($li);
 
-                    const $a = $(`<h5>X</h5>`)
-                        .css("color", "red")
-                        .css("margin-left", "10px")
-                        .css("margin-right", "5px")
-                        .on("click", function () {
-                            const $li = $(this).parent().parent();
+                    const $a = $(`<h5>X</h5>`).on("click", function () {
+                        const $li = $(this).parent().parent();
 
-                            removeBookmark(bookmarks, Object.keys(bookmarks)[$li.index()]);
-                            $li.remove();
-                        });
+                        removeBookmark(bookmarks, Object.keys(bookmarks)[$li.index()]);
+                        $li.remove();
+                    });
 
                     $li.children("div").append($a);
                 });
@@ -183,10 +156,13 @@ async function addViewerBookmarkButton() {
             const bookmarks: Bookmarks = await GM.getValue("bookmarks") ?? {};
 
             const title = $(NOVEL_TITLE).text();
-            const chapter = $(NOVEL_EP).text();
+            let chapter = $(NOVEL_EP).text();
 
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
+
+            if (chapter.startsWith("19"))
+                chapter = chapter.substring(2);
 
             bookmarks[location.href] = {
                 scrollTop: scrollTop,

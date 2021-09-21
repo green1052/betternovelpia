@@ -14,10 +14,10 @@ export function viewerData(url: string, func?: Function) {
         url: `/proc/viewer_data/${url}`,
         cache: false,
         async: false,
-        success: (data) => {
-            for (const string of data["s"]) {
+        success: (data: { c: string, s: { text: string }[] }) => {
+            for (const string of data.s) {
                 const json_t: JsonData = {
-                    text: string["text"],
+                    text: string.text,
                     size: 11,
                     align: "left"
                 };

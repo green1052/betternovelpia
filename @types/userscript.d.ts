@@ -1,5 +1,6 @@
 type Config =
     "AbsoluteViewerDrag" |
+    "BetterLastNovel" |
     "BetterSideView" |
     "Bookmark" |
     "Bookmark_AutoUse" |
