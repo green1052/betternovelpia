@@ -88,6 +88,8 @@ function addMainBookmarkButton() {
             $(document.body).prepend(bookmarkHtml);
 
             const refresh = (bookmarks: Bookmarks) => {
+                $("#BookmarkList").empty();
+
                 Object.values(bookmarks).forEach((bookmark, index) => {
                     const title = decodeURIComponent(bookmark.title);
                     const chapter = decodeURIComponent(bookmark.chapter);
