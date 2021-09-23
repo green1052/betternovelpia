@@ -6,7 +6,7 @@
     "watch": "webpack --watch"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.88",
+    "@swc/core": "^1.2.90",
     "@types/jquery": "^3.5.6",
     "@types/js-cookie": "^2.2.7",
     "@types/url-regex-safe": "^1.0.0",
