@@ -1,7 +1,6 @@
 import $ from "jquery";
 import Setting from "./core/Setting";
 import AbsoluteViewerDrag from "./module/AbsoluteViewerDrag";
-import BetterLastNovel from "./module/BetterLastNovel";
 import BetterSideView from "./module/BetterSideView";
 import Bookmark from "./module/Bookmark";
 import ClickNextChapter from "./module/ClickNextChapter";
@@ -12,6 +11,7 @@ import HideEvent from "./module/HideEvent";
 import InfoUnfold from "./module/InfoUnfold";
 import NovelDownload from "./module/NovelDownload";
 import NovelListFix from "./module/NovelListFix";
+import PreLoadComment from "./module/PreLoadComment";
 import PrivateMode from "./module/PrivateMode";
 import UrlPrettier from "./module/UrlPrettier";
 import ViewNovelToCookie from "./module/ViewNovelToCookie";
@@ -26,11 +26,6 @@ GM_config.init({
             type: "checkbox",
             default: false,
             section: ["일반 설정"]
-        },
-        BetterLastNovel: {
-            label: "이전 회차 알림 개선",
-            type: "checkbox",
-            default: false
         },
         HideEvent: {
             label: "이벤트 숨기기",
@@ -66,6 +61,11 @@ GM_config.init({
         },
         TripleNextChapter: {
             label: "트리플 클릭으로 다음 회차",
+            type: "checkbox",
+            default: false
+        },
+        PreLoadComment: {
+            label: "댓글 미리 불러오기",
             type: "checkbox",
             default: false
         },
@@ -170,7 +170,6 @@ $(() => {
     for (const module of [
         Setting,
         AbsoluteViewerDrag,
-        BetterLastNovel,
         BetterSideView,
         Bookmark,
         ClickNextChapter,
@@ -180,6 +179,7 @@ $(() => {
         InfoUnfold,
         NovelDownload,
         NovelListFix,
+        PreLoadComment,
         PrivateMode,
         UrlPrettier,
         ViewNovelToCookie,

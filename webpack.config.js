@@ -12,13 +12,15 @@ const header = {
     "author": "green1052",
     "homepageURL": "https://github.com/green1052/betternovelpia",
     "rut-at": "document-start",
-    "include": "novelpia.com",
+    "match": "http*://novelpia.com/*",
     "require": [
         "https://openuserjs.org/src/libs/sizzle/GM_config.js"
     ],
     "grant": [
         "GM_getValue",
         "GM_setValue",
+        "GM.getValue",
+        "GM.setValue",
         "unsafeWindow"
     ],
     "version": version

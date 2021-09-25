@@ -1,6 +1,5 @@
 type Config =
     "AbsoluteViewerDrag" |
-    "BetterLastNovel" |
     "BetterSideView" |
     "Bookmark" |
     "Bookmark_AutoUse" |
@@ -14,6 +13,7 @@ type Config =
     "InfoUnfold" |
     "NovelDownload" |
     "NovelListFix" |
+    "PreLoadComment" |
     "PreviousBookmark" |
     "PreviousBookmark_AutoUse" |
     "PreviousBookmark_First" |

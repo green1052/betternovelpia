@@ -16,4 +16,6 @@ interface NovelData {
 
 declare var novel_data: NovelData[] | [];
 
+declare function comment_load(): void;
+
 declare function novel_drawing(novel_d: NovelData[]): void;
