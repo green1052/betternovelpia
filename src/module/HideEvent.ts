@@ -1,8 +1,6 @@
 import $ from "jquery";
 
-export default {start};
-
-function hide(jquery: JQuery) {
+function hide(jquery: JQuery<HTMLElement>) {
     jquery
         .removeAttr("class")
         .removeAttr("style")
@@ -10,20 +8,25 @@ function hide(jquery: JQuery) {
         .empty();
 }
 
-function start() {
-    if (!GM_config.get("HideEvent"))
-        return;
+export default {
+    enable: ["HideEvent"],
+    start() {
+        if (location.pathname === "/")
+            return $("#slider-wrap[class*=mobile_show]").remove();
 
-    if (location.pathname === "/")
-        return $("#slider-wrap[class*=mobile_show]").remove();
+        if (location.pathname.includes("/contest_list")) {
+            $(`div[style*="banner_freestory7.png"]`).parent().parent().remove();
+            $(`span:contains("공모전 상금")`).parent().parent().remove();
+        }
 
-    if (location.pathname.includes("/freestory"))
-        hide($(`img[src*="banner_freestory1_mob.png"]`).parent().parent());
+        if (location.pathname.includes("/freestory"))
+            hide($(`div[class="mobile_show"][style*="banner_freestory6_mob.png"]`));
 
-    if (location.pathname.includes("/plus"))
-        hide($(`img[src*="plus_banner5.png"]`).parent());
+        if (location.pathname.includes("/plus"))
+            hide($(`img[src*="plus_banner5.png"]`).parent().parent());
 
-    $(`div.swiper-container[class*="mobile_show"]`).remove();
+        $(`div.swiper-container[class*="mobile_show"]`).remove();
 
-    hide($(`div[onclick*="/notice/all/view_171726"]`));
-}
+        hide($(`div[onclick*="/notice/all/view_171726"]`));
+    }
+} as Module;

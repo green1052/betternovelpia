@@ -2,8 +2,6 @@ import $ from "jquery";
 import {waitElement} from "../util/WaitElement";
 import {HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../util/Selectors";
 
-export default {start};
-
 interface Bookmarks {
     [key: string]: {
         scrollTop: number,
@@ -32,12 +30,14 @@ async function isFirst(who: "previous" | "bookmark") {
     return !GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined;
 }
 
-async function start() {
-    await previousBookmark();
+export default {
+    async start() {
+        await previousBookmark();
 
-    addMainBookmarkButton();
-    await addViewerBookmarkButton();
-}
+        addMainBookmarkButton();
+        await addViewerBookmarkButton();
+    }
+} as Module;
 
 async function previousBookmark() {
     if (!GM_config.get("PreviousBookmark") || !location.pathname.includes("/viewer/"))
@@ -68,10 +68,8 @@ async function previousBookmark() {
         $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
     };
 
-    if ($(NOVEL_DRAWING).children().length > 0) {
-        goto();
-        return;
-    }
+    if ($(NOVEL_DRAWING).children().length > 0)
+        return goto();
 
     waitElement($(NOVEL_DRAWING).get(0), () => goto());
 }
@@ -90,28 +88,27 @@ function addMainBookmarkButton() {
             const refresh = (bookmarks: Bookmarks) => {
                 $("#BookmarkList").empty();
 
-                Object.values(bookmarks).forEach((bookmark, index) => {
-                    const title = decodeURIComponent(bookmark.title);
-                    const chapter = decodeURIComponent(bookmark.chapter);
+                for (const [key, value] of Object.entries(bookmarks)) {
+                    const title = decodeURIComponent(value.title);
+                    const chapter = decodeURIComponent(value.chapter);
 
-                    const $li = $(`<li><div><a href="${Object.keys(bookmarks)[index]}">${title} - ${chapter}</a></div></li>`);
+                    const $li = $(`<li><div><a href="${key}">${title} - ${chapter}</a></div></li>`);
 
                     $("#BookmarkList").append($li);
 
                     const $a = $(`<h5>X</h5>`).on("click", function () {
                         const $li = $(this).parent().parent();
-
-                        removeBookmark(bookmarks, Object.keys(bookmarks)[$li.index()]);
+                        removeBookmark(bookmarks, key);
                         $li.remove();
                     });
 
                     $li.children("div").append($a);
-                });
+                }
             };
 
             refresh(await GM.getValue("bookmarks") ?? {});
 
-            $("#Reset").on("click", () => {
+            $("#Reset").on("dblclick", () => {
                 GM.setValue("bookmarks", {});
                 $("#BookmarkList").empty();
             });
@@ -158,13 +155,10 @@ async function addViewerBookmarkButton() {
             const bookmarks: Bookmarks = await GM.getValue("bookmarks") ?? {};
 
             const title = $(NOVEL_TITLE).text();
-            let chapter = $(NOVEL_EP).text();
+            const chapter = $(NOVEL_EP).text().replace(/^19/, "");
 
             if (!title || !chapter)
                 return alert("제목 또는 챕터 값이 비어있습니다.");
-
-            if (chapter.startsWith("19"))
-                chapter = chapter.substring(2);
 
             bookmarks[location.href] = {
                 scrollTop: scrollTop,

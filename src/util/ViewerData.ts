@@ -1,11 +1,5 @@
-interface JsonData {
-    text: string,
-    size: number,
-    align: string
-}
-
 export function viewerData(url: string, func?: Function) {
-    const json: JsonData[] = [];
+    const json: NovelData[] = [];
 
     $.ajax({
         data: {"size": "14"},
@@ -16,7 +10,7 @@ export function viewerData(url: string, func?: Function) {
         async: false,
         success: (data: { c: string, s: { text: string }[] }) => {
             for (const string of data.s) {
-                const json_t: JsonData = {
+                const json_t: NovelData = {
                     text: string.text,
                     size: 11,
                     align: "left"

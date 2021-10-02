@@ -1,21 +1,5 @@
 import $ from "jquery";
 import Setting from "./core/Setting";
-import AbsoluteViewerDrag from "./module/AbsoluteViewerDrag";
-import BetterSideView from "./module/BetterSideView";
-import Bookmark from "./module/Bookmark";
-import ClickNextChapter from "./module/ClickNextChapter";
-import DisableViewerLog from "./module/debug/DisableViewerLog";
-import FreeEmoji from "./module/FreeEmoji";
-import HideAddNovel from "./module/HideAddNovel";
-import HideEvent from "./module/HideEvent";
-import InfoUnfold from "./module/InfoUnfold";
-import NovelDownload from "./module/NovelDownload";
-import NovelListFix from "./module/NovelListFix";
-import PreLoadComment from "./module/PreLoadComment";
-import PrivateMode from "./module/PrivateMode";
-import UrlPrettier from "./module/UrlPrettier";
-import ViewNovelToCookie from "./module/ViewNovelToCookie";
-import Eval from "./module/debug/Eval";
 
 GM_config.init({
     id: "betternovelpia",
@@ -167,29 +151,26 @@ GM_config.init({
 });
 
 $(() => {
-    for (const module of [
-        Setting,
-        AbsoluteViewerDrag,
-        BetterSideView,
-        Bookmark,
-        ClickNextChapter,
-        FreeEmoji,
-        HideAddNovel,
-        HideEvent,
-        InfoUnfold,
-        NovelDownload,
-        NovelListFix,
-        PreLoadComment,
-        PrivateMode,
-        UrlPrettier,
-        ViewNovelToCookie,
-        DisableViewerLog,
-        Eval
-    ]) {
+    Setting.start();
+
+    const context = require.context("./module/", true, /\.ts$/);
+
+    for (const key of context.keys()) {
+        const start = performance.now();
+
         try {
-            module.start();
+            const module: Module = context(key).default;
+
+            if ((module.url === undefined || module.url.test(location.href)) &&
+                (module.enable === undefined || !module.enable.map(setting => GM_config.get(setting)).includes(false))) {
+                console.log(`${key}: 불러오는 중...`);
+
+                module.start();
+
+                console.log(`${key}: 로드됨 ${(performance.now() - start).toFixed(2)}ms\n`);
+            }
         } catch (e) {
-            console.error(e);
+            console.error(`${key}: ${e}\n`);
         }
     }
 });

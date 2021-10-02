@@ -4,8 +4,6 @@ import {fakeViewer} from "../util/FakeViewer";
 import {LOCKED} from "../util/Selectors";
 import {viewerData} from "../util/ViewerData";
 
-export default {start};
-
 function resetCookie(name: string, value: string) {
     Cookies.remove(name);
     Cookies.set(name, value, {
@@ -15,31 +13,33 @@ function resetCookie(name: string, value: string) {
     });
 }
 
-async function start() {
-    if (!GM_config.get("ViewNovelToCookie") || !location.pathname.includes("/viewer/"))
-        return;
+export default {
+    url: /\/viewer\//,
+    enable: ["ViewNovelToCookie"],
+    start() {
+        const locked = $(LOCKED).parent();
 
-    const locked = $(LOCKED).parent();
+        if (!locked.text().includes("Plus멤버십 가입하기") && !locked.text().includes("열람에 회원가입/로그인이 필요한 회차입니다"))
+            return;
 
-    if (!locked.text().includes("Plus멤버십 가입하기") && !locked.text().includes("열람에 회원가입/로그인이 필요한 회차입니다"))
-        return;
+        const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
+        const userKey: string | undefined = GM_config.get("ViewNoelToCookie_USERKEY");
 
-    const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
-    const userKey: string | undefined = GM_config.get("ViewNoelToCookie_USERKEY");
+        if (!loginKey || !userKey)
+            return;
 
-    if (!loginKey || !userKey)
-        return;
+        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
+        const oldUserKey = Cookies.get("USEFRKEY") ?? "";
 
-    const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
-    const oldUserKey = Cookies.get("USEFRKEY") ?? "";
+        resetCookie("LOGINKEY", loginKey);
+        resetCookie("USERKEY", userKey);
 
-    resetCookie("LOGINKEY", loginKey);
-    resetCookie("USERKEY", userKey);
+        const data = viewerData(location.pathname.substring(8), () => {
+            resetCookie("LOGINKEY", oldLoginKey);
+            resetCookie("USERKEY", oldUserKey);
+        });
 
-    const data = viewerData(location.pathname.substring(8), () => {
-        resetCookie("LOGINKEY", oldLoginKey);
-        resetCookie("USERKEY", oldUserKey);
-    });
-
-    fakeViewer(locked, data);
-}
+        if (data)
+            fakeViewer(locked, data);
+    }
+} as Module;

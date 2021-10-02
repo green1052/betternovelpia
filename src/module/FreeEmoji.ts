@@ -1,7 +1,5 @@
 import $ from "jquery";
 
-export default {start};
-
 const emojiList = [
     // 노벨피아 20종 움짤세트
     "cisk9bncs|1-20|gif",
@@ -108,27 +106,28 @@ const emojiList = [
     "d89jg198x|1-20|jpg"
 ];
 
-function start() {
-    if (!GM_config.get("FreeEmoji") || !location.pathname.includes("/viewer/"))
-        return;
+export default {
+    url: /\/viewer\//,
+    enable: ["FreeEmoji"],
+    start() {
+        $("#submenu_bar .nav-item").before(`<img src="//image.novelpia.com/img/emoticon/1/02-smile.png" style="width:35px;margin:3px 8px 3px 0;cursor:pointer;" onclick="$('.favorite_box img').attr('src','/img/new/viewer/favorites_0.png');favoriDepth = 1;$('.emoticon').hide();emoticon_open('0');">`);
 
-    $("#submenu_bar .nav-item").before(`<img src="//image.novelpia.com/img/emoticon/1/02-smile.png" style="width:35px;margin:3px 8px 3px 0;cursor:pointer;" onclick="$('.favorite_box img').attr('src','/img/new/viewer/favorites_0.png');favoriDepth = 1;$('.emoticon').hide();emoticon_open('0');">`);
+        const div = $(`<div class="col-sm-12 mg-b-10 emoticon" style="display:none;padding: 10px 15px;background-color: #F8F9FA;border-top: 1px solid #e8e8e8;margin-bottom: 0;" id="emoticon_shop0">`);
 
-    const div = $(`<div class="col-sm-12 mg-b-10 emoticon" style="display:none;padding: 10px 15px;background-color: #F8F9FA;border-top: 1px solid #e8e8e8;margin-bottom: 0;" id="emoticon_shop0">`);
+        const div2 = $(`<div style="display: grid;flex-wrap: nowrap;grid-template-columns: repeat(auto-fill, 60px);gap: 14px 14px;justify-content: space-between;">`);
 
-    const div2 = $(`<div style="display: grid;flex-wrap: nowrap;grid-template-columns: repeat(auto-fill, 60px);gap: 14px 14px;justify-content: space-between;">`);
+        for (const value of emojiList) {
+            const [id, minMax, type, letter] = value.split("|");
+            const [min, max] = minMax.split("-");
 
-    for (const value of emojiList) {
-        const [id, minMax, type, letter] = value.split("|");
-        const [min, max] = minMax.split("-");
-
-        for (let i = Number(min); i <= Number(max); i++) {
-            const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
-            div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');">`);
+            for (let i = Number(min); i <= Number(max); i++) {
+                const emoji = `//image.novelpia.com/img/emoticon/${id}/${i}${letter}.${type}`;
+                div2.append(`<img data-src="${emoji}" src="//image.novelpia.com/img/emoticon/none.gif" style="width:60px;margin:3px;cursor:pointer;" onclick="EmoticonView('0','${emoji}','306','/img/new/viewer/star_off.png','0');">`);
+            }
         }
+
+        div.append(div2);
+
+        $("#comment_box > div > div > div.row.mg-t-5 > div:nth-child(2)").append(div);
     }
-
-    div.append(div2);
-
-    $("#comment_box > div > div > div.row.mg-t-5 > div:nth-child(2)").append(div);
-}
+} as Module;

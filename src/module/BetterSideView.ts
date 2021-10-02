@@ -1,29 +1,30 @@
 import $ from "jquery";
 
-export default {start};
+export default {
+    enable: ["BetterSideView"],
+    start() {
+        if (/\/viewer\//.test(location.href))
+            return;
 
-function start() {
-    if (!GM_config.get("BetterSideView") || location.pathname.includes("/viewer/"))
-        return;
+        const div = $(`<div id="BetterSideView">`)
+            .css("display", "none")
+            .css("position", "fixed")
+            .css("width", "100vw")
+            .css("height", "100vh")
+            .css("z-index", 2)
+            .on("click", () => {
+                $(document.body).removeClass("show-left");
+                div.hide();
+            });
 
-    const div = $(`<div id="BetterSideView">`)
-        .css("display", "none")
-        .css("position", "fixed")
-        .css("width", "100vw")
-        .css("height", "100vh")
-        .css("z-index", 2)
-        .on("click", () => {
-            $(document.body).removeClass("show-left");
-            div.hide();
+        $(document.body).prepend(div);
+
+        $("#naviconLeftMobile").on("click", () => {
+            if (div.css("display") !== "none")
+                return div.hide();
+
+            if ($(document.body).hasClass("show-left"))
+                div.show();
         });
-
-    $(document.body).prepend(div);
-
-    $("#naviconLeftMobile").on("click", () => {
-        if (div.css("display") !== "none")
-            return div.hide();
-
-        if ($(document.body).hasClass("show-left"))
-            div.show();
-    });
-}
+    }
+} as Module;

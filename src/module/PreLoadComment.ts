@@ -1,8 +1,7 @@
-export default {start};
-
-function start() {
-    if (!GM_config.get("PreLoadComment") || !location.pathname.includes("/viewer/"))
-        return;
-
-    comment_load();
-}
+export default {
+    url: /\/viewer\//,
+    enable: ["PreLoadComment"],
+    start() {
+        comment_load();
+    }
+} as Module;

@@ -1,8 +1,9 @@
 import $ from "jquery";
 
-export default {start};
-
-function start() {
-    if (GM_config.get("HideAddNovel") && location.pathname.includes("/freestory") || location.pathname.includes("/plus"))
+export default {
+    url: /\/freestory|plus/,
+    enable: ["HideAddNovel"],
+    start() {
         $(`div[onclick*="/publishing/new"]`).remove();
-}
+    }
+} as Module;
