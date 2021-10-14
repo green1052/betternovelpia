@@ -2,15 +2,16 @@ import $ from "jquery";
 import {NOVEL_DRAWING} from "./Selectors";
 
 export function fakeViewer(locked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
-    novel_data = novelData;
-
     locked
         .parent()
-        .append(`<ol id="novel_drawing" class="no-drag np" onclick="navi_view();" style="padding:0px;margin:0px;">`);
+        .append(`<ol onclick="navi_view();" style="padding:0px;margin:0px;" id="novel_drawing" class="no-drag np">`);
     locked.remove();
 
-    data_load = 1;
-    novel_drawing(novel_data);
+    novel_data = novelData;
+    setTimeout(() => {
+        data_load = 1;
+        novel_drawing(novel_data);
+    }, 10);
 
     const next = $(`img[src*="btn_next.png"]`)
         .parent()

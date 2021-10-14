@@ -13,7 +13,8 @@ declare global {
         "FreeEmoji" |
         "HideAddNovel" |
         "HideEvent" |
-        "InfoUnfold" |
+        "HideNotice" |
+        "HidePlus" |
         "NovelDownload" |
         "NovelListFix" |
         "PreLoadComment" |
@@ -107,7 +108,7 @@ declare global {
     type GMValue = "bookmarks" | "previousBookmark";
 
     const GM: {
-        getValue(name: GMValue): Promise<any>
+        getValue(name: GMValue, defaultValue?: any): Promise<any>
         setValue(name: GMValue, value: any): void
         setClipboard(text: string): void;
     };

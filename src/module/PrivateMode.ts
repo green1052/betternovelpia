@@ -2,7 +2,7 @@ import $ from "jquery";
 import {viewerData} from "../util/ViewerData";
 
 export default {
-    url: /\/novel\//,
+    url: /^\/novel\//,
     enable: ["PrivateMode"],
     start() {
         const observer = new MutationObserver(() => {
@@ -14,20 +14,18 @@ export default {
                     .on("click", () => {
                         const data = viewerData(url);
 
-                        if (!data.length)
-                            return alert("내용 없음");
-
-                        let content = "";
-
-                        for (const str of data) {
-                            content += str.text
-                                .replace(/&nbsp;/g, "")
-                                .replace(/&amp;/g, "&")
-                                .replace(/&lt;/g, "<")
-                                .replace(/&gt;/g, ">")
-                                .replace(/&#39;/g, "'")
-                                .replace(/&quot;/g, `"`);
+                        if (!data.length) {
+                            alert("내용 없음");
+                            return;
                         }
+
+                        const content = data.map(str => str.text.replaceAll("&nbsp;", "")
+                            .replaceAll("&amp;", "&")
+                            .replaceAll("&lt;", "<")
+                            .replaceAll("&gt;", ">")
+                            .replaceAll("&#39;", "'")
+                            .replaceAll("&quot;", `"`)
+                        ).join("");
 
                         alert(content);
                     });

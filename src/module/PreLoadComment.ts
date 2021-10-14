@@ -1,5 +1,5 @@
 export default {
-    url: /\/viewer\//,
+    url: /^\/viewer\//,
     enable: ["PreLoadComment"],
     start() {
         comment_load();

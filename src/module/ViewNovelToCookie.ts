@@ -4,19 +4,18 @@ import {fakeViewer} from "../util/FakeViewer";
 import {LOCKED} from "../util/Selectors";
 import {viewerData} from "../util/ViewerData";
 
-function resetCookie(name: string, value: string) {
-    Cookies.remove(name);
-    Cookies.set(name, value, {
-        domain: ".novelpia.com",
-        path: "/",
-        expires: new Date().setFullYear(new Date().getFullYear() + 1)
-    });
-}
-
 export default {
-    url: /\/viewer\//,
+    url: /^\/viewer\//,
     enable: ["ViewNovelToCookie"],
     start() {
+        function resetCookie(name: string, value: string) {
+            Cookies.set(name, value, {
+                domain: ".novelpia.com",
+                path: "/",
+                expires: new Date().setFullYear(new Date().getFullYear() + 1)
+            });
+        }
+
         const locked = $(LOCKED).parent();
 
         if (!locked.text().includes("Plus멤버십 가입하기") && !locked.text().includes("열람에 회원가입/로그인이 필요한 회차입니다"))
@@ -39,7 +38,7 @@ export default {
             resetCookie("USERKEY", oldUserKey);
         });
 
-        if (data)
+        if (data.length > 0)
             fakeViewer(locked, data);
     }
 } as Module;

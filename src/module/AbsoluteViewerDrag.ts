@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /\/viewer\//,
+    url: /^\/viewer\//,
     enable: ["AbsoluteViewerDrag"],
     start() {
         clearInterval(playAlert);

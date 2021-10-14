@@ -3,7 +3,7 @@ import $ from "jquery";
 export default {
     enable: ["BetterSideView"],
     start() {
-        if (/\/viewer\//.test(location.href))
+        if (/^\/viewer\//.test(location.pathname))
             return;
 
         const div = $(`<div id="BetterSideView">`)
@@ -20,8 +20,10 @@ export default {
         $(document.body).prepend(div);
 
         $("#naviconLeftMobile").on("click", () => {
-            if (div.css("display") !== "none")
-                return div.hide();
+            if (div.css("display") !== "none") {
+                div.hide();
+                return;
+            }
 
             if ($(document.body).hasClass("show-left"))
                 div.show();

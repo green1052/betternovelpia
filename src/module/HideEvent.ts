@@ -1,28 +1,30 @@
 import $ from "jquery";
 
-function hide(jquery: JQuery<HTMLElement>) {
-    jquery
-        .removeAttr("class")
-        .removeAttr("style")
-        .css("margin", "15px")
-        .empty();
-}
-
 export default {
     enable: ["HideEvent"],
     start() {
-        if (location.pathname === "/")
-            return $("#slider-wrap[class*=mobile_show]").remove();
+        function hide(jquery: JQuery<HTMLElement>) {
+            jquery
+                .removeAttr("class")
+                .removeAttr("style")
+                .css("margin", "15px")
+                .empty();
+        }
 
-        if (location.pathname.includes("/contest_list")) {
+        if (location.pathname === "/") {
+            $("#slider-wrap[class*=mobile_show]").remove();
+            return;
+        }
+
+        if (/^\/contest_list/.test(location.pathname)) {
             $(`div[style*="banner_freestory7.png"]`).parent().parent().remove();
             $(`span:contains("공모전 상금")`).parent().parent().remove();
         }
 
-        if (location.pathname.includes("/freestory"))
+        if (/^\/freestory/.test(location.pathname))
             hide($(`div[class="mobile_show"][style*="banner_freestory6_mob.png"]`));
 
-        if (location.pathname.includes("/plus"))
+        if (/^\/plus/.test(location.pathname))
             hide($(`img[src*="plus_banner5.png"]`).parent().parent());
 
         $(`div.swiper-container[class*="mobile_show"]`).remove();

@@ -1,4 +1,3 @@
-const path = require("path");
 const WebpackUserscript = require("webpack-userscript");
 const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -28,33 +27,32 @@ const header = {
 
 module.exports = {
     mode: "production",
-    entry: path.join(__dirname, "src", "index.ts"),
+    entry: "./src/index.ts",
+    output: {
+        filename: "betternovelpia.user.js"
+    },
     module: {
         rules: [
             {
                 test: /\.ts$/,
                 include: /src/,
-                use: "swc-loader"
+                loader: "swc-loader"
             }
         ]
     },
     resolve: {
         extensions: [".js", ".ts"]
     },
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "betternovelpia.user.js"
-    },
     plugins: [
         new WebpackUserscript({
+            headers: header,
             metajs: false,
-            headers: header
+            pretty: false
         }),
         new DefinePlugin({
             VERSION: JSON.stringify(version)
         }),
         new CleanTerminalPlugin({
-            skipFirstRun: true,
             beforeCompile: true
         })
     ],
@@ -67,8 +65,7 @@ module.exports = {
                         comments: false
                     }
                 },
-                extractComments: false,
-                parallel: true
+                extractComments: false
             })
         ]
     }
