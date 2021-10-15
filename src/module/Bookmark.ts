@@ -4,16 +4,18 @@ import {HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} 
 import Cookies from "js-cookie";
 
 interface Bookmarks {
-    [key: string]: {
-        scrollTop: number,
-        title: string,
-        chapter: string
+    [url: string]: {
+        scrollTop: number;
+        title: string;
+        chapter: string;
     };
 }
 
 interface PreviousBookmark {
-    url: string,
-    scrollTop: number
+    title: string;
+    chapter: string;
+    url: string;
+    scrollTop: number;
 }
 
 function removeBookmark(bookmarks: Bookmarks, url: string) {
@@ -33,9 +35,9 @@ async function isFirst(who: "previous" | "bookmark") {
 
 export default {
     start() {
-        addMainBookmarkButton();
-        addViewerBookmarkButton();
         previousBookmark();
+        mainBookmark();
+        viewerBookmark();
     }
 } as Module;
 
@@ -51,7 +53,13 @@ async function previousBookmark() {
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
 
-        GM.setValue("previousBookmark", {url: location.href, scrollTop: scrollTop} as PreviousBookmark);
+        GM.setValue("previousBookmark", {
+            title: $(NOVEL_TITLE).text(),
+            chapter: $(NOVEL_EP).text().replace(/^19/, ""),
+            url: location.href,
+            scrollTop: scrollTop
+        } as PreviousBookmark);
+
         lastScrollTop = scrollTop;
     }, 1000);
 
@@ -76,24 +84,33 @@ async function previousBookmark() {
     waitElement($(NOVEL_DRAWING).get(0), goto);
 }
 
-function addMainBookmarkButton() {
+function mainBookmark() {
     if (!GM_config.get("Bookmark") || /^\/viewer\//.test(location.pathname))
         return;
 
     const li = $(`<li style="padding: 10px 25px;"><img height="25" src="//image.novelpia.com/img/new/icon/count_book.png"></li>`)
         .on("click", async () => {
-            const bookmarkHtml = $(`<div style=overflow:auto;bottom:0;position:fixed;z-index:99999;width:100vw;height:100vh class=no-drag id=Bookmark><script>"1"===$.cookie("DARKMODE_S")?$("#Bookmark").addClass("darkMode"):$("#Bookmark").css("background-color","white")</script><style>.darkMode{background-color:#000;color:#fff}.no-drag{-ms-user-select:none;-moz-user-select:-moz-none;-webkit-user-select:none;-khtml-user-select:none;user-select:none}.bookmark div{display:flex;align-items:center}.bookmark h5{color:red;margin-left:10px;margin-right:5px}</style><h2 style=margin-top:10px;text-align:center>북마크 관리</h2><ol class=bookmark id=BookmarkList style=font-size:15px;margin-left:5px></ol><div style=display:flex;position:absolute;bottom:35px;right:5px><h5 id=Backup>백업</h5><h5 id=Restore style=margin-left:5px>복원</h5></div><div style=position:absolute;bottom:5px;right:5px><button id=Reset>초기화</button> <button id=Close onclick='$("#Bookmark").remove()'>닫기</button></div></div>`);
+            const bookmarkHtml = $(`<div style=overflow:auto;bottom:0;position:fixed;z-index:99999;width:100vw;height:100vh class=no-drag id=bookmark><script>"1"===$.cookie("DARKMODE_S")?$("#bookmark").addClass("dark-mode"):$("#bookmark").css("background-color","white")</script><style>.no-overflow a{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.dark-mode{background-color:#000;color:#fff}.no-drag{-ms-user-select:none!important;-moz-user-select:-moz-none!important;-webkit-user-select:none!important;-khtml-user-select:none!important;user-select:none!important}.bookmark div{display:flex;align-items:center}.bookmark h5{color:red;margin-left:5px;margin-right:5px}</style><h2 style=margin-top:10px;text-align:center>북마크 관리</h2><ol class="no-overflow bookmark"id=bookmarkList style=font-size:15px;margin-left:-10px></ol><div style=display:flex;position:absolute;bottom:35px;right:5px><h5 id=backup>백업</h5><h5 id=restore style=margin-left:5px>복원</h5></div><div style=display:flex;position:absolute;bottom:5px;left:5px class=no-overflow><h5 style=font-size:.83em!important>이전 소설: </h5><a href=# id=lastNovel style=font-size:.83em!important;width:200px>없음</a></div><div style=position:absolute;bottom:5px;right:5px><button id=reset>초기화</button> <button id=close onclick='$("#bookmark").remove()'>닫기</button></div></div>`);
 
             $(document.body).prepend(bookmarkHtml);
 
-            const refresh = (bookmarks: Bookmarks) => {
-                const $BookmarkList = $("#BookmarkList").empty();
+            const refresh = async () => {
+                const previousBookmark: PreviousBookmark = await GM.getValue("previousBookmark", {});
+
+                if (previousBookmark.title && previousBookmark.chapter && previousBookmark.url)
+                    $("#lastNovel")
+                        .attr("href", previousBookmark.url)
+                        .html(`${previousBookmark.chapter} - ${previousBookmark.title}`);
+
+                const bookmarks: Bookmarks = await GM.getValue("bookmarks", {});
+
+                const $bookmarkList = $("#bookmarkList").empty();
 
                 for (const [key, value] of Object.entries(bookmarks)) {
                     const title = decodeURIComponent(value.title);
                     const chapter = decodeURIComponent(value.chapter);
 
-                    const $li = $(`<li><div><a href="${key}">${title} - ${chapter}</a></div></li>`);
+                    const $li = $(`<li><div><a href="${key}">${chapter} - ${title}</a></div></li>`);
 
                     $li.children("div").append(
                         $(`<h5>X</h5>`).on("click", function () {
@@ -102,25 +119,25 @@ function addMainBookmarkButton() {
                         })
                     );
 
-                    $BookmarkList.append($li);
+                    $bookmarkList.append($li);
                 }
             };
 
-            refresh(await GM.getValue("bookmarks", {}));
+            refresh();
 
-            $("#Reset").on("dblclick", () => {
+            $("#reset").on("dblclick", () => {
                 GM.setValue("bookmarks", {});
-                $("#BookmarkList").empty();
+                $("#bookmarkList").empty();
             });
 
-            $("#Backup").on("click", async () => {
+            $("#backup").on("click", async () => {
                 const bookmarks = await GM.getValue("bookmarks");
                 if (!Object.keys(bookmarks).length) return;
                 GM.setClipboard(JSON.stringify(bookmarks));
                 alert("클립보드로 복사되었습니다.");
             });
 
-            $("#Restore").on("click", async () => {
+            $("#restore").on("click", async () => {
                 const input = prompt("데이터를 입력해주세요: ");
 
                 if (!input) {
@@ -128,17 +145,15 @@ function addMainBookmarkButton() {
                     return;
                 }
 
-                const json: Bookmarks = JSON.parse(input);
-
-                GM.setValue("bookmarks", json);
-                refresh(json);
+                GM.setValue("bookmarks", JSON.parse(input));
+                refresh();
             });
         });
 
     $(SIDE_LEFT).append(li);
 }
 
-async function addViewerBookmarkButton() {
+async function viewerBookmark() {
     if (!GM_config.get("Bookmark") || !/^\/viewer\//.test(location.pathname))
         return;
 
@@ -163,11 +178,6 @@ async function addViewerBookmarkButton() {
 
             const title = $(NOVEL_TITLE).text();
             const chapter = $(NOVEL_EP).text().replace(/^19/, "");
-
-            if (!title || !chapter) {
-                alert("제목 또는 챕터 값이 비어있습니다.");
-                return;
-            }
 
             bookmarks[location.href] = {
                 scrollTop: scrollTop,

@@ -93,11 +93,7 @@ declare global {
             [key in Config]: Texts | Int | Float | Checkbox | Select | Radio | Textarea | Hidden | Button
         },
         events: {
-            init?: () => void,
-            open?: () => void,
-            save?: () => void,
-            close?: () => void,
-            reset?: () => void
+            save?: () => void
         }
     }
 
