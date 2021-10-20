@@ -8,6 +8,10 @@ export const NOVEL_BOX = "#novel_box";
 
 export const NOVEL_TITLE = "b.cut_line_one";
 
-export const NOVEL_EP = "span.cut_line_one > span";
+export const NOVEL_EP = "span.cut_line_one > span:not(.b_19)";
 
 export const LOCKED = ".ion-locked";
+
+export const EP_List = "#episode_list";
+
+export const NOTICE_LIST = ".ep_style4";

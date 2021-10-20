@@ -33,6 +33,11 @@ if (new MobileDetect(navigator.userAgent).mobile()) {
                 type: "checkbox",
                 default: false
             },
+            InfoUnfold: {
+                label: "상세정보 항상 보기",
+                type: "checkbox",
+                default: false
+            },
             NovelListFix: {
                 label: "소설 목록 개선",
                 type: "checkbox",

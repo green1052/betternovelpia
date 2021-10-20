@@ -12,13 +12,13 @@ export default {
             Cookies.set(name, value, {
                 domain: ".novelpia.com",
                 path: "/",
-                expires: new Date().setFullYear(new Date().getFullYear() + 1)
+                expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             });
         }
 
         const locked = $(LOCKED).parent();
 
-        if (!locked.text().includes("Plus멤버십 가입하기") && !locked.text().includes("열람에 회원가입/로그인이 필요한 회차입니다"))
+        if (!/Plus멤버십 가입하기|열람에 회원가입\/로그인이 필요한 회차입니다/.test(locked.text()))
             return;
 
         const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
@@ -28,7 +28,7 @@ export default {
             return;
 
         const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
-        const oldUserKey = Cookies.get("USEFRKEY") ?? "";
+        const oldUserKey = Cookies.get("USERKEY") ?? "";
 
         resetCookie("LOGINKEY", loginKey);
         resetCookie("USERKEY", userKey);

@@ -4,7 +4,7 @@ export default {
     url: /^\/viewer\//,
     enable: ["FreeEmoji"],
     start() {
-        $(`div[class="col-sm-12 mg-b-10 emoticon"]`).children("div").each((index, element) => {
+        for (const element of $(`div[class="col-sm-12 mg-b-10 emoticon"]`).children("div")) {
             const $element = $(element);
 
             $element.children("img").each((index2, element2) => {
@@ -27,6 +27,6 @@ export default {
                     .css("opacity", "")
                     .attr("onclick", `EmoticonView('${id}', '${url}','0','/img/new/viewer/star_off.png','0');`);
             });
-        });
+        }
     }
 } as Module;

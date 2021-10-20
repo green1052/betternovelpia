@@ -15,6 +15,7 @@ declare global {
         "HideEvent" |
         "HideNotice" |
         "HidePlus" |
+        "InfoUnfold" |
         "NovelDownload" |
         "NovelListFix" |
         "PreLoadComment" |

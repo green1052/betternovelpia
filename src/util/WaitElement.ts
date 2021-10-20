@@ -1,4 +1,4 @@
-export function waitElement(dom: HTMLElement, code: () => void | Promise<void>) {
+export function waitElement(dom: HTMLElement | undefined, code: () => void | Promise<void>) {
     if (!dom)
         return;
 

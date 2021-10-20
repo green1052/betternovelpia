@@ -5,7 +5,7 @@ export default {
     url: /^\/viewer\//,
     start() {
         function next() {
-            $(`img[src*="btn_next.png"]`).get(0).click();
+            $(`img[src*="btn_next.png"]`).get(0)?.click();
         }
 
         if (GM_config.get("DBNextChapter"))

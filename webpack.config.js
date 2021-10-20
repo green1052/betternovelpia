@@ -3,7 +3,6 @@ const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const {DefinePlugin} = require("webpack");
 const {version} = require("./package.json");
-
 const header = {
     "name": "BetterNovelpia",
     "namespace": "betternovelpia",
@@ -37,6 +36,11 @@ module.exports = {
                 test: /\.ts$/,
                 include: /src/,
                 loader: "swc-loader"
+            },
+            {
+                test: /\.html$/,
+                include: /html/,
+                loader: "html-loader"
             }
         ]
     },
