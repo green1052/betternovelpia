@@ -43,6 +43,11 @@ if (new MobileDetect(navigator.userAgent).mobile()) {
                 type: "checkbox",
                 default: false
             },
+            DisableNovelAlert: {
+                label: "회차 클릭 알림 제거",
+                type: "checkbox",
+                default: false
+            },
 
             AbsoluteViewerDrag: {
                 label: "뷰어 드래그 허용",
@@ -50,15 +55,12 @@ if (new MobileDetect(navigator.userAgent).mobile()) {
                 default: false,
                 section: ["뷰어 설정"]
             },
-            DBNextChapter: {
-                label: "더블 클릭으로 다음 회차",
-                type: "checkbox",
-                default: false
-            },
-            TripleNextChapter: {
-                label: "트리플 클릭으로 다음 회차",
-                type: "checkbox",
-                default: false
+            ClickNextChapter: {
+                label: "클릭으로 다음 회차 (0~5)",
+                type: "int",
+                min: 0,
+                max: 5,
+                default: 0
             },
             PreLoadComment: {
                 label: "댓글 미리 불러오기",

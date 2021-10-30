@@ -4,17 +4,12 @@ import {NOVEL_BOX} from "../util/Selectors";
 export default {
     url: /^\/viewer\//,
     start() {
-        function next() {
-            $(`img[src*="btn_next.png"]`).get(0)?.click();
-        }
+        const clickNextChapter = GM_config.get("ClickNextChapter");
 
-        if (GM_config.get("DBNextChapter"))
-            $(NOVEL_BOX).on("dblclick", next);
-
-        if (GM_config.get("TripleNextChapter"))
+        if (clickNextChapter !== 0)
             document.querySelector(NOVEL_BOX)!.addEventListener("click", (event) => {
-                if ((<CustomEvent>event).detail === 3)
-                    next();
+                if ((<CustomEvent>event).detail === clickNextChapter)
+                    $(`img[src*="btn_next.png"]`).get(0)?.click();
             });
     }
 } as Module;

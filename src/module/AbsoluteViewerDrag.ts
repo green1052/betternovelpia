@@ -16,5 +16,7 @@ export default {
         }
 
         $body.append("<style>.no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important;}</style>");
+
+        $("#viewer_no_drag").css("user-select");
     }
 } as Module;

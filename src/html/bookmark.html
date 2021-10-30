@@ -1,4 +1,4 @@
-<div class="no-drag" id="bookmark"
+<div class=no-drag id=bookmark
      style="overflow: auto; bottom: 0; position: fixed; z-index: 99999; width: 100vw; height: 100vh;">
     <script>
         if ($.cookie("DARKMODE_S") === "1")
@@ -41,20 +41,21 @@
 
     <h2 style="margin-top: 5px; text-align: center;">북마크 관리</h2>
 
-    <ol class="no-overflow bookmark" id="bookmarkList" style="font-size: 15px; margin-left: -10px;"></ol>
+    <ol class="no-overflow bookmark" id=bookmarkList
+        style="height: 85vh; overflow: auto;font-size: 15px; margin-left: -10px;"></ol>
 
-    <div style="display: flex; position:absolute; bottom: 35px; right: 5px;">
-        <h5 id="backup">백업</h5>
-        <h5 id="restore" style="margin-left: 5px;">복원</h5>
+    <div style="display: flex; position: fixed; bottom: 35px; right: 5px;">
+        <h5 id=backup>백업</h5>
+        <h5 id=restore style="margin-left: 5px;">복원</h5>
     </div>
 
-    <div class="no-overflow" style="display: flex; position: absolute; bottom: 5px; left: 5px;">
+    <div class="no-overflow" style="display: flex; position: fixed; bottom: -10px; left: 5px;">
         <h5 style="font-size: .83em!important;">이전 소설:&nbsp;</h5>
-        <a href="#" id="lastNovel" style="margin-bottom: 15px;font-size: .83em!important; width: 200px;">없음</a>
+        <a href=# id=lastNovel style="margin-bottom: 15px;font-size: .83em!important; width: 200px;">없음</a>
     </div>
 
-    <div style="position: absolute; bottom: 5px; right: 5px;">
-        <button id="reset">초기화</button>
-        <button id="close" onclick="$('#bookmark').remove();">닫기</button>
+    <div style="position: fixed; bottom: 5px; right: 5px;">
+        <button id=reset>초기화</button>
+        <button id=close>닫기</button>
     </div>
 </div>

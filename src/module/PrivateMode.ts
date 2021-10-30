@@ -18,7 +18,15 @@ export default {
                     const data = viewerData(url);
 
                     if (!data.length) {
-                        alert("내용 없음");
+                        toastr.options = {
+                            escapeHtml: true,
+                            closeButton: true,
+                            newestOnTop: false,
+                            progressBar: true
+                        };
+
+                        toastr.info("내용 없음", "프라이빗 모드");
+
                         return;
                     }
 

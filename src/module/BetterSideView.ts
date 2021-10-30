@@ -6,6 +6,8 @@ export default {
         if (/^\/viewer\//.test(location.pathname))
             return;
 
+        const $body = $(document.body);
+
         const div = $(`<div id="BetterSideView">`)
             .css("display", "none")
             .css("position", "fixed")
@@ -13,7 +15,7 @@ export default {
             .css("height", "100vh")
             .css("z-index", 2)
             .on("click", () => {
-                $(document.body).removeClass("show-left");
+                $body.removeClass("show-left");
                 div.hide();
             });
 
@@ -25,7 +27,7 @@ export default {
                 return;
             }
 
-            if ($(document.body).hasClass("show-left"))
+            if ($body.hasClass("show-left"))
                 div.show();
         });
     }

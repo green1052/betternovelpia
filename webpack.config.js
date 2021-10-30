@@ -3,6 +3,7 @@ const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const {DefinePlugin} = require("webpack");
 const {version} = require("./package.json");
+
 const header = {
     "name": "BetterNovelpia",
     "namespace": "betternovelpia",
@@ -11,14 +12,11 @@ const header = {
     "homepageURL": "https://github.com/green1052/betternovelpia",
     "rut-at": "document-start",
     "match": "http*://novelpia.com/*",
-    "require": [
-        "https://openuserjs.org/src/libs/sizzle/GM_config.js"
-    ],
+    "require": ["https://openuserjs.org/src/libs/sizzle/GM_config.js"],
     "grant": [
         "GM_getValue",
         "GM_setValue",
-        "GM.getValue",
-        "GM.setValue",
+        "GM_setClipboard",
         "unsafeWindow"
     ],
     "version": version

@@ -7,7 +7,8 @@ declare global {
         "Bookmark" |
         "Bookmark_AutoUse" |
         "Bookmark_OneUse" |
-        "DBNextChapter" |
+        "ClickNextChapter" |
+        "DisableNovelAlert" |
         "DisableViewLog" |
         "Eval" |
         "FreeEmoji" |
@@ -27,8 +28,7 @@ declare global {
         "UrlPrettier" |
         "ViewNoelToCookie_LOGINKEY" |
         "ViewNoelToCookie_USERKEY" |
-        "ViewNovelToCookie" |
-        "TripleNextChapter";
+        "ViewNovelToCookie";
 
     interface Field {
         label: string,
@@ -104,17 +104,15 @@ declare global {
 
     type GMValue = "bookmarks" | "previousBookmark";
 
-    const GM: {
-        getValue(name: GMValue, defaultValue?: any): Promise<any>
-        setValue(name: GMValue, value: any): void
-        setClipboard(text: string): void;
-    };
+    function GM_getValue(key: GMValue, defaultValue?: any): any
+
+    function GM_setValue(key: GMValue, value: any): null
+
+    function GM_setClipboard(data: string, type: string = "text/plain"): undefined
 
     const GM_config: {
         init(option: Configs): void,
         get(key: Config, defaults?: any): any,
         open(): void
     };
-
-    const VERSION: string;
 }

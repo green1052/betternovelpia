@@ -18,20 +18,19 @@ export default {
     }
 } as Module;
 
-async function novelBookmark() {
+function novelBookmark() {
     if (!/^\/novel\//.test(location.pathname))
         return;
 
-    const previousBookmark: PreviousBookmark = await GM.getValue("previousBookmark", {});
+    const previousBookmark: PreviousBookmark = GM_getValue("previousBookmark", {});
 
     if (previousBookmark.title === document.title.split("-")[2].trimLeft())
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
             .append(`<div style="background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer;" onclick="$('.loads').show();location='${previousBookmark.url}';"> <span style="background-color: #7f66de;border: 1px solid #fff;padding: 1px 6px;border-radius: 10px;font-size: 11px; margin-right: 3px;">${previousBookmark.chapter}</span> 이전 소설 이어보기 </div>`);
-
 }
 
-async function viewerBookmark() {
+function viewerBookmark() {
     if (!/^\/viewer\//.test(location.pathname))
         return;
 
@@ -43,7 +42,7 @@ async function viewerBookmark() {
         if (!scrollTop || scrollTop === lastScrollTop)
             return;
 
-        GM.setValue("previousBookmark", {
+        GM_setValue("previousBookmark", {
             title: $(NOVEL_TITLE).text(),
             chapter: $(NOVEL_EP).text(),
             url: location.href,
@@ -53,13 +52,13 @@ async function viewerBookmark() {
         lastScrollTop = scrollTop;
     }, 1000);
 
-    const bookmark: PreviousBookmark = await GM.getValue("previousBookmark");
+    const bookmark: PreviousBookmark = GM_getValue("previousBookmark");
 
-    if (!bookmark || location.href !== bookmark.url || !await isFirst("previous"))
+    if (!bookmark || location.href !== bookmark.url || !isFirst("previous"))
         return;
 
     if (GM_config.get("PreviousBookmark_OneUse"))
-        GM.setValue("previousBookmark", {});
+        GM_setValue("previousBookmark", {});
 
     const goto = () => {
         if (!GM_config.get("PreviousBookmark_AutoUse") && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
