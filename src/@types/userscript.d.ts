@@ -98,7 +98,12 @@ declare global {
         }
     }
 
-    const unsafeWindow: Window;
+    interface CustomWindow {
+        up_down_btn_view: Function;
+        navi_view: Function;
+    }
+
+    const unsafeWindow: CustomWindow & Window & typeof globalThis;
 
     type GMValue = "bookmarks" | "previousBookmark";
 
