@@ -5,6 +5,8 @@ export default {
     url: /^\/novel\//,
     enable: ["DisableNovelAlert"],
     start() {
+        if (!$(".b_plus").length) return;
+
         const observer = new MutationObserver(() => {
             for (const element of $(`${EP_List} > table > tbody > tr`)) {
                 const $element = $(element);

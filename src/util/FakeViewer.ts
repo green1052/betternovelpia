@@ -1,11 +1,17 @@
 import $ from "jquery";
 import {NOVEL_DRAWING} from "./Selectors";
+import NovelDrawing from "../html/novelpia/novelDrawing.html";
+import NextChapter from "../html/novelpia/nextChapter.html";
+import LastChapter from "../html/novelpia/lastChapter.html";
 
-export function fakeViewer(locked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
-    locked
+export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
+    blocked
         .parent()
-        .append(`<ol onclick="navi_view();" style="padding:0px;margin:0px;" id="novel_drawing" class="no-drag np">`);
-    locked.remove();
+        .parent()
+        .parent()
+        .append(NovelDrawing);
+
+    blocked.parent().parent().remove();
 
     novel_data = novelData;
 
@@ -19,7 +25,8 @@ export function fakeViewer(locked: JQuery<HTMLElement>, novelData: { text: strin
 
         $(NOVEL_DRAWING)
             .append(next
-                ? `<div id="next_epi_btn_bottom" style="background-color: rgba(155, 155, 155, 0.1); border: 1px solid rgba(155, 155, 155, 0.2); border-radius: 10px; padding: 10px 20px; text-align: center; margin: 100px 0px; cursor: pointer;" onclick="${next}">다음화 보기</div>`
-                : `<div style="background-color: rgba(155,155,155,0.1); border: 1px solid  rgba(155,155,155,0.2); border-radius: 10px; padding: 10px 20px;margin-top:10px;text-align:center;margin-top:100px;">여기까지가 등록된 마지막 회차입니다</div>`);
+                ? $(NextChapter).on("click", () => next)
+                : LastChapter
+            );
     }, 10);
 }

@@ -98,15 +98,13 @@ declare global {
         }
     }
 
-    const unsafeWindow: {
-        [key: string]: any
-    };
+    const unsafeWindow: Window;
 
     type GMValue = "bookmarks" | "previousBookmark";
 
     function GM_getValue(key: GMValue, defaultValue?: any): any
 
-    function GM_setValue(key: GMValue, value: any): null
+    function GM_setValue(key: GMValue, value: any): void
 
     function GM_setClipboard(data: string, type: string = "text/plain"): undefined
 

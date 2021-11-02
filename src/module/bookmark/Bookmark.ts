@@ -18,7 +18,9 @@ export function isFirst(who: "previous" | "bookmark") {
     const previousBookmark: PreviousBookmark = GM_getValue("previousBookmark");
 
     if (who === "previous")
-        return GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined ? true : !(bookmarks && bookmarks.hasOwnProperty(location.href));
+        return GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined
+            ? true
+            : !(bookmarks && bookmarks.hasOwnProperty(location.href));
 
     return !GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined;
 }
@@ -41,7 +43,7 @@ function mainBookmark() {
     if (/^\/viewer\//.test(location.pathname))
         return;
 
-    const li = $(`<li style="padding: 10px 25px;"><img height="25" src="//image.novelpia.com/img/new/icon/count_book.png"></li>`)
+    const li = $(`<li style="padding: 10px 25px;"><img height=25 src=//image.novelpia.com/img/new/icon/count_book.png></li>`)
         .on("click", async () => {
             $(document.body).prepend(BookmarkHtml);
 

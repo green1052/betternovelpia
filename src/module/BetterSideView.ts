@@ -8,7 +8,7 @@ export default {
 
         const $body = $(document.body);
 
-        const div = $(`<div id="BetterSideView">`)
+        const div = $("<div id=BetterSideView>")
             .css("display", "none")
             .css("position", "fixed")
             .css("width", "100vw")

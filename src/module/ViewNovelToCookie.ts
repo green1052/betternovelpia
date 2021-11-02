@@ -1,8 +1,7 @@
 import $ from "jquery";
-import Cookies from "js-cookie";
 import {fakeViewer} from "../util/FakeViewer";
-import {LOCKED} from "../util/Selectors";
 import {viewerData} from "../util/ViewerData";
+import Cookies from "js-cookie";
 
 export default {
     url: /^\/viewer\//,
@@ -16,10 +15,9 @@ export default {
             });
         }
 
-        const locked = $(LOCKED).parent();
+        const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
 
-        if (!/Plus멤버십 가입하기|열람에 회원가입\/로그인이 필요한 회차입니다/.test(locked.text()))
-            return;
+        if (!blocked.length) return;
 
         const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
         const userKey: string | undefined = GM_config.get("ViewNoelToCookie_USERKEY");
@@ -39,6 +37,6 @@ export default {
         });
 
         if (data.length > 0)
-            fakeViewer(locked, data);
+            fakeViewer(blocked, data);
     }
 } as Module;
