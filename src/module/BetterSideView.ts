@@ -21,13 +21,13 @@ export default {
 
         $(document.body).prepend(div);
 
-        $("#naviconLeftMobile").on("click", () => {
+        $("span#naviconLeftMobile").on("click", () => {
             if (div.css("display") !== "none") {
                 div.hide();
                 return;
             }
 
-            if ($body.hasClass("show-left"))
+            if (!$body.hasClass("show-left"))
                 div.show();
         });
     }

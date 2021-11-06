@@ -129,7 +129,7 @@ class Bookmark extends React.Component<IProps, IState> {
                     }}>
                         <h5 style={{fontSize: ".83em!important"}}>이전 소설:&nbsp;</h5>
 
-                        <a href={previousBookmark.url ?? "#"} id="lastNovel"
+                        <a onClick={() => $(".loads").show()} href={previousBookmark.url ?? "#"} id="lastNovel"
                            style={{
                                marginBottom: "15px",
                                fontSize: ".83em!important",
