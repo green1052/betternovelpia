@@ -1,8 +1,7 @@
 import $ from "jquery";
-import MobileDetect from "mobile-detect";
 import Setting from "./core/Setting";
 
-if (new MobileDetect(navigator.userAgent).mobile()) {
+if ($(".mobile_show").css("display") === "block") {
     GM_config.init({
         id: "betternovelpia",
         title: `BetterNovelpia - ${VERSION}`,
@@ -20,6 +19,11 @@ if (new MobileDetect(navigator.userAgent).mobile()) {
             },
             HideEvent: {
                 label: "이벤트 숨기기",
+                type: "checkbox",
+                default: false
+            },
+            HideAd: {
+                label: "광고 숨기기",
                 type: "checkbox",
                 default: false
             },
@@ -164,29 +168,27 @@ if (new MobileDetect(navigator.userAgent).mobile()) {
         }
     });
 
-    $(() => {
-        Setting.start();
+    Setting.start();
 
-        const context = require.context("./module/", true, /\.ts$/);
+    const context = require.context("./module/", true, /\.tsx?$/);
 
-        for (const key of context.keys()) {
-            const start = performance.now();
+    for (const key of context.keys()) {
+        const start = performance.now();
 
-            const exec = /(?<name>\w*).ts$/g.exec(key);
-            const name = exec ? exec.groups!["name"] : key;
+        const exec = /(?<name>\w*).tsx?$/g.exec(key);
+        const name = exec ? exec.groups!["name"] : key;
 
-            try {
-                const module: Module = context(key).default;
+        try {
+            const module: Module = context(key).default;
 
-                if ((module.url === undefined || module.url.test(location.pathname)) &&
-                    (module.enable === undefined || !module.enable.map(setting => GM_config.get(setting)).includes(false))) {
-                    console.log(`${name}: 불러오는 중...`);
-                    module.start();
-                    console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms\n\n`);
-                }
-            } catch (e) {
-                console.error(`${name}: ${e}\n\n`);
+            if ((module.url === undefined || module.url.test(location.pathname)) &&
+                (module.enable === undefined || !module.enable.map(setting => GM_config.get(setting)).includes(false))) {
+                console.log(`${name}: 불러오는 중...`);
+                module.start();
+                console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms\n\n`);
             }
+        } catch (e) {
+            console.error(`${name}: ${e}\n\n`);
         }
-    });
+    }
 }

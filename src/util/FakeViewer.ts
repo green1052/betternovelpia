@@ -1,8 +1,8 @@
 import $ from "jquery";
 import {NOVEL_DRAWING} from "./Selectors";
-import NovelDrawing from "../html/novelpia/novelDrawing.html";
-import NextChapter from "../html/novelpia/nextChapter.html";
-import LastChapter from "../html/novelpia/lastChapter.html";
+import NovelDrawing from "../html/novelDrawing.html";
+import NextChapter from "../html/nextChapter.html";
+import LastChapter from "../html/lastChapter.html";
 
 export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
     blocked
@@ -25,7 +25,7 @@ export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: stri
 
         $(NOVEL_DRAWING)
             .append(next
-                ? $(NextChapter).on("click", () => next)
+                ? $(NextChapter).attr("onclick", next)
                 : LastChapter
             );
     }, 10);

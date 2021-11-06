@@ -8,7 +8,7 @@ export default {
     enable: ["UrlPrettier"],
     start() {
         function matched() {
-            const match = $(NOVEL_DRAWING).text().match(urlRegex({strict: true}));
+            const match = $(NOVEL_DRAWING).text().match(urlRegex());
 
             match?.forEach(str =>
                 $(`${NOVEL_DRAWING} font:contains("${str}")`).wrapAll(`<a target="_blank" href="${str}">`)

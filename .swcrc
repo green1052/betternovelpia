@@ -2,9 +2,18 @@
   "jsc": {
     "parser": {
       "syntax": "typescript",
-      "tsx": false,
+      "tsx": true,
       "decorators": false,
       "dynamicImport": false
+    },
+    "transform": {
+      "react": {
+        "pragma": "React.createElement",
+        "pragmaFrag": "React.Fragment",
+        "throwIfNamespace": true,
+        "development": false,
+        "useBuiltins": false
+      }
     },
     "target": "es2021"
   }

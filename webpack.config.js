@@ -10,7 +10,7 @@ const header = {
     "description": "노벨피아를 더 좋게 바꿔줍니다!",
     "author": "green1052",
     "homepageURL": "https://github.com/green1052/betternovelpia",
-    "rut-at": "document-start",
+    "rut-at": "document-end",
     "match": "http*://novelpia.com/*",
     "require": ["https://openuserjs.org/src/libs/sizzle/GM_config.js"],
     "grant": [
@@ -31,7 +31,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.tsx?$/,
                 include: /src/,
                 loader: "swc-loader"
             },
@@ -43,7 +43,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".js", ".ts"]
+        extensions: [".js", ".ts", ".tsx"]
     },
     plugins: [
         new WebpackUserscript({
@@ -70,5 +70,8 @@ module.exports = {
                 extractComments: false
             })
         ]
+    },
+    performance: {
+        hints: false
     }
 };
