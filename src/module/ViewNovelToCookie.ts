@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export default {
     url: /^\/viewer\//,
     enable: ["ViewNovelToCookie"],
-    async start() {
+    start() {
         function resetCookie(name: string, value: string) {
             Cookies.set(name, value, {
                 domain: ".novelpia.com",
@@ -31,7 +31,7 @@ export default {
         resetCookie("LOGINKEY", loginKey);
         resetCookie("USERKEY", userKey);
 
-        const data = await viewerData(location.pathname.substring(8), () => {
+        const data = viewerData(location.pathname.substring(8), () => {
             resetCookie("LOGINKEY", oldLoginKey);
             resetCookie("USERKEY", oldUserKey);
         });

@@ -14,10 +14,8 @@ export default {
 
             jquery
                 .removeAttr("onclick")
-                .on("click", async () => {
-                    const data = await viewerData(url);
-
-                    console.log(data);
+                .on("click", () => {
+                    const data = viewerData(url);
 
                     if (!data.length) {
                         toastr.options = {
