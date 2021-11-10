@@ -7,7 +7,7 @@ export default {
     start() {
         if (!$(".b_plus").length) return;
 
-        const observer = new MutationObserver(() => {
+        function disableNovelAlert() {
             for (const element of $(`${EP_List} > table > tbody > tr`)) {
                 const $element = $(element);
 
@@ -32,7 +32,11 @@ export default {
 
                 $td.attr("onclick", `$('.loads').show(); location ='/viewer/${url}'`);
             }
-        });
+        }
+
+        disableNovelAlert();
+
+        const observer = new MutationObserver(disableNovelAlert);
 
         observer.observe($(EP_List).get(0)!, {
             childList: true

@@ -8,15 +8,14 @@ export default {
         clearInterval(playAlert);
         playAlert = undefined;
 
-        const $body = $(document.body);
+        const $body = $(document.body)
+            .append("<style>.no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important;}</style>");
 
         for (const event of ["ondragstart", "onselectstart", "oncontextmenu"]) {
             $body.removeAttr(event);
             $(NOVEL_BOX).removeAttr(event);
         }
 
-        $body.append("<style>.no-drag{-ms-user-select:unset!important;-moz-user-select:unset!important;-webkit-user-select:unset!important;-khtml-user-select:unset!important;user-select:unset!important;}</style>");
-
-        $("#viewer_no_drag").css("user-select");
+        $("#viewer_no_drag").css("user-select", "");
     }
 } as Module;

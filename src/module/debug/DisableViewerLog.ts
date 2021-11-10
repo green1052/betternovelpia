@@ -8,12 +8,14 @@ export default {
             .toString()
             .replace(regex, "");
 
-        unsafeWindow.up_down_btn_view = (option: "on" | "off") => eval(`${upDownBtnView}up_down_btn_view(option)`);
+        unsafeWindow.up_down_btn_view = (option: "on" | "off") =>
+            eval(`${upDownBtnView}up_down_btn_view(option)`);
 
         const naviView = unsafeWindow.navi_view
             .toString()
             .replace(regex, "");
 
-        unsafeWindow.navi_view = () => eval(`${naviView}navi_view()`);
+        unsafeWindow.navi_view = () =>
+            eval(`${naviView}navi_view()`);
     }
 } as Module;

@@ -1,7 +1,8 @@
 import $ from "jquery";
-import Setting from "./core/Setting";
 
-if ($(".mobile_show").css("display") === "block") {
+$(() => {
+    if ($(".mobile_show").css("display") !== "block") return;
+
     GM_config.init({
         id: "betternovelpia",
         title: `BetterNovelpia - ${VERSION}`,
@@ -168,8 +169,6 @@ if ($(".mobile_show").css("display") === "block") {
         }
     });
 
-    Setting.start();
-
     const context = require.context("./module/", true, /\.tsx?$/);
 
     for (const key of context.keys()) {
@@ -191,4 +190,4 @@ if ($(".mobile_show").css("display") === "block") {
             console.error(`${name}: ${e}\n\n`);
         }
     }
-}
+});

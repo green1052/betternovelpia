@@ -70,5 +70,5 @@ function viewerBookmark() {
         return;
     }
 
-    waitElement($(NOVEL_DRAWING).get(0), goto);
+    waitElement($(NOVEL_DRAWING).get(0)!, goto);
 }

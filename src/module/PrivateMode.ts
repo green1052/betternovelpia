@@ -14,8 +14,10 @@ export default {
 
             jquery
                 .removeAttr("onclick")
-                .on("click", () => {
-                    const data = viewerData(url);
+                .on("click", async () => {
+                    const data = await viewerData(url);
+
+                    console.log(data);
 
                     if (!data.length) {
                         toastr.options = {
@@ -30,7 +32,8 @@ export default {
                         return;
                     }
 
-                    const content = data.map(str => str.text.replaceAll("&nbsp;", "")
+                    const content = data.map(str => str.text
+                        .replaceAll("&nbsp;", "")
                         .replaceAll("&amp;", "&")
                         .replaceAll("&lt;", "<")
                         .replaceAll("&gt;", ">")

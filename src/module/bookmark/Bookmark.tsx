@@ -48,6 +48,12 @@ class Bookmark extends React.Component<IProps, IState> {
         const previousBookmark = newState.previousBookmark;
 
         const GlobalStyles = createGlobalStyle`
+          .no-overflow {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+
           .no-overflow a {
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -91,17 +97,18 @@ class Bookmark extends React.Component<IProps, IState> {
         return (
             <>
                 <GlobalStyles/>
-                <div className="no-drag" id="bookmark" style={globalStyle}>
+                <div className="no-drag" style={globalStyle}>
                     <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
 
-                    <ol className="no-overflow bookmark" id="bookmarkList"
+                    <ol className="no-overflow bookmark"
                         style={{
                             height: "85vh",
                             overflow: "auto",
                             fontSize: "15px",
                             marginLeft: "-10px"
                         }}>
-                        {Object.entries(bookmarks).map(([key, value]) => <li>
+                        {Object.entries(bookmarks).map(([key, value]) =>
+                            <li>
                                 <div>
                                     <a onClick={() => $(".loads").show()}
                                        href={key}>{decodeURIComponent(value.chapter)} - {decodeURIComponent(value.title)}</a>
@@ -121,18 +128,17 @@ class Bookmark extends React.Component<IProps, IState> {
                         <h5 onClick={() => this.restore()} id="restore" style={{marginLeft: "5px"}}>복원</h5>
                     </div>
 
-                    <div className="no-overflow" style={{
+                    <div style={{
                         display: "flex",
                         position: "fixed",
-                        bottom: "-10px",
+                        bottom: "5px",
                         left: "5px"
                     }}>
-                        <h5 style={{fontSize: ".83em!important"}}>이전 소설:&nbsp;</h5>
+                        <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
 
-                        <a onClick={() => $(".loads").show()} href={previousBookmark.url ?? "#"} id="lastNovel"
+                        <a className="no-overflow" onClick={() => $(".loads").show()} href={previousBookmark.url ?? "#"}
                            style={{
-                               marginBottom: "15px",
-                               fontSize: ".83em!important",
+                               fontSize: ".83em",
                                width: "20vh"
                            }}>
                             {previousBookmark.title && previousBookmark.chapter
@@ -146,9 +152,9 @@ class Bookmark extends React.Component<IProps, IState> {
                         bottom: "5px",
                         right: "5px"
                     }}>
-                        <button onDoubleClick={() => this.reset()} id="reset">초기화</button>
+                        <button onDoubleClick={() => this.reset()}>초기화</button>
                         <button onClick={() => ReactDOM.unmountComponentAtNode($("#root").get(0)!)}
-                                id="close" style={{marginLeft: "5px"}}>닫기
+                                style={{marginLeft: "5px"}}>닫기
                         </button>
                     </div>
                 </div>
@@ -266,7 +272,7 @@ function novelBookmark() {
             .parent()
             .append(`<div style="background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer;" onclick="$('.loads').show();location='${bookmark[0]}';"> <span style="background-color: #7f66de;border: 1px solid #fff;padding: 1px 6px;border-radius: 10px;font-size: 11px; margin-right: 3px;">${bookmark[1].chapter}</span> 북마크 이어보기 </div>`);
 
-    const observer = new MutationObserver(() => {
+    function addBookmark() {
         for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
             const $element = $(element);
 
@@ -283,7 +289,11 @@ function novelBookmark() {
                 .children(".ion-bookmark")
                 .show();
         }
-    });
+    }
+
+    addBookmark();
+
+    const observer = new MutationObserver(addBookmark);
 
     observer.observe($(EP_List).get(0)!, {
         childList: true
@@ -367,5 +377,5 @@ function viewerBookmark() {
         return;
     }
 
-    waitElement($(NOVEL_DRAWING).get(0), goto);
+    waitElement($(NOVEL_DRAWING).get(0)!, goto);
 }

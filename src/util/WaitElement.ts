@@ -1,7 +1,4 @@
-export function waitElement(dom: HTMLElement | undefined, code: () => void | Promise<void>) {
-    if (!dom)
-        return;
-
+export function waitElement(dom: HTMLElement, code: () => void | Promise<void>) {
     let isDone = false;
 
     const observer = new MutationObserver(() => {
