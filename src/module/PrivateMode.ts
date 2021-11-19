@@ -7,7 +7,7 @@ export default {
     enable: ["PrivateMode"],
     start() {
         function makePrivate(jquery: JQuery<HTMLElement>) {
-            const url = /'\/viewer\/(?<url>\d*)'/.exec(jquery.attr("onclick")!)?.groups!["url"];
+            const url = /'\/viewer\/(\d*)'/.exec(jquery.attr("onclick")!)?.[1];
 
             if (!url)
                 return;

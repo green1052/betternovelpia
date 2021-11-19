@@ -16,8 +16,8 @@ export default {
             return;
         }
 
-        if (/^\/contest_list/.test(location.pathname)) {
-            $(`div[style*="banner_freestory9.png"]`).parent().parent().remove();
+        if (/^\/contest_final_list/.test(location.pathname)) {
+            $(`div[style*="banner_freestory9_1.png"]`).parent().parent().remove();
             $(`span:contains("공모전 상금")`).parent().parent().remove();
         }
 

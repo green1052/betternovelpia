@@ -1,4 +1,4 @@
-export function waitElement(dom: HTMLElement, code: () => void | Promise<void>) {
+export function waitElement(dom: HTMLElement, code: () => void | Promise<void>, timeout: number = 5000) {
     let isDone = false;
 
     const observer = new MutationObserver(() => {
@@ -15,5 +15,5 @@ export function waitElement(dom: HTMLElement, code: () => void | Promise<void>) 
     setTimeout(() => {
         if (!isDone)
             observer.disconnect();
-    }, 5000);
+    }, timeout);
 }

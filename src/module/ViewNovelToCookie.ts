@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export default {
     url: /^\/viewer\//,
     enable: ["ViewNovelToCookie"],
-    start() {
+    start: function () {
         function resetCookie(name: string, value: string) {
             Cookies.set(name, value, {
                 domain: ".novelpia.com",
@@ -17,7 +17,8 @@ export default {
 
         const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
 
-        if (!blocked.length) return;
+        if (!blocked.length && data_load === 1)
+            return;
 
         const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
         const userKey: string | undefined = GM_config.get("ViewNoelToCookie_USERKEY");

@@ -4,7 +4,7 @@ export default {
     url: /\/$/,
     enable: ["NovelListFix"],
     start() {
-        $(`div[class=""][onclick]`).attr("onclick", function (index, value) {
+        $(`div[class=""][onclick*="/novel/"], div[onclick*="/novel/"]:not([class])`).attr("onclick", function (index, value) {
             $(this).attr("onclick", `$('.loads').show();${value}`);
         });
     }

@@ -21,6 +21,7 @@ declare global {
         "NovelDownload" |
         "NovelListFix" |
         "PreLoadComment" |
+        "PreLoadEpisodeList" |
         "PreviousBookmark" |
         "PreviousBookmark_AutoUse" |
         "PreviousBookmark_First" |

@@ -18,4 +18,8 @@ declare global {
     var novel_data: NovelData[] | [];
 
     function novel_drawing(novel_d: NovelData[]): void;
+
+    function comment_load(): void;
+
+    function episode_list_viewer(page: number): void;
 }

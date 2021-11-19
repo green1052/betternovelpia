@@ -72,6 +72,11 @@ $(() => {
                 type: "checkbox",
                 default: false
             },
+            PreLoadEpisodeList: {
+                label: "목록 미리 불러오기",
+                type: "checkbox",
+                default: false
+            },
             NovelDownload: {
                 label: "소설 복사 사용",
                 type: "checkbox",
@@ -174,8 +179,7 @@ $(() => {
     for (const key of context.keys()) {
         const start = performance.now();
 
-        const exec = /(?<name>\w*).tsx?$/g.exec(key);
-        const name = exec ? exec.groups!["name"] : key;
+        const name = /(\w*)\.tsx?$/gi.exec(key)?.[1] ?? key;
 
         try {
             const module: Module = context(key).default;

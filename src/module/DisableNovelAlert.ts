@@ -28,7 +28,9 @@ export default {
                 if (!attr)
                     continue;
 
-                const url = /^novel_on_(?<url>\d*)"$/.exec(attr)?.groups!["url"];
+                const url = /^novel_on_(\d*)"$/.exec(attr)?.[1];
+
+                if (!url) continue;
 
                 $td.attr("onclick", `$('.loads').show(); location ='/viewer/${url}'`);
             }

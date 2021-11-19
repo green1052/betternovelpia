@@ -1,7 +1,7 @@
 const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
-const {DefinePlugin} = require("webpack");
 const {version} = require("./package.json");
 const WebpackUserscript = require("webpack-userscript");
+const {DefinePlugin} = require("webpack");
 
 const header = {
     name: "BetterNovelpia",
@@ -28,19 +28,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: /src/,
-                loader: "babel-loader",
-                options: {
-                    presets: [
-                        ["@babel/preset-env", {targets: "defaults"}],
-                        "@babel/preset-typescript",
-                        "@babel/preset-react"
-                    ],
-                    plugins: [
-                        "babel-plugin-styled-components",
-                        ["@babel/plugin-transform-runtime", {"regenerator": true}]
-                    ],
-                    cacheDirectory: true
-                }
+                loader: "swc-loader"
             },
             {
                 test: /\.html$/,

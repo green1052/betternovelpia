@@ -276,7 +276,7 @@ function novelBookmark() {
         for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
             const $element = $(element);
 
-            const url = /'\/viewer\/(?<url>\d*)'/.exec($element.attr("onclick")!)?.groups!["url"];
+            const url = /'\/viewer\/(\d*)'/.exec($element.attr("onclick")!)?.[1];
 
             if (!url) continue;
 
