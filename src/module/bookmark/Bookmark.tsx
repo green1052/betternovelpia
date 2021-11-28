@@ -297,7 +297,7 @@ function novel() {
 }
 
 function viewer() {
-    if (!/^\/novel\//.test(location.pathname))
+    if (!/^\/viewer\//.test(location.pathname))
         return;
 
     const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
