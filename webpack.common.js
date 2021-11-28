@@ -21,7 +21,7 @@ const header = {
 };
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: "./src/index.ts",
     module: {
         rules: [
             {
