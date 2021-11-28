@@ -89,7 +89,10 @@ function Setting() {
                     <br/>
                     <h4 className="tx-gray-800 mg-t-25 s_inv">
                         BetterNovelpia - {VERSION}
-                        <i onClick={() => ReactDOM.unmountComponentAtNode($("#settingContainer").get(0)!)}
+                        <i onClick={() => {
+                            $(".loads").show();
+                            location.reload();
+                        }}
                            style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
                     </h4>
 

@@ -13,7 +13,8 @@ interface IProps {
 interface IState {
     bookmarks: Bookmarks;
     previousBookmark: PreviousBookmark;
-
+    data: string;
+    hide: boolean;
 }
 
 class Bookmark extends React.Component<IProps, IState> {
@@ -27,7 +28,9 @@ class Bookmark extends React.Component<IProps, IState> {
 
         this.state = {
             bookmarks: this.Bookmarks,
-            previousBookmark: this.PreviousBookmark
+            previousBookmark: this.PreviousBookmark,
+            data: "",
+            hide: true
         };
     }
 
@@ -47,6 +50,7 @@ class Bookmark extends React.Component<IProps, IState> {
         const newState = this.state;
 
         const bookmarks = newState.bookmarks;
+        const hide = newState.hide;
 
         const previousBookmark = newState.previousBookmark;
         const GlobalStyles = createGlobalStyle`
@@ -100,6 +104,24 @@ class Bookmark extends React.Component<IProps, IState> {
             <>
                 <GlobalStyles/>
                 <div style={globalStyle}>
+                    {
+                        hide
+                            ? undefined
+                            : <div style={{
+                                display: "flex",
+                                position: "fixed",
+                                left: "50%",
+                                top: "50%",
+                                transform: "translate(-50%, -50%)"
+                            }}>
+                                <input onChange={(e) => this.setState({data: e.target.value})}
+                                       type="text"
+                                       placeholder="데이터를 입력해주세요"/>
+                                <button onClick={() => this.restore()} style={{marginLeft: "5px"}}>적용</button>
+                                <button onClick={() => this.setState({hide: true})} style={{marginLeft: "5px"}}>취소</button>
+                            </div>
+                    }
+
                     <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
 
                     <ol className="no-overflow bookmark"
@@ -127,7 +149,7 @@ class Bookmark extends React.Component<IProps, IState> {
                         right: "5px"
                     }}>
                         <h5 onClick={() => this.backup()}>백업</h5>
-                        <h5 onClick={() => this.restore()} style={{marginLeft: "5px"}}>복원</h5>
+                        <h5 onClick={() => this.setState({hide: false})} style={{marginLeft: "5px"}}>복원</h5>
                     </div>
 
                     <div style={{
@@ -191,7 +213,7 @@ class Bookmark extends React.Component<IProps, IState> {
     }
 
     private restore() {
-        const input = prompt("데이터를 입력해주세요: ");
+        const data = this.state.data;
 
         toastr.options = {
             escapeHtml: true,
@@ -200,13 +222,16 @@ class Bookmark extends React.Component<IProps, IState> {
             progressBar: true
         };
 
-        if (input) {
-            this.Bookmarks = JSON.parse(input);
+        if (data) {
+            this.Bookmarks = JSON.parse(data);
             toastr.info("복원되었습니다.", "북마크");
-            return;
-        }
+        } else
+            toastr.info("데이터가 비어있습니다.", "북마크");
 
-        toastr.info("데이터가 비어있습니다.", "북마크");
+        this.setState({
+            hide: true,
+            data: ""
+        });
     }
 
     private reset() {
