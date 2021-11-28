@@ -1,10 +1,22 @@
 import $ from "jquery";
 import {viewerData} from "../util/ViewerData";
 import {EP_List, NOTICE_LIST} from "../util/Selectors";
+import {decode} from "html-entities";
+import toastr from "toastr";
 
 export default {
     url: /^\/novel\//,
     enable: ["PrivateMode"],
+    config: {
+        head: "프라이빗 모드",
+        configs: {
+            PrivateMode: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         function makePrivate(jquery: JQuery<HTMLElement>) {
             const url = /'\/viewer\/(\d*)'/.exec(jquery.attr("onclick")!)?.[1];
@@ -30,16 +42,7 @@ export default {
                         return;
                     }
 
-                    const content = data.map(str => str.text
-                        .replaceAll("&nbsp;", "")
-                        .replaceAll("&amp;", "&")
-                        .replaceAll("&lt;", "<")
-                        .replaceAll("&gt;", ">")
-                        .replaceAll("&#39;", "'")
-                        .replaceAll("&quot;", `"`)
-                    ).join("");
-
-                    alert(content);
+                    alert(...data.map(str => decode(str.text)));
                 });
         }
 

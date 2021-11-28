@@ -6,6 +6,26 @@ import Cookies from "js-cookie";
 export default {
     url: /^\/viewer\//,
     enable: ["ViewNovelToCookie"],
+    config: {
+        head: "다른 쿠키로 Plus 소설 보기",
+        configs: {
+            ViewNovelToCookie: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            },
+            ViewNoelToCookie_LOGINKEY: {
+                label: "LOGINKEY",
+                type: "text",
+                title: "LOGINKEY"
+            },
+            ViewNoelToCookie_USERKEY: {
+                label: "USERKEY",
+                type: "text",
+                title: "USERKEY"
+            }
+        }
+    },
     start: function () {
         function resetCookie(name: string, value: string) {
             Cookies.set(name, value, {
@@ -17,11 +37,11 @@ export default {
 
         const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
 
-        if (!blocked.length && data_load === 1)
+        if (!blocked.length)
             return;
 
-        const loginKey: string | undefined = GM_config.get("ViewNoelToCookie_LOGINKEY");
-        const userKey: string | undefined = GM_config.get("ViewNoelToCookie_USERKEY");
+        const loginKey = GM_getValue("ViewNoelToCookie_LOGINKEY", "") as string | undefined;
+        const userKey = GM_getValue("ViewNoelToCookie_USERKEY", "") as string | undefined;
 
         if (!loginKey || !userKey)
             return;

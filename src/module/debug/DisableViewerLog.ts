@@ -1,6 +1,16 @@
 export default {
     url: /^\/viewer\//,
     enable: ["DisableViewLog"],
+    config: {
+        head: "뷰어 디버그 로그 제거",
+        configs: {
+            DisableViewLog: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         const regex = /console.log\(.*\);/g;
 

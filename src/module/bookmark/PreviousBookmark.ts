@@ -1,28 +1,12 @@
+import {isFirst, PreviousBookmark} from "./util";
+import $ from "jquery";
 import {NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
 import {waitElement} from "../../util/WaitElement";
-import {isFirst} from "./Bookmark";
-import $ from "jquery";
 
-export interface PreviousBookmark {
-    title: string;
-    chapter: string;
-    url: string;
-    scrollTop: number;
-}
+function novel() {
+    if (!/^\/novel\//.test(location.pathname)) return;
 
-export default {
-    enable: ["PreviousBookmark"],
-    start() {
-        novelBookmark();
-        viewerBookmark();
-    }
-} as Module;
-
-function novelBookmark() {
-    if (!/^\/novel\//.test(location.pathname))
-        return;
-
-    const previousBookmark: PreviousBookmark = GM_getValue("previousBookmark", {});
+    const previousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
     if (previousBookmark.title === document.title.split("-")[2].trimLeft())
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
@@ -30,12 +14,16 @@ function novelBookmark() {
             .append(`<div style="background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer;" onclick="$('.loads').show();location='${previousBookmark.url}';"> <span style="background-color: #7f66de;border: 1px solid #fff;padding: 1px 6px;border-radius: 10px;font-size: 11px; margin-right: 3px;">${previousBookmark.chapter}</span> 이전 소설 이어보기 </div>`);
 }
 
-function viewerBookmark() {
-    if (!/^\/viewer\//.test(location.pathname))
+function viewer() {
+    if (!/^\/viewer\//.test(location.pathname)) return;
+
+    const title = encodeURIComponent($(NOVEL_TITLE).text());
+    const chapter = $(NOVEL_EP).text();
+
+    if (!chapter)
         return;
 
     let lastScrollTop = 0;
-
     setInterval(() => {
         const scrollTop = $(NOVEL_BOX).scrollTop();
 
@@ -43,25 +31,25 @@ function viewerBookmark() {
             return;
 
         GM_setValue("previousBookmark", {
-            title: $(NOVEL_TITLE).text(),
-            chapter: $(NOVEL_EP).text(),
             url: location.href,
-            scrollTop: scrollTop
+            scrollTop: scrollTop,
+            title: title,
+            chapter: chapter
         } as PreviousBookmark);
 
         lastScrollTop = scrollTop;
     }, 1000);
 
-    const bookmark: PreviousBookmark = GM_getValue("previousBookmark");
+    const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
     if (!bookmark || location.href !== bookmark.url || !isFirst("previous"))
         return;
 
-    if (GM_config.get("PreviousBookmark_OneUse"))
+    if (GM_getValue("PreviousBookmark_OneUse", false))
         GM_setValue("previousBookmark", {});
 
     const goto = () => {
-        if (!GM_config.get("PreviousBookmark_AutoUse") && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
+        if (!GM_getValue("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
         $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
     };
 
@@ -72,3 +60,37 @@ function viewerBookmark() {
 
     waitElement($(NOVEL_DRAWING).get(0)!, goto);
 }
+
+export default {
+    url: /^\/novel\//,
+    enable: ["PreviousBookmark"],
+    config: {
+        head: "이전 회차 북마크 설정",
+        configs: {
+            PreviousBookmark: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            },
+            PreviousBookmark_First: {
+                label: "이전 회차 북마크 우선",
+                type: "checkbox",
+                default: false
+            },
+            PreviousBookmark_OneUse: {
+                label: "이전 회차 북마크 한번만 사용",
+                type: "checkbox",
+                default: false
+            },
+            PreviousBookmark_AutoUse: {
+                label: "이전 회차 북마크 자동 이동",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
+    start() {
+        novel();
+        viewer();
+    }
+} as Module;

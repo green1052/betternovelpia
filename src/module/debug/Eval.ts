@@ -3,6 +3,16 @@ import {SIDE_LEFT} from "../../util/Selectors";
 
 export default {
     enable: ["Eval"],
+    config: {
+        head: "eval 사용",
+        configs: {
+            Eval: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         if (!/^\/viewer\//.test(location.pathname))
             $(SIDE_LEFT).append(

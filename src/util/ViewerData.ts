@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 export function viewerData(url: string, func?: Function) {
     let json: NovelData[] = [];
 

@@ -3,6 +3,16 @@ import $ from "jquery";
 export default {
     url: /^\/viewer\//,
     enable: ["FreeEmoji"],
+    config: {
+        head: "유로 이모지 무료 사용",
+        configs: {
+            FreeEmoji: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         for (const element of $(`div[class="col-sm-12 mg-b-10 emoticon"]`).children("div")) {
             const $element = $(element);

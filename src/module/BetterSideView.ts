@@ -2,6 +2,16 @@ import $ from "jquery";
 
 export default {
     enable: ["BetterSideView"],
+    config: {
+        head: "사이드뷰 개선",
+        configs: {
+            BetterSideView: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         if (/^\/viewer\//.test(location.pathname))
             return;

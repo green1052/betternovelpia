@@ -1,11 +1,11 @@
-import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../../util/Selectors";
-import {PreviousBookmark} from "./PreviousBookmark";
-import {waitElement} from "../../util/WaitElement";
-import Cookies from "js-cookie";
-import $ from "jquery";
 import React from "react";
 import ReactDOM from "react-dom";
 import {createGlobalStyle} from "styled-components";
+import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../../util/Selectors";
+import Cookies from "js-cookie";
+import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "./util";
+import $ from "jquery";
+import {waitElement} from "../../util/WaitElement";
 
 interface IProps {
 }
@@ -13,13 +13,17 @@ interface IProps {
 interface IState {
     bookmarks: Bookmarks;
     previousBookmark: PreviousBookmark;
+
 }
 
 class Bookmark extends React.Component<IProps, IState> {
-    private PreviousBookmark: PreviousBookmark = GM_getValue("previousBookmark", {});
+    private readonly PreviousBookmark: PreviousBookmark;
 
     constructor(props: IProps) {
         super(props);
+
+        this._Bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
+        this.PreviousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
         this.state = {
             bookmarks: this.Bookmarks,
@@ -27,7 +31,7 @@ class Bookmark extends React.Component<IProps, IState> {
         };
     }
 
-    private _Bookmarks: Bookmarks = GM_getValue("bookmarks", {});
+    private _Bookmarks: Bookmarks;
 
     private get Bookmarks() {
         return this._Bookmarks;
@@ -35,19 +39,25 @@ class Bookmark extends React.Component<IProps, IState> {
 
     private set Bookmarks(bookmarks: Bookmarks) {
         GM_setValue("bookmarks", bookmarks);
-
-        this.setState({
-            bookmarks: bookmarks
-        });
+        this._Bookmarks = bookmarks;
+        this.setState({bookmarks: bookmarks});
     }
 
     render() {
         const newState = this.state;
 
         const bookmarks = newState.bookmarks;
-        const previousBookmark = newState.previousBookmark;
 
+        const previousBookmark = newState.previousBookmark;
         const GlobalStyles = createGlobalStyle`
+          * {
+            -ms-user-select: none !important;
+            -moz-user-select: none !important;
+            -webkit-user-select: none !important;
+            -khtml-user-select: none !important;
+            user-select: none !important;
+          }
+
           .no-overflow {
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -58,14 +68,6 @@ class Bookmark extends React.Component<IProps, IState> {
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-          }
-
-          .no-drag {
-            -ms-user-select: none !important;
-            -moz-user-select: none !important;
-            -webkit-user-select: none !important;
-            -khtml-user-select: none !important;
-            user-select: none !important;
           }
 
           .bookmark div {
@@ -89,15 +91,15 @@ class Bookmark extends React.Component<IProps, IState> {
         };
 
         if (Cookies.get("DARKMODE_S") === "1") {
-            globalStyle["backgroundColor"] = "#000";
-            globalStyle["color"] = "white";
+            globalStyle.backgroundColor = "#000";
+            globalStyle.color = "white";
         } else
-            globalStyle["backgroundColor"] = "white";
+            globalStyle.backgroundColor = "white";
 
         return (
             <>
                 <GlobalStyles/>
-                <div className="no-drag" style={globalStyle}>
+                <div style={globalStyle}>
                     <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
 
                     <ol className="no-overflow bookmark"
@@ -111,7 +113,7 @@ class Bookmark extends React.Component<IProps, IState> {
                             <li>
                                 <div>
                                     <a onClick={() => $(".loads").show()}
-                                       href={key}>{decodeURIComponent(value.chapter)} - {decodeURIComponent(value.title)}</a>
+                                       href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
                                     <h5 onClick={(e) => this.deleteBookmark(e)}>X</h5>
                                 </div>
                             </li>
@@ -124,8 +126,8 @@ class Bookmark extends React.Component<IProps, IState> {
                         bottom: "35px",
                         right: "5px"
                     }}>
-                        <h5 onClick={() => this.backup()} id="backup">백업</h5>
-                        <h5 onClick={() => this.restore()} id="restore" style={{marginLeft: "5px"}}>복원</h5>
+                        <h5 onClick={() => this.backup()}>백업</h5>
+                        <h5 onClick={() => this.restore()} style={{marginLeft: "5px"}}>복원</h5>
                     </div>
 
                     <div style={{
@@ -136,14 +138,17 @@ class Bookmark extends React.Component<IProps, IState> {
                     }}>
                         <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
 
-                        <a className="no-overflow" onClick={() => $(".loads").show()} href={previousBookmark.url ?? "#"}
+                        <a className="no-overflow" onClick={() => $(".loads").show()}
+                           href={previousBookmark.url ?? "#"}
                            style={{
                                fontSize: ".83em",
                                width: "20vh"
                            }}>
-                            {previousBookmark.title && previousBookmark.chapter
-                                ? `${previousBookmark.chapter} - ${previousBookmark.title}`
-                                : "없음"}
+                            {
+                                previousBookmark.title && previousBookmark.chapter
+                                    ? `${previousBookmark.chapter} - ${decodeURIComponent(previousBookmark.title)}`
+                                    : "없음"
+                            }
                         </a>
                     </div>
 
@@ -153,7 +158,7 @@ class Bookmark extends React.Component<IProps, IState> {
                         right: "5px"
                     }}>
                         <button onDoubleClick={() => this.reset()}>초기화</button>
-                        <button onClick={() => ReactDOM.unmountComponentAtNode($("#root").get(0)!)}
+                        <button onClick={() => ReactDOM.unmountComponentAtNode($("#bookmarkContainer").get(0)!)}
                                 style={{marginLeft: "5px"}}>닫기
                         </button>
                     </div>
@@ -209,46 +214,12 @@ class Bookmark extends React.Component<IProps, IState> {
     }
 }
 
-export interface Bookmarks {
-    [url: string]: {
-        scrollTop: number;
-        title: string;
-        chapter: string;
-    };
-}
-
-export function isFirst(who: "previous" | "bookmark") {
-    const bookmarks: Bookmarks = GM_getValue("bookmarks");
-    const previousBookmark: PreviousBookmark = GM_getValue("previousBookmark");
-
-    if (who === "previous")
-        return GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined
-            ? true
-            : !(bookmarks && bookmarks.hasOwnProperty(location.href));
-
-    return !GM_config.get("PreviousBookmark_First") && previousBookmark !== undefined;
-}
-
-function removeBookmark(bookmarks: Bookmarks, url: string) {
-    delete bookmarks[url];
-    GM_setValue("bookmarks", bookmarks);
-}
-
-export default {
-    enable: ["Bookmark"],
-    start() {
-        mainBookmark();
-        novelBookmark();
-        viewerBookmark();
-    }
-} as Module;
-
-function mainBookmark() {
+function bookmark() {
     if (/^\/viewer\//.test(location.pathname))
         return;
 
     const appContainer = document.createElement("div");
-    appContainer.id = "root";
+    appContainer.id = "bookmarkContainer";
     document.body.prepend(appContainer);
 
     const li = $(`<li style="padding: 10px 25px;"><img height=25 src=//image.novelpia.com/img/new/icon/count_book.png></li>`)
@@ -259,11 +230,11 @@ function mainBookmark() {
     $(SIDE_LEFT).append(li);
 }
 
-function novelBookmark() {
+function novel() {
     if (!/^\/novel\//.test(location.pathname))
         return;
 
-    const bookmarks: Bookmarks = GM_getValue("bookmarks", {});
+    const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
 
     const bookmark = Object.entries(bookmarks).filter(([, value]) => decodeURIComponent(value.title) === document.title.split("-")[2].trimLeft()).pop();
 
@@ -300,11 +271,11 @@ function novelBookmark() {
     });
 }
 
-function viewerBookmark() {
-    if (!/^\/viewer\//.test(location.pathname))
+function viewer() {
+    if (!/^\/novel\//.test(location.pathname))
         return;
 
-    const bookmarks: Bookmarks = GM_getValue("bookmarks", {});
+    const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
 
     const td = $("<td>")
         .css("text-align", "center")
@@ -312,16 +283,21 @@ function viewerBookmark() {
         .css("font-style", "12px")
         .css("width", 63)
         .css("z-index", 10000)
-        .on("click", async () => {
-            const scrollTop = $("#novel_box").scrollTop();
+        .on("click", () => {
+            const scrollTop = $(NOVEL_BOX).scrollTop();
 
             if (scrollTop === undefined)
+                return;
+
+            const chapter = $(NOVEL_EP).text();
+
+            if (!chapter)
                 return;
 
             bookmarks[location.href] = {
                 scrollTop: scrollTop,
                 title: encodeURIComponent($(NOVEL_TITLE).text()),
-                chapter: encodeURIComponent($(NOVEL_EP).text())
+                chapter: chapter
             };
 
             GM_setValue("bookmarks", bookmarks);
@@ -364,11 +340,11 @@ function viewerBookmark() {
     if (!scrollTop || !isFirst("bookmark"))
         return;
 
-    if (GM_config.get("Bookmark_OneUse"))
+    if (GM_getValue("Bookmark_OneUse", false))
         removeBookmark(bookmarks, location.href);
 
     const goto = () => {
-        if (!GM_config.get("Bookmark_AutoUse") && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+        if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
         $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
     };
 
@@ -379,3 +355,32 @@ function viewerBookmark() {
 
     waitElement($(NOVEL_DRAWING).get(0)!, goto);
 }
+
+export default {
+    enable: ["Bookmark"],
+    config: {
+        head: "북마크 설정",
+        configs: {
+            Bookmark: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            },
+            Bookmark_OneUse: {
+                label: "북마크 한번만 사용",
+                type: "checkbox",
+                default: false
+            },
+            Bookmark_AutoUse: {
+                label: "북마크 자동 이동",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
+    start() {
+        bookmark();
+        novel();
+        viewer();
+    }
+} as Module;

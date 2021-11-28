@@ -4,6 +4,16 @@ import {EP_List} from "../util/Selectors";
 export default {
     url: /^\/novel\//,
     enable: ["DisableNovelAlert"],
+    config: {
+        head: "회차 클릭 알림 제거",
+        configs: {
+            DisableNovelAlert: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         if (!$(".b_plus").length) return;
 

@@ -6,6 +6,16 @@ import {NOVEL_DRAWING} from "../util/Selectors";
 export default {
     url: /^\/viewer\//,
     enable: ["UrlPrettier"],
+    config: {
+        head: "URL a href 적용",
+        configs: {
+            UrlPrettier: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         function matched() {
             const match = $(NOVEL_DRAWING).text().match(urlRegex({strict: true}));

@@ -1,9 +1,20 @@
 import $ from "jquery";
 import {HEADER_BAR, NOVEL_DRAWING} from "../util/Selectors";
+import toastr from "toastr";
 
 export default {
     url: /^\/viewer\//,
     enable: ["NovelDownload"],
+    config: {
+        head: "소설 복사 사용",
+        configs: {
+            NovelDownload: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         const td = $("<td><h9>복사</h9></td>")
             .css("text-align", "center")
@@ -11,8 +22,7 @@ export default {
             .css("width", "63px")
             .css("z-index", 10000)
             .on("click", () => {
-                GM_setClipboard($(NOVEL_DRAWING).text()
-                    .replace(/다음화 보기|여기까지가 등록된 마지막 회차입니다/, ""));
+                GM_setClipboard($(NOVEL_DRAWING).text().replace(/다음화 보기|여기까지가 등록된 마지막 회차입니다/, ""));
 
                 toastr.options = {
                     escapeHtml: true,

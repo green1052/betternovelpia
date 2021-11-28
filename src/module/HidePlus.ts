@@ -3,6 +3,16 @@ import $ from "jquery";
 export default {
     url: /^\/search\//,
     enable: ["HidePlus"],
+    config: {
+        head: "검색시 플러스 숨기기",
+        configs: {
+            HidePlus: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         let plusCount = 0;
 

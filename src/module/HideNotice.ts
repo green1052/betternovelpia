@@ -3,6 +3,16 @@ import $ from "jquery";
 export default {
     url: /^\/novel\//,
     enable: ["HideNotice"],
+    config: {
+        head: "댓글 미리 불러오기",
+        configs: {
+            HideNotice: {
+                label: "공지 숨기기 버튼 추가",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         $(".notice_toggle_btn").on("click", () => $("#upNotice").show());
 

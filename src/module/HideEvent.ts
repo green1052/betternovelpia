@@ -2,6 +2,16 @@ import $ from "jquery";
 
 export default {
     enable: ["HideEvent"],
+    config: {
+        head: "이벤트 숨기기",
+        configs: {
+            HideEvent: {
+                label: "활성화",
+                type: "checkbox",
+                default: false
+            }
+        }
+    },
     start() {
         function hide(jquery: JQuery<HTMLElement>) {
             jquery
@@ -17,7 +27,7 @@ export default {
         }
 
         if (/^\/contest_final_list/.test(location.pathname)) {
-            $(`div[style*="banner_freestory9_1.png"]`).parent().parent().remove();
+            $(`div[style*="banner_contest_review_m.png"]`).parent().parent().remove();
             $(`span:contains("공모전 상금")`).parent().parent().remove();
         }
 

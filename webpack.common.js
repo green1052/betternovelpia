@@ -11,7 +11,6 @@ const header = {
     homepageURL: "https://github.com/green1052/betternovelpia",
     "rut-at": "document-start",
     match: "http*://novelpia.com/*",
-    require: ["https://openuserjs.org/src/libs/sizzle/GM_config.js"],
     grant: [
         "GM_getValue",
         "GM_setValue",
@@ -22,18 +21,25 @@ const header = {
 };
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./src/index.tsx",
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 include: /src/,
-                loader: "swc-loader"
-            },
-            {
-                test: /\.html$/,
-                include: /html/,
-                loader: "html-loader"
+                loader: "babel-loader",
+                options: {
+                    presets: [
+                        ["@babel/preset-env", {targets: "defaults"}],
+                        "@babel/preset-typescript",
+                        "@babel/preset-react"
+                    ],
+                    plugins: [
+                        "babel-plugin-styled-components",
+                        ["@babel/plugin-transform-runtime", {"regenerator": true}]
+                    ],
+                    cacheDirectory: true
+                }
             }
         ]
     },
