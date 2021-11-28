@@ -62,7 +62,6 @@ function viewer() {
 }
 
 export default {
-    url: /^\/novel\//,
     enable: ["PreviousBookmark"],
     config: {
         head: "이전 회차 북마크 설정",
