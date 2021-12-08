@@ -2,7 +2,7 @@ import $ from "jquery";
 import {EP_List} from "../util/Selectors";
 
 export default {
-    url: /^\/novel\//,
+    include: /^\/novel\//,
     enable: ["DisableNovelAlert"],
     config: {
         head: "회차 클릭 알림 제거",
@@ -15,8 +15,6 @@ export default {
         }
     },
     start() {
-        if (!$(".b_plus").length) return;
-
         function disableNovelAlert() {
             for (const element of $(`${EP_List} > table > tbody > tr`)) {
                 const $element = $(element);

@@ -1,5 +1,5 @@
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["PreLoadEpisodeList"],
     config: {
         head: "목록 미리 불러오기",

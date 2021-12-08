@@ -1,12 +1,12 @@
 import $ from "jquery";
 
 export default {
-    include: /^\/novel\//,
-    enable: ["InfoUnfold"],
+    include: /^\/viewer\//,
+    enable: ["HideViewerThumbnail"],
     config: {
-        head: "상세정보 항상 보기",
+        head: "뷰어 썸네일 숨기기",
         configs: {
-            InfoUnfold: {
+            HideViewerThumbnail: {
                 label: "활성화",
                 type: "checkbox",
                 default: false
@@ -14,7 +14,6 @@ export default {
         }
     },
     start() {
-        $("#more_info_btn").hide();
-        $(".more_info").show();
+        $(`img[id="imgs_0"]:not([class]):not([data-filename])`).remove();
     }
 } as Module;

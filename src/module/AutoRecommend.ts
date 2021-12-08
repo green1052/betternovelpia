@@ -1,10 +1,12 @@
+import $ from "jquery";
+
 export default {
     include: /^\/viewer\//,
-    enable: ["PreLoadComment"],
+    enable: ["AutoRecommend"],
     config: {
-        head: "댓글 미리 불러오기",
+        head: "자동으로 소설 추천",
         configs: {
-            PreLoadComment: {
+            AutoRecommend: {
                 label: "활성화",
                 type: "checkbox",
                 default: false
@@ -12,6 +14,7 @@ export default {
         }
     },
     start() {
-        setTimeout(() => comment_load(), 500);
+        if ($("#btn_episode_vote").attr("src") === "/img/new/viewer/btn_vote.png")
+            episode_vote();
     }
 } as Module;

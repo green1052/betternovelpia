@@ -1,10 +1,9 @@
 import $ from "jquery";
 import {fakeViewer} from "../util/FakeViewer";
 import {viewerData} from "../util/ViewerData";
-import Cookies from "js-cookie";
 
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["ViewNovelToCookie"],
     config: {
         head: "다른 쿠키로 Plus 소설 보기",
@@ -16,45 +15,29 @@ export default {
             },
             ViewNoelToCookie_LOGINKEY: {
                 label: "LOGINKEY",
-                type: "text",
-                title: "LOGINKEY"
+                type: "text"
             },
             ViewNoelToCookie_USERKEY: {
                 label: "USERKEY",
-                type: "text",
-                title: "USERKEY"
+                type: "text"
             }
         }
     },
-    start: function () {
-        function resetCookie(name: string, value: string) {
-            Cookies.set(name, value, {
-                domain: ".novelpia.com",
-                path: "/",
-                expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-            });
-        }
-
+    async start() {
         const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
 
         if (!blocked.length)
             return;
 
-        const loginKey = GM_getValue("ViewNoelToCookie_LOGINKEY", "") as string | undefined;
-        const userKey = GM_getValue("ViewNoelToCookie_USERKEY", "") as string | undefined;
+        const loginKey = GM_getValue("ViewNoelToCookie_LOGINKEY", "") as string;
+        const userKey = GM_getValue("ViewNoelToCookie_USERKEY", "") as string;
 
         if (!loginKey || !userKey)
             return;
 
-        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
-        const oldUserKey = Cookies.get("USERKEY") ?? "";
-
-        resetCookie("LOGINKEY", loginKey);
-        resetCookie("USERKEY", userKey);
-
-        const data = viewerData(location.pathname.substring(8), () => {
-            resetCookie("LOGINKEY", oldLoginKey);
-            resetCookie("USERKEY", oldUserKey);
+        const data = await viewerData(location.pathname.substring(8), {
+            LOGINKEY: loginKey,
+            USERKEY: userKey
         });
 
         if (data.length > 0)

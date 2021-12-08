@@ -1,11 +1,16 @@
 import $ from "jquery";
-import React from "react";
+import toastr from "toastr";
 
 export const configs: Configs[] = [];
 
-$(() => {
-    if ($(".mobile_show").css("display") !== "block") return;
+toastr.options = {
+    escapeHtml: true,
+    closeButton: true,
+    newestOnTop: false,
+    progressBar: true
+};
 
+$(() => {
     const context = require.context("./module/", true, /\.tsx?$/);
 
     for (const key of context.keys()) {
@@ -16,12 +21,11 @@ $(() => {
         try {
             const module: Module = context(key).default;
 
-            if (!module) continue;
-
             if (module.config)
                 configs.push(module.config);
 
-            if ((module.url === undefined || module.url.test(location.pathname)) &&
+            if ((module.include === undefined || module.include.test(location.pathname)) &&
+                (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
                 (module.enable === undefined || !module.enable.map(setting => GM_getValue(setting, false)).includes(false))) {
                 console.log(`${name}: 불러오는 중...`);
                 module.start();

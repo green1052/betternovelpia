@@ -1,12 +1,12 @@
 import $ from "jquery";
 
 export default {
-    include: /^\/novel\//,
-    enable: ["InfoUnfold"],
+    include: /^\/viewer\//,
+    enable: ["HideRecommendEffect"],
     config: {
-        head: "상세정보 항상 보기",
+        head: "추천 효과 숨기기",
         configs: {
-            InfoUnfold: {
+            HideRecommendEffect: {
                 label: "활성화",
                 type: "checkbox",
                 default: false
@@ -14,7 +14,6 @@ export default {
         }
     },
     start() {
-        $("#more_info_btn").hide();
-        $(".more_info").show();
+        $(".like_btn").remove();
     }
 } as Module;

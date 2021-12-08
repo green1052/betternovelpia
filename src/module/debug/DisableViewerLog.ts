@@ -1,5 +1,5 @@
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["DisableViewLog"],
     config: {
         head: "뷰어 디버그 로그 제거",

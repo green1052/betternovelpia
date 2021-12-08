@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import ReactDOM from "react-dom";
-import {SIDE_LEFT} from "../util/Selectors";
 import $ from "jquery";
 import {configs} from "../index";
+import {appendSide} from "../util/AppendSide";
 
 function Card(props: { children: any }) {
     return (
@@ -30,9 +30,7 @@ function CardHead(props: { label: string }) {
 
 function CardBody(props: { children: any }) {
     return (
-        <div className="card-body" style={{padding: "20px"}}>
-            {props.children}
-        </div>
+        <div className="card-body" style={{padding: "20px"}}>{props.children}</div>
     );
 }
 
@@ -54,7 +52,7 @@ function Checkbox(props: { config: Config, label: string }) {
     );
 }
 
-function InputBox(props: { type: string, config: Config, label: string }) {
+function TextBox(props: { config: Config, label: string }) {
     const [value, setValue] = useState((GM_getValue(props.config, "") as string) ?? "");
 
     const change = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +60,36 @@ function InputBox(props: { type: string, config: Config, label: string }) {
         setValue(e.target.value);
     };
 
+    return (<div className="form-group">
+            <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
+            <input onChange={(e) => change(e)} className="form-control" type="text" value={value}/>
+            <br/>
+            <br/>
+        </div>
+    );
+}
+
+function NumberBox(props: { config: Config, label: string, min: number, max: number }) {
+    const [value, setValue] = useState((GM_getValue(props.config, 0) as number) ?? 0);
+
+    const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const changeValue = e.target.value;
+
+        if (!changeValue) return;
+
+        const convert = Number(changeValue);
+
+        if (isNaN(convert) || props.min > convert || props.max < convert) return;
+
+        GM_setValue(props.config, convert);
+        setValue(convert);
+    };
+
     return (
         <div className="form-group">
             <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
-            <input onChange={(e) => change(e)} className="form-control" type={props.type} value={value}/>
+            <input onChange={(e) => change(e)} className="form-control" type="number" value={value} min={props.min}
+                   max={props.max}/>
             <br/>
             <br/>
         </div>
@@ -98,21 +122,25 @@ function Setting() {
 
                     <div className="row mg-t-20 mg-b-20">
                         {
-                            Object.entries(configs).map(([, value]) => (
+                            Object.values(configs).map(value =>
                                 <Card>
                                     <CardHead label={value.head}/>
                                     <CardBody>
                                         {
-                                            Object.entries(value.configs).map(([key2, value2]) => (
+                                            Object.entries(value.configs).map(([key, value2]) =>
                                                 value2.type === "text"
-                                                    ? <InputBox type={value2.type} config={key2 as Config}
-                                                                label={value2.label}/>
-                                                    : <Checkbox config={key2 as Config} label={value2.label}/>
-                                            ))
+                                                    ? <TextBox config={key as Config}
+                                                               label={value2.label}/>
+                                                    : value2.type === "checkbox"
+                                                        ? <Checkbox config={key as Config} label={value2.label}/>
+                                                        : value2.type === "int" &&
+                                                        <NumberBox config={key as Config} label={value2.label}
+                                                                   min={value2.min} max={value2.max}/>
+                                            )
                                         }
                                     </CardBody>
                                 </Card>
-                            ))
+                            )
                         }
                     </div>
                 </div>
@@ -122,15 +150,15 @@ function Setting() {
 }
 
 export default {
+    exclude: /^\/viewer\//,
     start() {
-        if (/^\/viewer\//.test(location.pathname))
-            return;
+        appendSide(`<hr style="margin: 3px 0px;">`);
 
         const appContainer = document.createElement("div");
         appContainer.id = "settingContainer";
         document.body.prepend(appContainer);
 
-        $(SIDE_LEFT).append(
+        appendSide(
             $(`<li style="padding: 10px 25px;"><img style="margin-left: -5px; height: 25px;" src="//novelpia.com/img/new/viewer/btn_theme.png"></li>`)
                 .on("click", () => ReactDOM.render(<Setting/>, appContainer))
         );

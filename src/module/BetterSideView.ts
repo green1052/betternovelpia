@@ -1,6 +1,7 @@
 import $ from "jquery";
 
 export default {
+    exclude: /^\/viewer\//,
     enable: ["BetterSideView"],
     config: {
         head: "사이드뷰 개선",
@@ -13,9 +14,6 @@ export default {
         }
     },
     start() {
-        if (/^\/viewer\//.test(location.pathname))
-            return;
-
         $(document.body)
             .prepend(
                 $("<div id=BetterSideView>")

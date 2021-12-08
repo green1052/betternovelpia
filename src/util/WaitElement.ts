@@ -15,7 +15,8 @@ export function waitElement(dom: HTMLElement, code: () => void | Promise<void>, 
     observer.observe(dom, {
         childList: true,
         attributes: true,
-        characterData: true
+        characterData: true,
+        subtree: true
     });
 
     setTimeout(() => {

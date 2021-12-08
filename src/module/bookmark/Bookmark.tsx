@@ -1,242 +1,193 @@
-import React from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom";
 import {createGlobalStyle} from "styled-components";
-import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE, SIDE_LEFT} from "../../util/Selectors";
+import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
 import Cookies from "js-cookie";
-import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "./util";
+import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
 import $ from "jquery";
-import {waitElement} from "../../util/WaitElement";
+import toastr from "toastr";
+import {element} from "../../util/Element";
+import {appendHeader} from "../../util/AppendHeader";
+import {isDarkMode} from "../../util/IsDarkMode";
+import {isPageViewer} from "../../util/IsPageViewer";
+import {appendSide} from "../../util/AppendSide";
 
-interface IProps {
-}
+function Bookmark() {
+    const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
+    const [previousBookmark] = useState((GM_getValue("previousBookmark", {}) as PreviousBookmark));
+    const [hide, setHide] = useState(true);
+    const [data, setData] = useState("");
 
-interface IState {
-    bookmarks: Bookmarks;
-    previousBookmark: PreviousBookmark;
-    data: string;
-    hide: boolean;
-}
+    const deleteBookmark = (e: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => {
+        const bookmarks1 = bookmarks;
 
-class Bookmark extends React.Component<IProps, IState> {
-    private readonly PreviousBookmark: PreviousBookmark;
+        delete bookmarks1[$(e.currentTarget).parent().children("a").attr("href")!];
 
-    constructor(props: IProps) {
-        super(props);
+        setBookmarks(bookmarks1);
+    };
 
-        this._Bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
-        this.PreviousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
-
-        this.state = {
-            bookmarks: this.Bookmarks,
-            previousBookmark: this.PreviousBookmark,
-            data: "",
-            hide: true
-        };
-    }
-
-    private _Bookmarks: Bookmarks;
-
-    private get Bookmarks() {
-        return this._Bookmarks;
-    }
-
-    private set Bookmarks(bookmarks: Bookmarks) {
-        GM_setValue("bookmarks", bookmarks);
-        this._Bookmarks = bookmarks;
-        this.setState({bookmarks: bookmarks});
-    }
-
-    render() {
-        const newState = this.state;
-
-        const bookmarks = newState.bookmarks;
-        const hide = newState.hide;
-
-        const previousBookmark = newState.previousBookmark;
-        const GlobalStyles = createGlobalStyle`
-          * {
-            -ms-user-select: none !important;
-            -moz-user-select: none !important;
-            -webkit-user-select: none !important;
-            -khtml-user-select: none !important;
-            user-select: none !important;
-          }
-
-          .no-overflow {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-          }
-
-          .no-overflow a {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-          }
-
-          .bookmark div {
-            display: flex;
-          }
-
-          .bookmark h5 {
-            color: red;
-            margin-left: 5px;
-            margin-right: 5px;
-          }
-        `;
-
-        const globalStyle: React.CSSProperties = {
-            overflow: "auto",
-            bottom: 0,
-            position: "fixed",
-            zIndex: 99999,
-            width: "100vw",
-            height: "100vh"
-        };
-
-        if (Cookies.get("DARKMODE_S") === "1") {
-            globalStyle.backgroundColor = "#000";
-            globalStyle.color = "white";
-        } else
-            globalStyle.backgroundColor = "white";
-
-        return (
-            <>
-                <GlobalStyles/>
-                <div style={globalStyle}>
-                    {
-                        hide
-                            ? undefined
-                            : <div style={{
-                                display: "flex",
-                                position: "fixed",
-                                left: "50%",
-                                top: "50%",
-                                transform: "translate(-50%, -50%)"
-                            }}>
-                                <input onChange={(e) => this.setState({data: e.target.value})}
-                                       type="text"
-                                       placeholder="데이터를 입력해주세요"/>
-                                <button onClick={() => this.restore()} style={{marginLeft: "5px"}}>적용</button>
-                                <button onClick={() => this.setState({hide: true})} style={{marginLeft: "5px"}}>취소</button>
-                            </div>
-                    }
-
-                    <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
-
-                    <ol className="no-overflow bookmark"
-                        style={{
-                            height: "85vh",
-                            overflow: "auto",
-                            fontSize: "15px",
-                            marginLeft: "-10px"
-                        }}>
-                        {Object.entries(bookmarks).map(([key, value]) =>
-                            <li>
-                                <div>
-                                    <a onClick={() => $(".loads").show()}
-                                       href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
-                                    <h5 onClick={(e) => this.deleteBookmark(e)}>X</h5>
-                                </div>
-                            </li>
-                        )}
-                    </ol>
-
-                    <div style={{
-                        display: "flex",
-                        position: "fixed",
-                        bottom: "35px",
-                        right: "5px"
-                    }}>
-                        <h5 onClick={() => this.backup()}>백업</h5>
-                        <h5 onClick={() => this.setState({hide: false})} style={{marginLeft: "5px"}}>복원</h5>
-                    </div>
-
-                    <div style={{
-                        display: "flex",
-                        position: "fixed",
-                        bottom: "5px",
-                        left: "5px"
-                    }}>
-                        <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
-
-                        <a className="no-overflow" onClick={() => $(".loads").show()}
-                           href={previousBookmark.url ?? "#"}
-                           style={{
-                               fontSize: ".83em",
-                               width: "20vh"
-                           }}>
-                            {
-                                previousBookmark.title && previousBookmark.chapter
-                                    ? `${previousBookmark.chapter} - ${decodeURIComponent(previousBookmark.title)}`
-                                    : "없음"
-                            }
-                        </a>
-                    </div>
-
-                    <div style={{
-                        position: "fixed",
-                        bottom: "5px",
-                        right: "5px"
-                    }}>
-                        <button onDoubleClick={() => this.reset()}>초기화</button>
-                        <button onClick={() => ReactDOM.unmountComponentAtNode($("#bookmarkContainer").get(0)!)}
-                                style={{marginLeft: "5px"}}>닫기
-                        </button>
-                    </div>
-                </div>
-            </>
-        );
-    }
-
-    private deleteBookmark(e: React.MouseEvent<HTMLHeadingElement, MouseEvent>) {
-        const bookmarks = this.Bookmarks;
-        delete bookmarks[$(e.currentTarget).parent().children("a").attr("href")!];
-        this.Bookmarks = bookmarks;
-    }
-
-    private backup() {
-        const bookmarks = this.Bookmarks;
-
+    const backup = () => {
         if (!Object.keys(bookmarks).length) return;
 
         GM_setClipboard(JSON.stringify(bookmarks));
 
-        toastr.options = {
-            escapeHtml: true,
-            closeButton: true,
-            newestOnTop: false,
-            progressBar: true
-        };
-
         toastr.info("클립보드로 복사되었습니다.", "북마크");
-    }
+    };
 
-    private restore() {
-        const data = this.state.data;
-
-        toastr.options = {
-            escapeHtml: true,
-            closeButton: true,
-            newestOnTop: false,
-            progressBar: true
-        };
-
+    const restore = () => {
         if (data) {
-            this.Bookmarks = JSON.parse(data);
+            setBookmarks(JSON.parse(data));
             toastr.info("복원되었습니다.", "북마크");
         } else
             toastr.info("데이터가 비어있습니다.", "북마크");
 
-        this.setState({
-            hide: true,
-            data: ""
-        });
-    }
+        setHide(true);
+        setData("");
+    };
 
-    private reset() {
-        this.Bookmarks = {};
-    }
+    const reset = () => setBookmarks({});
+
+    const quit = () => {
+        GM_setValue("bookmarks", bookmarks);
+        ReactDOM.unmountComponentAtNode($("#bookmarkContainer").get(0)!);
+    };
+
+    const GlobalStyles = createGlobalStyle`
+      * {
+        -ms-user-select: none !important;
+        -moz-user-select: none !important;
+        -webkit-user-select: none !important;
+        -khtml-user-select: none !important;
+        user-select: none !important;
+      }
+
+      .no-overflow {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .no-overflow a {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .bookmark div {
+        display: flex;
+      }
+
+      .bookmark h5 {
+        color: red;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    `;
+
+    const globalStyle: React.CSSProperties = {
+        overflow: "auto",
+        bottom: 0,
+        position: "fixed",
+        zIndex: 99999,
+        width: "100vw",
+        height: "100vh"
+    };
+
+    if (Cookies.get("DARKMODE_S") === "1") {
+        globalStyle.backgroundColor = "#000";
+        globalStyle.color = "white";
+    } else
+        globalStyle.backgroundColor = "white";
+
+    return (
+        <>
+            <GlobalStyles/>
+            <div style={globalStyle}>
+                {
+                    hide
+                        ? undefined
+                        : <div style={{
+                            display: "flex",
+                            position: "fixed",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)"
+                        }}>
+                            <input onChange={(e) => setData(e.target.value)}
+                                   type="text"
+                                   placeholder="데이터를 입력해주세요"/>
+                            <button onClick={() => restore()} style={{marginLeft: "5px"}}>적용</button>
+                            <button onClick={() => setHide(false)} style={{marginLeft: "5px"}}>취소</button>
+                        </div>
+                }
+
+                <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
+
+                <ol className="no-overflow bookmark"
+                    style={{
+                        height: "85vh",
+                        overflow: "auto",
+                        fontSize: "15px",
+                        marginLeft: "-10px"
+                    }}>
+                    {
+                        Object.entries(bookmarks).map(([key, value]) =>
+                            <li>
+                                <div>
+                                    <a onClick={() => $(".loads").show()}
+                                       href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
+                                    <h5 onClick={(e) => deleteBookmark(e)}>X</h5>
+                                </div>
+                            </li>
+                        )
+                    }
+                </ol>
+
+                <div style={{
+                    display: "flex",
+                    position: "fixed",
+                    bottom: "35px",
+                    right: "5px"
+                }}>
+                    <h5 onClick={() => backup()}>백업</h5>
+                    <h5 onClick={() => setHide(false)} style={{marginLeft: "5px"}}>복원</h5>
+                </div>
+
+                <div style={{
+                    display: "flex",
+                    position: "fixed",
+                    bottom: "5px",
+                    left: "5px"
+                }}>
+                    <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
+
+                    <a className="no-overflow" onClick={() => $(".loads").show()}
+                       href={previousBookmark.url ?? "#"}
+                       style={{
+                           fontSize: ".83em",
+                           width: "20vh"
+                       }}>
+                        {
+                            previousBookmark.title && previousBookmark.chapter
+                                ? `${previousBookmark.chapter} - ${decodeURIComponent(previousBookmark.title)}`
+                                : "없음"
+                        }
+                    </a>
+                </div>
+
+                <div style={{
+                    position: "fixed",
+                    bottom: "5px",
+                    right: "5px"
+                }}>
+                    <button onDoubleClick={() => reset()}>초기화</button>
+                    <button onClick={() => quit()} style={{marginLeft: "5px"}}>
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </>
+    );
 }
 
 function bookmark() {
@@ -252,7 +203,7 @@ function bookmark() {
             ReactDOM.render(<Bookmark/>, appContainer)
         );
 
-    $(SIDE_LEFT).append(li);
+    appendSide(li);
 }
 
 function novel() {
@@ -276,9 +227,7 @@ function novel() {
 
             if (!url) continue;
 
-            const bookmark = Object.keys(bookmarks).find(key => key.endsWith(url));
-
-            if (!bookmark) continue;
+            if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
 
             $element
                 .children("b")
@@ -297,7 +246,7 @@ function novel() {
 }
 
 function viewer() {
-    if (!/^\/novel\//.test(location.pathname))
+    if (!/^\/viewer\//.test(location.pathname))
         return;
 
     const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
@@ -328,17 +277,10 @@ function viewer() {
             GM_setValue("bookmarks", bookmarks);
 
             $("#Bookmark").css("color",
-                Cookies.get("DARKMODE") === "1"
+                isDarkMode()
                     ? "rgb(117, 242, 70)"
                     : "rgb(160, 73, 180)"
             );
-
-            toastr.options = {
-                escapeHtml: true,
-                closeButton: true,
-                newestOnTop: false,
-                progressBar: true
-            };
 
             toastr.info("저장되었습니다.", "북마크");
         })
@@ -346,16 +288,16 @@ function viewer() {
             $(`<i id="Bookmark" class="icon ion-bookmark">`)
                 .css("color",
                     bookmarks?.hasOwnProperty(location.href)
-                        ? Cookies.get("DARKMODE") === "1"
+                        ? isDarkMode()
                             ? "rgb(117, 242, 70)"
                             : "rgb(160, 73, 180)"
-                        : Cookies.get("DARKMODE") === "1"
+                        : isDarkMode()
                             ? "#ffffff7a"
                             : "#0000007a"
                 )
         );
 
-    $(HEADER_BAR).children().eq(6).before(td);
+    appendHeader(td);
 
     if (!bookmarks)
         return;
@@ -368,17 +310,10 @@ function viewer() {
     if (GM_getValue("Bookmark_OneUse", false))
         removeBookmark(bookmarks, location.href);
 
-    const goto = () => {
+    element($(NOVEL_DRAWING), () => {
         if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
         $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
-    };
-
-    if ($(NOVEL_DRAWING).children().length > 0) {
-        goto();
-        return;
-    }
-
-    waitElement($(NOVEL_DRAWING).get(0)!, goto);
+    });
 }
 
 export default {
@@ -404,6 +339,10 @@ export default {
         }
     },
     start() {
+        if (isPageViewer()) {
+            toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
+        }
+
         bookmark();
         novel();
         viewer();

@@ -1,10 +1,10 @@
 import urlRegex from "url-regex-safe";
-import {waitElement} from "../util/WaitElement";
 import $ from "jquery";
 import {NOVEL_DRAWING} from "../util/Selectors";
+import {element} from "../util/Element";
 
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["UrlPrettier"],
     config: {
         head: "URL a href 적용",
@@ -25,11 +25,6 @@ export default {
             );
         }
 
-        if ($(NOVEL_DRAWING).children().length > 0) {
-            matched();
-            return;
-        }
-
-        waitElement($(NOVEL_DRAWING).get(0)!, matched);
+        element($(NOVEL_DRAWING), matched);
     }
 } as Module;

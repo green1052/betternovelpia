@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["FreeEmoji"],
     config: {
         head: "유로 이모지 무료 사용",

@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /^\/search\//,
+    include: /^\/search\//,
     enable: ["HidePlus"],
     config: {
         head: "검색시 플러스 숨기기",

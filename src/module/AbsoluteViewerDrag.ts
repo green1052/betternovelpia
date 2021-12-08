@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /^\/viewer\//,
+    include: /^\/viewer\//,
     enable: ["AbsoluteViewerDrag"],
     config: {
         head: "뷰어 드래그 허용",

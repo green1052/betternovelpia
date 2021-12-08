@@ -1,7 +1,9 @@
-import {isFirst, PreviousBookmark} from "./util";
+import {isFirst, PreviousBookmark} from "../../util/Bookmark";
 import $ from "jquery";
 import {NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
-import {waitElement} from "../../util/WaitElement";
+import toastr from "toastr";
+import {element} from "../../util/Element";
+import {isPageViewer} from "../../util/IsPageViewer";
 
 function novel() {
     if (!/^\/novel\//.test(location.pathname)) return;
@@ -23,22 +25,14 @@ function viewer() {
     if (!chapter)
         return;
 
-    let lastScrollTop = 0;
-    setInterval(() => {
-        const scrollTop = $(NOVEL_BOX).scrollTop();
-
-        if (!scrollTop || scrollTop === lastScrollTop)
-            return;
-
+    $(NOVEL_BOX).on("scroll", (e) => {
         GM_setValue("previousBookmark", {
             url: location.href,
-            scrollTop: scrollTop,
+            scrollTop: e.currentTarget.scrollTop,
             title: title,
             chapter: chapter
         } as PreviousBookmark);
-
-        lastScrollTop = scrollTop;
-    }, 1000);
+    });
 
     const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
@@ -48,21 +42,13 @@ function viewer() {
     if (GM_getValue("PreviousBookmark_OneUse", false))
         GM_setValue("previousBookmark", {});
 
-    const goto = () => {
+    element($(NOVEL_DRAWING), () => {
         if (!GM_getValue("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
         $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
-    };
-
-    if ($(NOVEL_DRAWING).children().length > 0) {
-        goto();
-        return;
-    }
-
-    waitElement($(NOVEL_DRAWING).get(0)!, goto);
+    });
 }
 
 export default {
-    url: /^\/novel\//,
     enable: ["PreviousBookmark"],
     config: {
         head: "이전 회차 북마크 설정",
@@ -90,6 +76,11 @@ export default {
         }
     },
     start() {
+        if (isPageViewer()) {
+            toastr.info("페이지 방식은 지원하지 않습니다.", "이전 회차 북마크");
+            return;
+        }
+
         novel();
         viewer();
     }

@@ -2,10 +2,9 @@ import $ from "jquery";
 import {viewerData} from "../util/ViewerData";
 import {EP_List, NOTICE_LIST} from "../util/Selectors";
 import {decode} from "html-entities";
-import toastr from "toastr";
 
 export default {
-    url: /^\/novel\//,
+    include: /^\/novel\//,
     enable: ["PrivateMode"],
     config: {
         head: "프라이빗 모드",
@@ -26,23 +25,15 @@ export default {
 
             jquery
                 .removeAttr("onclick")
-                .on("click", () => {
-                    const data = viewerData(url);
+                .on("click", async () => {
+                    const data = await viewerData(url);
 
                     if (!data.length) {
-                        toastr.options = {
-                            escapeHtml: true,
-                            closeButton: true,
-                            newestOnTop: false,
-                            progressBar: true
-                        };
-
-                        toastr.info("내용 없음", "프라이빗 모드");
-
+                        alert("내용 없음");
                         return;
                     }
 
-                    alert(...data.map(str => decode(str.text)));
+                    alert(data.map(str => decode(str.text)).join(""));
                 });
         }
 

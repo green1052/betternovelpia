@@ -4,9 +4,16 @@ interface Field {
     label: string,
 }
 
-interface Texts extends Field {
+interface Text extends Field {
     type: "text",
-    title: string
+    default?: string
+}
+
+interface Int extends Field {
+    type: "int",
+    min: number,
+    max: number,
+    default?: number
 }
 
 interface Checkbox extends Field {
@@ -17,6 +24,7 @@ interface Checkbox extends Field {
 declare global {
     type Config =
         "AbsoluteViewerDrag" |
+        "AutoRecommend" |
         "BetterSideView" |
         "Bookmark" |
         "Bookmark_AutoUse" |
@@ -30,8 +38,11 @@ declare global {
         "HideEvent" |
         "HideNotice" |
         "HidePlus" |
+        "HideRecommendEffect" |
+        "HideViewerThumbnail" |
         "HideAd" |
         "InfoUnfold" |
+        "NaviColor" |
         "NovelDownload" |
         "NovelListFix" |
         "PreLoadComment" |
@@ -41,6 +52,7 @@ declare global {
         "PreviousBookmark_First" |
         "PreviousBookmark_OneUse" |
         "PrivateMode" |
+        "RecommendAllNovel" |
         "UrlPrettier" |
         "ViewNoelToCookie_LOGINKEY" |
         "ViewNoelToCookie_USERKEY" |
@@ -49,12 +61,13 @@ declare global {
     interface Configs {
         head: string,
         configs: {
-            [key in Config]: Texts | Checkbox
+            [key in Config]: Text | Int | Checkbox
         }
     }
 
     interface Module {
-        url?: RegExp;
+        include?: RegExp;
+        exclude?: RegExp;
         enable?: Config[];
         config?: Configs,
 

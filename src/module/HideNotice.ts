@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /^\/novel\//,
+    include: /^\/novel\//,
     enable: ["HideNotice"],
     config: {
         head: "공지 숨기기 버튼 추가",

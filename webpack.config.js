@@ -2,6 +2,7 @@ const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const {version} = require("./package.json");
 const WebpackUserscript = require("webpack-userscript");
 const {DefinePlugin} = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const header = {
     name: "BetterNovelpia",
@@ -12,16 +13,25 @@ const header = {
     "rut-at": "document-start",
     match: "http*://novelpia.com/*",
     grant: [
+        "GM_listValues",
         "GM_getValue",
         "GM_setValue",
         "GM_setClipboard",
+        "GM_xmlhttpRequest",
         "unsafeWindow"
     ],
     version: version
 };
 
 module.exports = {
+    mode: "production",
     entry: "./src/index.ts",
+    output: {
+        filename: "betternovelpia.user.js"
+    },
+    performance: {
+        hints: false
+    },
     module: {
         rules: [
             {
@@ -58,5 +68,18 @@ module.exports = {
             metajs: false,
             pretty: false
         })
-    ]
+    ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    format: {
+                        comments: false
+                    }
+                },
+                extractComments: false
+            })
+        ]
+    }
 };

@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /\/$/,
+    include: /\/$/,
     enable: ["NovelListFix"],
     config: {
         head: "소설 목록 개선",

@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default {
-    url: /^\/freestory|plus/,
+    include: /^\/freestory|plus/,
     enable: ["HideAddNovel"],
     config: {
         head: "소설 등록 숨기기",
