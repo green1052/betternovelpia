@@ -25,14 +25,14 @@ function viewer() {
     if (!chapter)
         return;
 
-    $(NOVEL_BOX).on("scroll", (e) => {
+    $(NOVEL_BOX).on("scroll", (e) =>
         GM_setValue("previousBookmark", {
             url: location.href,
             scrollTop: e.currentTarget.scrollTop,
             title: title,
             chapter: chapter
-        } as PreviousBookmark);
-    });
+        } as PreviousBookmark)
+    );
 
     const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 

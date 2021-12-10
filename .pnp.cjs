@@ -41,7 +41,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.16.0"],
             ["@babel/preset-typescript", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.16.0"],
             ["@babel/runtime", "npm:7.16.3"],
-            ["@types/jquery", "npm:3.5.9"],
+            ["@types/file-saver", "npm:2.0.4"],
+            ["@types/jquery", "npm:3.5.10"],
             ["@types/js-cookie", "npm:3.0.1"],
             ["@types/react", "npm:17.0.37"],
             ["@types/react-dom", "npm:17.0.11"],
@@ -52,6 +53,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:8.2.3"],
             ["babel-plugin-styled-components", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:2.0.2"],
             ["clean-terminal-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:3.0.0"],
+            ["file-saver", "npm:2.0.5"],
             ["html-entities", "npm:2.3.2"],
             ["jquery", "npm:3.6.0"],
             ["js-cookie", "npm:3.0.1"],
@@ -2519,6 +2521,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/file-saver", [
+        ["npm:2.0.4", {
+          "packageLocation": "./.yarn/cache/@types-file-saver-npm-2.0.4-580b1040df-508865c508.zip/node_modules/@types/file-saver/",
+          "packageDependencies": [
+            ["@types/file-saver", "npm:2.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/hoist-non-react-statics", [
         ["npm:3.3.1", {
           "packageLocation": "./.yarn/cache/@types-hoist-non-react-statics-npm-3.3.1-c0081332b2-2c0778570d.zip/node_modules/@types/hoist-non-react-statics/",
@@ -2531,18 +2542,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/jquery", [
-        ["npm:3.5.8", {
-          "packageLocation": "./.yarn/cache/@types-jquery-npm-3.5.8-77d289f145-8e561efb52.zip/node_modules/@types/jquery/",
+        ["npm:3.5.10", {
+          "packageLocation": "./.yarn/cache/@types-jquery-npm-3.5.10-4db2266e3e-8ac37fd113.zip/node_modules/@types/jquery/",
           "packageDependencies": [
-            ["@types/jquery", "npm:3.5.8"],
+            ["@types/jquery", "npm:3.5.10"],
             ["@types/sizzle", "npm:2.3.3"]
           ],
           "linkType": "HARD",
         }],
-        ["npm:3.5.9", {
-          "packageLocation": "./.yarn/cache/@types-jquery-npm-3.5.9-bd96a4a707-8939ee0e73.zip/node_modules/@types/jquery/",
+        ["npm:3.5.8", {
+          "packageLocation": "./.yarn/cache/@types-jquery-npm-3.5.8-77d289f145-8e561efb52.zip/node_modules/@types/jquery/",
           "packageDependencies": [
-            ["@types/jquery", "npm:3.5.9"],
+            ["@types/jquery", "npm:3.5.8"],
             ["@types/sizzle", "npm:2.3.3"]
           ],
           "linkType": "HARD",
@@ -3361,7 +3372,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.16.0"],
             ["@babel/preset-typescript", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.16.0"],
             ["@babel/runtime", "npm:7.16.3"],
-            ["@types/jquery", "npm:3.5.9"],
+            ["@types/file-saver", "npm:2.0.4"],
+            ["@types/jquery", "npm:3.5.10"],
             ["@types/js-cookie", "npm:3.0.1"],
             ["@types/react", "npm:17.0.37"],
             ["@types/react-dom", "npm:17.0.11"],
@@ -3372,6 +3384,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:8.2.3"],
             ["babel-plugin-styled-components", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:2.0.2"],
             ["clean-terminal-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:3.0.0"],
+            ["file-saver", "npm:2.0.5"],
             ["html-entities", "npm:2.3.2"],
             ["jquery", "npm:3.6.0"],
             ["js-cookie", "npm:3.0.1"],
@@ -4074,6 +4087,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fastest-levenshtein-npm-1.0.12-a32b4ef51e-e1a013698d.zip/node_modules/fastest-levenshtein/",
           "packageDependencies": [
             ["fastest-levenshtein", "npm:1.0.12"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["file-saver", [
+        ["npm:2.0.5", {
+          "packageLocation": "./.yarn/cache/file-saver-npm-2.0.5-2c3bc40d53-c62d96e5ce.zip/node_modules/file-saver/",
+          "packageDependencies": [
+            ["file-saver", "npm:2.0.5"]
           ],
           "linkType": "HARD",
         }]

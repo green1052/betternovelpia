@@ -17,7 +17,6 @@ const header = {
         "GM_getValue",
         "GM_setValue",
         "GM_setClipboard",
-        "GM_xmlhttpRequest",
         "unsafeWindow"
     ],
     version: version

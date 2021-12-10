@@ -14,17 +14,9 @@ export default {
         }
     },
     start() {
-        let plusCount = 0;
-
-        for (const element of $(".b_plus")) {
-            const $element = $(element).parent().parent().parent().parent().parent();
-
-            if (!$element.hasClass("mobile_show"))
-                continue;
-
-            $element.remove();
-            plusCount++;
-        }
+        const plusCount = $(".b_plus").map((_, element) =>
+            $(element).parents(`div[class="mobile_show"]`).eq(0).remove()
+        ).length;
 
         $(`span[style="font-size: 14px;font-weight: 600;"]`)
             .append(`<br><font style="color: #d23a3a;font-size: 12px;">(PLUS ${plusCount}개 차단)</font>`);

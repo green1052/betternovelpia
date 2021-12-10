@@ -44,6 +44,7 @@ declare global {
         "InfoUnfold" |
         "NaviColor" |
         "NovelDownload" |
+        "NovelDownload_Copy" |
         "NovelListFix" |
         "PreLoadComment" |
         "PreLoadEpisodeList" |
@@ -54,8 +55,8 @@ declare global {
         "PrivateMode" |
         "RecommendAllNovel" |
         "UrlPrettier" |
-        "ViewNoelToCookie_LOGINKEY" |
-        "ViewNoelToCookie_USERKEY" |
+        "ViewNovelToCookie_LOGINKEY" |
+        "ViewNovelToCookie_USERKEY" |
         "ViewNovelToCookie";
 
     interface Configs {

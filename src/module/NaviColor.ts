@@ -41,16 +41,16 @@ export default {
                     case "1":
                     case "":
                     case undefined:
-                        return "#000";
+                        return "#fff";
 
                     case "2":
-                        return "#545454";
+                        return "#e3e3e3";
 
                     case "3":
-                        return "#797417";
+                        return "#fffddb";
 
                     case "4":
-                        return "#246b15";
+                        return "#c4ecbb";
 
                     default:
                         return localStorage["viewer_bg"];

@@ -1,41 +1,34 @@
-export function viewerData(url: string, cookie?: { LOGINKEY: string, USERKEY: string }): Promise<NovelData[]> {
-    return new Promise((resolve, reject) => {
-        let headers: { [key in string]: string } = {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-        };
+export function fetchWithTimeout(input: RequestInfo, options: RequestInit, timeout = 5000): Promise<Response> {
+    // @ts-ignore
+    return Promise.race([
+        fetch(input, options),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("timeout")), timeout)
+        )
+    ]);
+}
 
-        if (cookie && cookie.LOGINKEY && cookie.USERKEY)
-            headers.Cookie = `LOGINKEY=${cookie.LOGINKEY}; USERKEY=${cookie.USERKEY};`;
-
-        GM_xmlhttpRequest({
-            url: `/proc/viewer_data/${url}`,
+export async function viewerData(url: string, code?: () => void): Promise<NovelData[]> {
+    try {
+        const response: { c: string, s: { text: string }[] } = await (await fetchWithTimeout(`/proc/viewer_data/${url}`, {
             method: "POST",
-            headers: headers,
-            responseType: "json",
-            timeout: 5000,
-            data: `{size:14}`,
-            onload: (response) => {
-                if (!response.responseText) {
-                    reject();
-                    return;
-                }
-
-                const data = JSON.parse(response.responseText) as { c: string, s: { text: string }[] };
-
-                resolve(data.s.map(({text}) => {
-                    return {
-                        text: text,
-                        size: 11,
-                        align: "left"
-                    };
-                }));
+            cache: "no-cache",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            onerror(response) {
-                reject(response.responseText);
-            },
-            ontimeout(response) {
-                reject(response.responseText);
-            }
+            body: new URLSearchParams({
+                size: "14"
+            })
+        })).json();
+
+        return response.s.map(({text}) => {
+            return {
+                text: text,
+                size: 11,
+                align: "left"
+            };
         });
-    });
+    } finally {
+        code?.();
+    }
 }

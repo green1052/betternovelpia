@@ -14,7 +14,9 @@ export default {
         }
     },
     start() {
-        if ($("#btn_episode_vote").attr("src") === "/img/new/viewer/btn_vote.png")
-            episode_vote();
+        const vote = $("#btn_episode_vote");
+
+        if (vote.attr("src") === "/img/new/viewer/btn_vote.png")
+            vote.get(0)!.click();
     }
 } as Module;

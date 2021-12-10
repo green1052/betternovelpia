@@ -117,7 +117,7 @@ function Bookmark() {
                                    type="text"
                                    placeholder="데이터를 입력해주세요"/>
                             <button onClick={() => restore()} style={{marginLeft: "5px"}}>적용</button>
-                            <button onClick={() => setHide(false)} style={{marginLeft: "5px"}}>취소</button>
+                            <button onClick={() => setHide(true)} style={{marginLeft: "5px"}}>취소</button>
                         </div>
                 }
 

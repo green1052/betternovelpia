@@ -1451,6 +1451,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/file-saver@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@types/file-saver@npm:2.0.4"
+  checksum: 508865c5088771b3f07fcc2ca6f496b59593c7d16830914313ef94c81ca259570c77e39c385d2c8c5febe525cbd0d1938fb6adb7278246df24b556375678966e
+  languageName: node
+  linkType: hard
+
 "@types/hoist-non-react-statics@npm:*":
   version: 3.3.1
   resolution: "@types/hoist-non-react-statics@npm:3.3.1"
@@ -1470,12 +1477,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jquery@npm:^3.5.9":
-  version: 3.5.9
-  resolution: "@types/jquery@npm:3.5.9"
+"@types/jquery@npm:^3.5.10":
+  version: 3.5.10
+  resolution: "@types/jquery@npm:3.5.10"
   dependencies:
     "@types/sizzle": "*"
-  checksum: 8939ee0e73a47d16384ec43964cb32a8a462990330444668662994172ab687e4799ddf915190a3c234a2337c5ee3d8937125005375bd9a1e3360cb56ec904904
+  checksum: 8ac37fd113680bfe63748f28b438e4e0119342bdb5d7f94851a4178607b5c097a0b23bd2d17f9c390972a5d4c04247b5d1b806eb52b50ea1085b50629db8057d
   languageName: node
   linkType: hard
 
@@ -2067,7 +2074,8 @@ __metadata:
     "@babel/preset-react": ^7.16.0
     "@babel/preset-typescript": ^7.16.0
     "@babel/runtime": ^7.16.3
-    "@types/jquery": ^3.5.9
+    "@types/file-saver": ^2.0.4
+    "@types/jquery": ^3.5.10
     "@types/js-cookie": ^3.0.1
     "@types/react": ^17.0.37
     "@types/react-dom": ^17.0.11
@@ -2078,6 +2086,7 @@ __metadata:
     babel-loader: ^8.2.3
     babel-plugin-styled-components: ^2.0.2
     clean-terminal-webpack-plugin: ^3.0.0
+    file-saver: ^2.0.5
     html-entities: ^2.3.2
     jquery: ^3.6.0
     js-cookie: ^3.0.1
@@ -2653,6 +2662,13 @@ __metadata:
   version: 1.0.12
   resolution: "fastest-levenshtein@npm:1.0.12"
   checksum: e1a013698dd1d302c7a78150130c7d50bb678c2c2f8839842a796d66cc7cdf50ea6b3d7ca930b0c8e7e8c2cd84fea8ab831023b382f7aab6922c318c1451beab
+  languageName: node
+  linkType: hard
+
+"file-saver@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "file-saver@npm:2.0.5"
+  checksum: c62d96e5cebc58b4bdf3ae8a60d5cf9607ad82f75f798c33a4ee63435ac2203002584d5256a2a780eda7feb5e19dc3b6351c2212e58b3f529e63d265a7cc79f7
   languageName: node
   linkType: hard
 

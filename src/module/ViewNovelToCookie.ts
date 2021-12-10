@@ -1,6 +1,15 @@
 import $ from "jquery";
 import {fakeViewer} from "../util/FakeViewer";
 import {viewerData} from "../util/ViewerData";
+import Cookies from "js-cookie";
+
+function resetCookie(name: string, value: string) {
+    Cookies.set(name, value, {
+        domain: ".novelpia.com",
+        path: "/",
+        expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    });
+}
 
 export default {
     include: /^\/viewer\//,
@@ -13,11 +22,11 @@ export default {
                 type: "checkbox",
                 default: false
             },
-            ViewNoelToCookie_LOGINKEY: {
+            ViewNovelToCookie_LOGINKEY: {
                 label: "LOGINKEY",
                 type: "text"
             },
-            ViewNoelToCookie_USERKEY: {
+            ViewNovelToCookie_USERKEY: {
                 label: "USERKEY",
                 type: "text"
             }
@@ -29,15 +38,21 @@ export default {
         if (!blocked.length)
             return;
 
-        const loginKey = GM_getValue("ViewNoelToCookie_LOGINKEY", "") as string;
-        const userKey = GM_getValue("ViewNoelToCookie_USERKEY", "") as string;
+        const loginKey = GM_getValue("ViewNovelToCookie_LOGINKEY", "") as string;
+        const userKey = GM_getValue("ViewNovelToCookie_USERKEY", "") as string;
 
         if (!loginKey || !userKey)
             return;
 
-        const data = await viewerData(location.pathname.substring(8), {
-            LOGINKEY: loginKey,
-            USERKEY: userKey
+        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
+        const oldUserKey = Cookies.get("USERKEY") ?? "";
+
+        resetCookie("LOGINKEY", loginKey);
+        resetCookie("USERKEY", userKey);
+
+        const data = await viewerData(location.pathname.substring(8), () => {
+            resetCookie("LOGINKEY", oldLoginKey);
+            resetCookie("USERKEY", oldUserKey);
         });
 
         if (data.length > 0)
