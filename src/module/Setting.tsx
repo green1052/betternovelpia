@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import $ from "jquery";
 import {configs} from "../index";
 import {appendSide} from "../util/AppendSide";
+import styled, {css} from "styled-components";
 
 function Card(props: { children: any }) {
     return (
@@ -37,10 +38,10 @@ function CardBody(props: { children: any }) {
 function Checkbox(props: { config: Config, label: string }) {
     const [checked, setChecked] = useState((GM_getValue(props.config, false) as boolean) ?? false);
 
-    const change = () => {
+    const change = useCallback(() => {
         setChecked(!checked);
         GM_setValue(props.config, !checked);
-    };
+    }, [props, checked]);
 
     return (
         <>
@@ -55,12 +56,13 @@ function Checkbox(props: { config: Config, label: string }) {
 function TextBox(props: { config: Config, label: string }) {
     const [value, setValue] = useState((GM_getValue(props.config, "") as string) ?? "");
 
-    const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         GM_setValue(props.config, e.target.value);
         setValue(e.target.value);
-    };
+    }, [props]);
 
-    return (<div className="form-group">
+    return (
+        <div className="form-group">
             <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
             <input onChange={(e) => change(e)} className="form-control" type="text" value={value}/>
             <br/>
@@ -72,7 +74,7 @@ function TextBox(props: { config: Config, label: string }) {
 function NumberBox(props: { config: Config, label: string, min: number, max: number }) {
     const [value, setValue] = useState((GM_getValue(props.config, 0) as number) ?? 0);
 
-    const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const changeValue = e.target.value;
 
         if (!changeValue) return;
@@ -83,7 +85,7 @@ function NumberBox(props: { config: Config, label: string, min: number, max: num
 
         GM_setValue(props.config, convert);
         setValue(convert);
-    };
+    }, [props]);
 
     return (
         <div className="form-group">
@@ -97,21 +99,46 @@ function NumberBox(props: { config: Config, label: string, min: number, max: num
 }
 
 function Setting() {
+    const [hide, setHide] = useState(true);
+
+    useEffect(() => {
+        appendSide(`<hr style="margin: 3px 0;">`);
+
+        appendSide(
+            $(`<li style="padding: 10px 25px;"><img style="margin-left: -5px; height: 25px;" src="//novelpia.com/img/new/viewer/btn_theme.png"></li>`)
+                .on("click", () => setHide(false))
+        );
+    }, []);
+
+    const MainDiv = styled.div`
+      overflow: auto;
+      bottom: 0;
+      position: fixed;
+      z-index: 99999;
+      width: 100vw;
+      height: 100vh;
+      background-color: white;
+      ${hide && css`display: none;`}
+    `;
+
+    const TitleDiv = styled.div`
+      position: sticky;
+      top: 0;
+      z-index: 999999;
+      background-color: white;
+      text-align: center;
+      width: 100vw;
+      height: 50px;
+      box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
+    `;
+
     return (
-        <div style={{
-            overflow: "auto",
-            bottom: 0,
-            position: "fixed",
-            zIndex: 99999,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "white"
-        }}>
+        <MainDiv>
             <div className="" style={{fontSize: "12px"}}>
-                <div className="am-mainpanel"
-                     style={{maxWidth: "1200px", margin: "0px auto 0px auto", padding: "0px 20px"}}>
-                    <br/>
-                    <h4 className="tx-gray-800 mg-t-25 s_inv">
+                <TitleDiv>
+                    <h4 style={{
+                        lineHeight: "50px"
+                    }} className="tx-gray-800 s_inv">
                         BetterNovelpia - {VERSION}
                         <i onClick={() => {
                             $(".loads").show();
@@ -119,7 +146,10 @@ function Setting() {
                         }}
                            style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
                     </h4>
+                </TitleDiv>
 
+                <div className="am-mainpanel"
+                     style={{maxWidth: "1200px", margin: "0px auto 0px auto", padding: "0px 20px"}}>
                     <div className="row mg-t-20 mg-b-20">
                         {
                             Object.values(configs).map(value =>
@@ -145,22 +175,15 @@ function Setting() {
                     </div>
                 </div>
             </div>
-        </div>
+        </MainDiv>
     );
 }
 
 export default {
     exclude: /^\/viewer\//,
     start() {
-        appendSide(`<hr style="margin: 3px 0px;">`);
-
         const appContainer = document.createElement("div");
-        appContainer.id = "settingContainer";
         document.body.prepend(appContainer);
-
-        appendSide(
-            $(`<li style="padding: 10px 25px;"><img style="margin-left: -5px; height: 25px;" src="//novelpia.com/img/new/viewer/btn_theme.png"></li>`)
-                .on("click", () => ReactDOM.render(<Setting/>, appContainer))
-        );
+        ReactDOM.render(<Setting/>, appContainer);
     }
 } as Module;

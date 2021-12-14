@@ -3,6 +3,7 @@ const {version} = require("./package.json");
 const WebpackUserscript = require("webpack-userscript");
 const {DefinePlugin} = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const header = {
     name: "BetterNovelpia",
@@ -13,7 +14,6 @@ const header = {
     "rut-at": "document-start",
     match: "http*://novelpia.com/*",
     grant: [
-        "GM_listValues",
         "GM_getValue",
         "GM_setValue",
         "GM_setClipboard",
@@ -36,19 +36,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: /src/,
-                loader: "babel-loader",
-                options: {
-                    presets: [
-                        ["@babel/preset-env", {targets: "defaults"}],
-                        "@babel/preset-typescript",
-                        "@babel/preset-react"
-                    ],
-                    plugins: [
-                        "babel-plugin-styled-components",
-                        ["@babel/plugin-transform-runtime", {"regenerator": true}]
-                    ],
-                    cacheDirectory: true
-                }
+                loader: "babel-loader"
             }
         ]
     },
@@ -66,7 +54,8 @@ module.exports = {
             headers: header,
             metajs: false,
             pretty: false
-        })
+        }),
+        new ForkTsCheckerWebpackPlugin()
     ],
     optimization: {
         minimize: true,

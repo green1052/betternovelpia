@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
-import {createGlobalStyle} from "styled-components";
+import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
 import Cookies from "js-cookie";
 import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
@@ -16,41 +16,47 @@ function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
     const [previousBookmark] = useState((GM_getValue("previousBookmark", {}) as PreviousBookmark));
     const [hide, setHide] = useState(true);
+    const [inputHide, setInputHide] = useState(true);
     const [data, setData] = useState("");
 
-    const deleteBookmark = (e: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => {
-        const bookmarks1 = bookmarks;
+    useEffect(() => {
+        const li = $(`<li style="padding: 10px 25px;"><img height=25 src=//image.novelpia.com/img/new/icon/count_book.png></li>`)
+            .on("click", () => setHide(false));
 
-        delete bookmarks1[$(e.currentTarget).parent().children("a").attr("href")!];
+        appendSide(li);
+    }, []);
 
+    const deleteBookmark = useCallback((url: string) => {
+        const bookmarks1 = {...bookmarks};
+        delete bookmarks1[url];
         setBookmarks(bookmarks1);
-    };
+    }, [bookmarks]);
 
-    const backup = () => {
+    const backup = useCallback(() => {
         if (!Object.keys(bookmarks).length) return;
 
         GM_setClipboard(JSON.stringify(bookmarks));
 
         toastr.info("클립보드로 복사되었습니다.", "북마크");
-    };
+    }, [bookmarks]);
 
-    const restore = () => {
+    const restore = useCallback(() => {
         if (data) {
             setBookmarks(JSON.parse(data));
             toastr.info("복원되었습니다.", "북마크");
         } else
             toastr.info("데이터가 비어있습니다.", "북마크");
 
-        setHide(true);
+        setInputHide(true);
         setData("");
-    };
+    }, [data]);
 
-    const reset = () => setBookmarks({});
+    const reset = useCallback(() => setBookmarks({}), []);
 
-    const quit = () => {
+    const quit = useCallback(() => {
         GM_setValue("bookmarks", bookmarks);
-        ReactDOM.unmountComponentAtNode($("#bookmarkContainer").get(0)!);
-    };
+        setHide(true);
+    }, [bookmarks]);
 
     const GlobalStyles = createGlobalStyle`
       * {
@@ -84,41 +90,40 @@ function Bookmark() {
       }
     `;
 
-    const globalStyle: React.CSSProperties = {
-        overflow: "auto",
-        bottom: 0,
-        position: "fixed",
-        zIndex: 99999,
-        width: "100vw",
-        height: "100vh"
-    };
+    const MainDiv = styled.div`
+      overflow: auto;
+      bottom: 0;
+      position: fixed;
+      z-index: 99999;
+      width: 100vw;
+      height: 100vh;
 
-    if (Cookies.get("DARKMODE_S") === "1") {
-        globalStyle.backgroundColor = "#000";
-        globalStyle.color = "white";
-    } else
-        globalStyle.backgroundColor = "white";
+      ${Cookies.get("DARKMODE_S") === "1"
+              ? css`background-color: #000;
+                color: white`
+              : css`background-color: white;`}
+
+      ${hide && css`display: none;`}
+    `;
 
     return (
         <>
             <GlobalStyles/>
-            <div style={globalStyle}>
+            <MainDiv>
                 {
-                    hide
-                        ? undefined
-                        : <div style={{
-                            display: "flex",
-                            position: "fixed",
-                            left: "50%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)"
-                        }}>
-                            <input onChange={(e) => setData(e.target.value)}
-                                   type="text"
-                                   placeholder="데이터를 입력해주세요"/>
-                            <button onClick={() => restore()} style={{marginLeft: "5px"}}>적용</button>
-                            <button onClick={() => setHide(true)} style={{marginLeft: "5px"}}>취소</button>
-                        </div>
+                    !inputHide && <div style={{
+                        display: "flex",
+                        position: "fixed",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)"
+                    }}>
+                        <input onChange={(e) => setData(e.target.value)}
+                               type="text"
+                               placeholder="데이터를 입력해주세요"/>
+                        <button onClick={() => restore()} style={{marginLeft: "5px"}}>적용</button>
+                        <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
+                    </div>
                 }
 
                 <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
@@ -136,7 +141,7 @@ function Bookmark() {
                                 <div>
                                     <a onClick={() => $(".loads").show()}
                                        href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
-                                    <h5 onClick={(e) => deleteBookmark(e)}>X</h5>
+                                    <h5 onClick={() => deleteBookmark(key)}>X</h5>
                                 </div>
                             </li>
                         )
@@ -150,7 +155,7 @@ function Bookmark() {
                     right: "5px"
                 }}>
                     <h5 onClick={() => backup()}>백업</h5>
-                    <h5 onClick={() => setHide(false)} style={{marginLeft: "5px"}}>복원</h5>
+                    <h5 onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</h5>
                 </div>
 
                 <div style={{
@@ -185,7 +190,7 @@ function Bookmark() {
                         닫기
                     </button>
                 </div>
-            </div>
+            </MainDiv>
         </>
     );
 }
@@ -195,15 +200,8 @@ function bookmark() {
         return;
 
     const appContainer = document.createElement("div");
-    appContainer.id = "bookmarkContainer";
     document.body.prepend(appContainer);
-
-    const li = $(`<li style="padding: 10px 25px;"><img height=25 src=//image.novelpia.com/img/new/icon/count_book.png></li>`)
-        .on("click", () =>
-            ReactDOM.render(<Bookmark/>, appContainer)
-        );
-
-    appendSide(li);
+    ReactDOM.render(<Bookmark/>, appContainer);
 }
 
 function novel() {

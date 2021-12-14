@@ -25,18 +25,22 @@ function viewer() {
     if (!chapter)
         return;
 
-    $(NOVEL_BOX).on("scroll", (e) =>
-        GM_setValue("previousBookmark", {
-            url: location.href,
-            scrollTop: e.currentTarget.scrollTop,
-            title: title,
-            chapter: chapter
-        } as PreviousBookmark)
-    );
-
     const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
-    if (!bookmark || location.href !== bookmark.url || !isFirst("previous"))
+    let scrollTop = 0;
+
+    $(NOVEL_BOX).on("scroll", (e) => scrollTop = e.currentTarget.scrollTop);
+
+    $(window).on("beforeunload", () => {
+        GM_setValue("previousBookmark", {
+            url: location.href,
+            scrollTop: scrollTop,
+            title: title,
+            chapter: chapter
+        } as PreviousBookmark);
+    });
+
+    if (!bookmark || !bookmark.scrollTop || location.href !== bookmark.url || !isFirst("previous"))
         return;
 
     if (GM_getValue("PreviousBookmark_OneUse", false))
