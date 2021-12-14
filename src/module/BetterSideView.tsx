@@ -13,11 +13,11 @@ function BetterSideView() {
     }, []);
 
     const MainDiv = styled.div`
-      ${hide && css`display: none;`}
       position: fixed;
       width: 100vw;
       height: 100vh;
       z-index: 999;
+      ${hide && css`display: none;`};
     `;
 
     const click = useCallback(() => {

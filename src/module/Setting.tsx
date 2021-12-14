@@ -118,7 +118,7 @@ function Setting() {
       width: 100vw;
       height: 100vh;
       background-color: white;
-      ${hide && css`display: none;`}
+      ${hide && css`display: none;`};
     `;
 
     const TitleDiv = styled.div`

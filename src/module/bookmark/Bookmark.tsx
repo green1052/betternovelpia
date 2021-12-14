@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
-import Cookies from "js-cookie";
 import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
 import $ from "jquery";
 import toastr from "toastr";
@@ -97,19 +96,17 @@ function Bookmark() {
       z-index: 99999;
       width: 100vw;
       height: 100vh;
-
-      ${Cookies.get("DARKMODE_S") === "1"
+      ${hide && css`display: none;`};
+      ${isDarkMode()
               ? css`background-color: #000;
-                color: white`
-              : css`background-color: white;`}
-
-      ${hide && css`display: none;`}
+                color: white;`
+              : css`background-color: white;`};
     `;
 
     return (
         <>
-            <GlobalStyles/>
             <MainDiv>
+                <GlobalStyles/>
                 {
                     !inputHide && <div style={{
                         display: "flex",
