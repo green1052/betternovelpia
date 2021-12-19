@@ -17,8 +17,8 @@ export default {
         clearInterval(playAlert);
         playAlert = undefined;
 
-        $(`style:not([type]):not([nonce]):contains(".no-drag")`).html((index, str) =>
-            str.replace(/.no-drag {.*}/, "")
+        $(`style:not([type]):not([nonce]):contains(".no-drag")`).html((index, html) =>
+            html.replace(/.no-drag {.*}/, "")
         );
 
         $("#viewer_no_drag").css("user-select", "");

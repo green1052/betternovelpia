@@ -4,8 +4,11 @@ import $ from "jquery";
 import {configs} from "../index";
 import {appendSide} from "../util/AppendSide";
 import styled, {css} from "styled-components";
+import {isDarkMode} from "../util/IsDarkMode";
+import useForceUpdate from "use-force-update";
+import toastr from "toastr";
 
-function Card(props: { children: any }) {
+function Card(props: { children: React.ReactNode }) {
     return (
         <div className="col-lg-4">
             <hr/>
@@ -29,7 +32,7 @@ function CardHead(props: { label: string }) {
     );
 }
 
-function CardBody(props: { children: any }) {
+function CardBody(props: { children: React.ReactNode }) {
     return (
         <div className="card-body" style={{padding: "20px"}}>{props.children}</div>
     );
@@ -41,7 +44,7 @@ function Checkbox(props: { config: Config, label: string }) {
     const change = useCallback(() => {
         setChecked(!checked);
         GM_setValue(props.config, !checked);
-    }, [props, checked]);
+    }, [checked]);
 
     return (
         <>
@@ -59,12 +62,12 @@ function TextBox(props: { config: Config, label: string }) {
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         GM_setValue(props.config, e.target.value);
         setValue(e.target.value);
-    }, [props]);
+    }, []);
 
     return (
         <div className="form-group">
             <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
-            <input onChange={(e) => change(e)} className="form-control" type="text" value={value}/>
+            <input onChange={change} className="form-control" type="text" value={value}/>
             <br/>
             <br/>
         </div>
@@ -85,12 +88,12 @@ function NumberBox(props: { config: Config, label: string, min: number, max: num
 
         GM_setValue(props.config, convert);
         setValue(convert);
-    }, [props]);
+    }, []);
 
     return (
         <div className="form-group">
             <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
-            <input onChange={(e) => change(e)} className="form-control" type="number" value={value} min={props.min}
+            <input onChange={change} className="form-control" type="number" value={value} min={props.min}
                    max={props.max}/>
             <br/>
             <br/>
@@ -98,14 +101,57 @@ function NumberBox(props: { config: Config, label: string, min: number, max: num
     );
 }
 
+function exportConfig() {
+    return GM_listValues().reduce((acc, key) => ({...acc, [key]: GM_getValue(key)}), {});
+}
+
 function Setting() {
     const [hide, setHide] = useState(true);
+    const [inputHide, setInputHide] = useState(true);
+    const [data, setData] = useState("");
+
+    const forceUpdate = useForceUpdate();
+
+    const quit = useCallback(() => {
+        $(".loads").show();
+        location.reload();
+    }, []);
+
+    const backup = useCallback(() => {
+        const data = exportConfig();
+
+        if (!Object.keys(data).length) return;
+
+        GM_setClipboard(JSON.stringify(data));
+
+        toastr.info("클립보드로 복사되었습니다.", "설정");
+    }, []);
+
+    const restore = useCallback(() => {
+        if (data) {
+            for (const [key, value] of Object.entries(JSON.parse(data)))
+                GM_setValue(key as GMValue, value);
+
+            toastr.info("복원되었습니다.", "북마크");
+        } else
+            toastr.info("데이터가 비어있습니다.", "북마크");
+
+        setInputHide(true);
+        setData("");
+    }, [data]);
+
+    const reset = useCallback(() => {
+        for (const config of GM_listValues())
+            GM_deleteValue(config);
+
+        forceUpdate();
+    }, []);
 
     useEffect(() => {
         appendSide(`<hr style="margin: 3px 0;">`);
 
         appendSide(
-            $(`<li style="padding: 10px 25px;"><img style="margin-left: -5px; height: 25px;" src="//novelpia.com/img/new/viewer/btn_theme.png"></li>`)
+            $(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-ios-gear"></i></span> 설정</li>`)
                 .on("click", () => setHide(false))
         );
     }, []);
@@ -117,7 +163,7 @@ function Setting() {
       z-index: 99999;
       width: 100vw;
       height: 100vh;
-      background-color: white;
+      background-color: ${isDarkMode() ? "black" : "white"};
       ${hide && css`display: none;`};
     `;
 
@@ -125,34 +171,63 @@ function Setting() {
       position: sticky;
       top: 0;
       z-index: 999999;
-      background-color: white;
       text-align: center;
       width: 100vw;
       height: 50px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
+      ${isDarkMode()
+              ? css`background-color: black;
+                color: white;`
+              : css`background-color: white;`};
+    `;
+
+    const UnderDiv = styled.div`
+      position: sticky;
+      bottom: 0;
+      z-index: 999999;
+      width: 100vw;
+      height: 30px;
+      box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
+      ${isDarkMode()
+              ? css`background-color: black;
+                color: white;`
+              : css`background-color: white;`};
     `;
 
     return (
         <MainDiv>
-            <div className="" style={{fontSize: "12px"}}>
-                <TitleDiv>
-                    <h4 style={{
-                        lineHeight: "50px"
-                    }} className="tx-gray-800 s_inv">
-                        BetterNovelpia - {VERSION}
-                        <i onClick={() => {
-                            $(".loads").show();
-                            location.reload();
-                        }}
-                           style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
-                    </h4>
-                </TitleDiv>
+            {
+                !inputHide && <div style={{
+                    display: "flex",
+                    position: "fixed",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 999999
+                }}>
+                    <input onChange={(e) => setData(e.target.value)}
+                           value={data}
+                           type="text"
+                           placeholder="데이터를 입력해주세요"/>
+                    <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
+                    <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
+                </div>
+            }
 
+            <TitleDiv>
+                <h4 style={{lineHeight: "50px"}}>
+                    BetterNovelpia - {VERSION}
+                    <i onClick={quit}
+                       style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
+                </h4>
+            </TitleDiv>
+
+            <div className="" style={{fontSize: "12px"}}>
                 <div className="am-mainpanel"
                      style={{maxWidth: "1200px", margin: "0px auto 0px auto", padding: "0px 20px"}}>
                     <div className="row mg-t-20 mg-b-20">
                         {
-                            Object.values(configs).map(value =>
+                            configs.map(value =>
                                 <Card>
                                     <CardHead label={value.head}/>
                                     <CardBody>
@@ -175,6 +250,15 @@ function Setting() {
                     </div>
                 </div>
             </div>
+
+            <UnderDiv>
+                <div style={{display: "flex", float: "right"}}>
+                    <button onClick={backup}>백업</button>
+                    <button onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</button>
+                    <button style={{marginLeft: "5px", marginRight: "5px"}} onDoubleClick={() => reset()}>초기화
+                    </button>
+                </div>
+            </UnderDiv>
         </MainDiv>
     );
 }

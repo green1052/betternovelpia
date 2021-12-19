@@ -16,6 +16,10 @@ declare global {
 
     function GM_setValue(key: GMValue, value: any): void
 
+    function GM_deleteValue(key: GMValue): void
+
+    function GM_listValues(): GMValue[]
+
     function GM_setClipboard(data: string, type: string = "text/plain"): undefined
 
     interface ResponseType {

@@ -16,6 +16,8 @@ const header = {
     grant: [
         "GM_getValue",
         "GM_setValue",
+        "GM_deleteValue",
+        "GM_listValues",
         "GM_setClipboard",
         "unsafeWindow"
     ],

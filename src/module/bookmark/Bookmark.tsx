@@ -18,12 +18,10 @@ function Bookmark() {
     const [inputHide, setInputHide] = useState(true);
     const [data, setData] = useState("");
 
-    useEffect(() => {
-        const li = $(`<li style="padding: 10px 25px;"><img height=25 src=//image.novelpia.com/img/new/icon/count_book.png></li>`)
-            .on("click", () => setHide(false));
-
-        appendSide(li);
-    }, []);
+    useEffect(() =>
+            appendSide($(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-bookmark"></i></span> 북마크</li>`)
+                .on("click", () => setHide(false)))
+        , []);
 
     const deleteBookmark = useCallback((url: string) => {
         const bookmarks1 = {...bookmarks};
@@ -116,9 +114,10 @@ function Bookmark() {
                         transform: "translate(-50%, -50%)"
                     }}>
                         <input onChange={(e) => setData(e.target.value)}
+                               value={data}
                                type="text"
                                placeholder="데이터를 입력해주세요"/>
-                        <button onClick={() => restore()} style={{marginLeft: "5px"}}>적용</button>
+                        <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
                         <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
                     </div>
                 }
@@ -151,7 +150,7 @@ function Bookmark() {
                     bottom: "35px",
                     right: "5px"
                 }}>
-                    <h5 onClick={() => backup()}>백업</h5>
+                    <h5 onClick={backup}>백업</h5>
                     <h5 onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</h5>
                 </div>
 
@@ -182,8 +181,8 @@ function Bookmark() {
                     bottom: "5px",
                     right: "5px"
                 }}>
-                    <button onDoubleClick={() => reset()}>초기화</button>
-                    <button onClick={() => quit()} style={{marginLeft: "5px"}}>
+                    <button onDoubleClick={reset}>초기화</button>
+                    <button onClick={quit} style={{marginLeft: "5px"}}>
                         닫기
                     </button>
                 </div>

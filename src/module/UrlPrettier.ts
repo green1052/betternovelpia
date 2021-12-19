@@ -17,14 +17,12 @@ export default {
         }
     },
     start() {
-        function matched() {
+        element($(NOVEL_DRAWING), () => {
             const match = $(NOVEL_DRAWING).text().match(urlRegex({strict: true}));
 
             match?.forEach(str =>
                 $(`${NOVEL_DRAWING} font:contains("${str}")`).wrapAll(`<a target="_blank" href="${str}">`)
             );
-        }
-
-        element($(NOVEL_DRAWING), matched);
+        });
     }
 } as Module;

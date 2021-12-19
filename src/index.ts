@@ -21,19 +21,18 @@ $(() => {
         try {
             const module: Module = context(key).default;
 
-            if (!module) continue;
+            if (!module || typeof module.start != "function") continue;
 
             if (module.config) configs.push(module.config);
 
             if ((module.include === undefined || module.include.test(location.pathname)) &&
                 (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
-                (module.enable === undefined || !module.enable.map((setting) => GM_getValue(setting, false)).includes(false))) {
-                console.log(`${name}: 불러오는 중...`);
+                (module.enable === undefined || !module.enable.map(setting => GM_getValue(setting, false)).includes(false))) {
                 module.start();
-                console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms\n\n`);
+                console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms`);
             }
         } catch (e) {
-            console.error(`${name}: ${e}\n\n`);
+            console.error(`${name}: ${e}`);
         }
     }
 });
