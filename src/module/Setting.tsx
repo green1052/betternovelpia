@@ -205,7 +205,7 @@ function Setting() {
                     transform: "translate(-50%, -50%)",
                     zIndex: 999999
                 }}>
-                    <input onChange={(e) => setData(e.target.value)}
+                    <input autoFocus onChange={(e) => setData(e.target.value)}
                            value={data}
                            type="text"
                            placeholder="데이터를 입력해주세요"/>

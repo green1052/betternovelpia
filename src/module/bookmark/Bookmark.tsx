@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
@@ -17,13 +17,23 @@ function Bookmark() {
     const [hide, setHide] = useState(true);
     const [inputHide, setInputHide] = useState(true);
     const [data, setData] = useState("");
+    const [scrollTop, setScrollTop] = useState(0);
 
-    useEffect(() =>
-            appendSide($(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-bookmark"></i></span> 북마크</li>`)
-                .on("click", () => setHide(false)))
-        , []);
+    const bookmarkList = useRef<HTMLOListElement>(null);
+
+    useEffect(() => {
+        if (scrollTop !== 0)
+            bookmarkList.current?.scroll(0, scrollTop);
+    }, [scrollTop]);
+
+    useEffect(() => {
+        appendSide($(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-bookmark"></i></span> 북마크</li>`)
+            .on("click", () => setHide(false)));
+    }, []);
 
     const deleteBookmark = useCallback((url: string) => {
+        setScrollTop(bookmarkList.current?.scrollTop ?? 0);
+
         const bookmarks1 = {...bookmarks};
         delete bookmarks1[url];
         setBookmarks(bookmarks1);
@@ -113,7 +123,7 @@ function Bookmark() {
                         top: "50%",
                         transform: "translate(-50%, -50%)"
                     }}>
-                        <input onChange={(e) => setData(e.target.value)}
+                        <input autoFocus onChange={(e) => setData(e.target.value)}
                                value={data}
                                type="text"
                                placeholder="데이터를 입력해주세요"/>
@@ -124,7 +134,7 @@ function Bookmark() {
 
                 <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
 
-                <ol className="no-overflow bookmark"
+                <ol ref={bookmarkList} className="no-overflow bookmark"
                     style={{
                         height: "85vh",
                         overflow: "auto",
