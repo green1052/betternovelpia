@@ -19,7 +19,7 @@ export default {
         const clickNextChapter = GM_getValue("ClickNextChapter", 0) as number;
 
         if (clickNextChapter !== 0)
-            document.querySelector(NOVEL_BOX)!.addEventListener("click", (event) => {
+            document.querySelector(NOVEL_BOX)!.addEventListener("click", event => {
                 if ((<CustomEvent>event).detail === clickNextChapter)
                     $(`img[src*="btn_next.png"]`).get(0)?.click();
             });

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
@@ -21,15 +21,12 @@ function Bookmark() {
 
     const bookmarkList = useRef<HTMLOListElement>(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (scrollTop !== 0)
             bookmarkList.current?.scroll(0, scrollTop);
     }, [scrollTop]);
 
-    useEffect(() => {
-        appendSide($(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-bookmark"></i></span> 북마크</li>`)
-            .on("click", () => setHide(false)));
-    }, []);
+    useEffect(() => appendSide("ion-bookmark", "북마크", () => setHide(false)), []);
 
     const deleteBookmark = useCallback((url: string) => {
         setScrollTop(bookmarkList.current?.scrollTop ?? 0);
@@ -145,8 +142,7 @@ function Bookmark() {
                         Object.entries(bookmarks).map(([key, value]) =>
                             <li>
                                 <div>
-                                    <a onClick={() => $(".loads").show()}
-                                       href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
+                                    <a href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
                                     <h5 onClick={() => deleteBookmark(key)}>X</h5>
                                 </div>
                             </li>
@@ -172,8 +168,7 @@ function Bookmark() {
                 }}>
                     <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
 
-                    <a className="no-overflow" onClick={() => $(".loads").show()}
-                       href={previousBookmark.url ?? "#"}
+                    <a className="no-overflow" href={previousBookmark.url ?? "#"}
                        style={{
                            fontSize: ".83em",
                            width: "20vh"
@@ -221,7 +216,7 @@ function novel() {
     if (bookmark)
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
-            .append(`<div style="background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer;" onclick="$('.loads').show();location='${bookmark[0]}';"> <span style="background-color: #7f66de;border: 1px solid #fff;padding: 1px 6px;border-radius: 10px;font-size: 11px; margin-right: 3px;">${bookmark[1].chapter}</span> 북마크 이어보기 </div>`);
+            .append(`<div onclick='$(".loads").show(),location="${bookmark[0]}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${bookmark[1].chapter}</span> 이어보기</div>`);
 
     function addBookmark() {
         for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {

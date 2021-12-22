@@ -33,22 +33,19 @@ export default {
                         return;
                     }
 
-                    alert(data.map(str => decode(str.text)).join(""));
+                    alert(...data.map(str => decode(str.text)));
                 });
         }
 
-        for (const element of $(`${NOTICE_LIST} td:nth-child(2)`)) {
+        for (const element of $(`${NOTICE_LIST} td:nth-child(2)`))
             makePrivate($(element));
-        }
 
-        const observer = new MutationObserver(() => {
+        const observer = new MutationObserver(() =>
             $(`${EP_List} > table > tbody > tr td:nth-child(2)`).attr("onclick", function () {
                 makePrivate($(this));
-            });
-        });
+            })
+        );
 
-        observer.observe($(EP_List).get(0)!, {
-            childList: true
-        });
+        observer.observe($(EP_List).get(0)!, {childList: true});
     }
 } as Module;

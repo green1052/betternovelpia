@@ -6,13 +6,14 @@ const TerserPlugin = require("terser-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const header = {
+    author: "green1052",
     name: "BetterNovelpia",
     namespace: "betternovelpia",
-    description: "노벨피아를 더 좋게 바꿔줍니다!",
-    author: "green1052",
-    homepageURL: "https://github.com/green1052/betternovelpia",
-    "rut-at": "document-start",
     match: "http*://novelpia.com/*",
+    version: version,
+    description: "노벨피아를 더 좋게 바꿔줍니다!",
+    "rut-at": "document-start",
+    noframes: true,
     grant: [
         "GM_getValue",
         "GM_setValue",
@@ -21,7 +22,7 @@ const header = {
         "GM_setClipboard",
         "unsafeWindow"
     ],
-    version: version
+    homepageURL: "https://github.com/green1052/betternovelpia"
 };
 
 module.exports = {

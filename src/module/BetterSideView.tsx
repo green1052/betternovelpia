@@ -12,6 +12,11 @@ function BetterSideView() {
         );
     }, []);
 
+    const click = useCallback(() => {
+        $(document.body).removeClass("show-left");
+        setHide(true);
+    }, []);
+
     const MainDiv = styled.div`
       position: fixed;
       width: 100vw;
@@ -20,12 +25,7 @@ function BetterSideView() {
       ${hide && css`display: none;`};
     `;
 
-    const click = useCallback(() => {
-        $(document.body).removeClass("show-left");
-        setHide(true);
-    }, []);
-
-    return <MainDiv onClick={() => click()}/>;
+    return <MainDiv onClick={click}/>;
 }
 
 export default {

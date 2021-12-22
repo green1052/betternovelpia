@@ -23,16 +23,12 @@ export default {
                     case "":
                     case undefined:
                         return "#000";
-
                     case "2":
                         return "#4e4e4e";
-
                     case "3":
                         return "#565314";
-
                     case "4":
                         return "#225816";
-
                     default:
                         return localStorage["viewer_bg"];
                 }
@@ -42,16 +38,12 @@ export default {
                     case "":
                     case undefined:
                         return "#fff";
-
                     case "2":
                         return "#e3e3e3";
-
                     case "3":
                         return "#fffddb";
-
                     case "4":
                         return "#c4ecbb";
-
                     default:
                         return localStorage["viewer_bg"];
                 }

@@ -1,4 +1,3 @@
-import $ from "jquery";
 import toastr from "toastr";
 
 export const configs: Configs[] = [];
@@ -10,9 +9,9 @@ toastr.options = {
     progressBar: true
 };
 
-$(() => {
-    const context = require.context("./module/", true, /\.tsx?$/);
+const context = require.context("./module/", true, /\.tsx?$/);
 
+window.addEventListener("DOMContentLoaded", () => {
     for (const key of context.keys()) {
         const start = performance.now();
 

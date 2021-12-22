@@ -6,6 +6,8 @@ declare global {
         navi_view: Function;
         alarm_btn: Function;
         viewer_display: Function;
+        comment_load: Function;
+        option_proc: Function;
     }
 
     const unsafeWindow: CustomWindow & Window & typeof globalThis;

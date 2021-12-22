@@ -23,13 +23,15 @@ interface Checkbox extends Field {
 
 declare global {
     type Config =
-        "AbsoluteViewerDrag" |
+        "AbsoluteDrag" |
         "AutoRecommend" |
         "BetterSideView" |
         "Bookmark" |
         "Bookmark_AutoUse" |
         "Bookmark_OneUse" |
         "ClickNextChapter" |
+        "CommentBlockUser" |
+        "CommentReportConfirm" |
         "DisableNovelAlert" |
         "DisableViewLog" |
         "Eval" |
@@ -37,15 +39,17 @@ declare global {
         "HideAddNovel" |
         "HideEvent" |
         "HideNotice" |
+        "HideOnlyEmojiComment" |
+        "HideOnlyEmojiComment_Remove" |
         "HidePlus" |
         "HideRecommendEffect" |
+        "HideReview" |
         "HideViewerThumbnail" |
         "HideAd" |
         "InfoUnfold" |
         "NaviColor" |
         "NovelDownload" |
         "NovelDownload_Copy" |
-        "NovelListFix" |
         "PreLoadComment" |
         "PreLoadEpisodeList" |
         "PreviousBookmark" |

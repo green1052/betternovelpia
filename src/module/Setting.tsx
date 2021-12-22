@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
-import $ from "jquery";
 import {configs} from "../index";
 import {appendSide} from "../util/AppendSide";
 import styled, {css} from "styled-components";
@@ -39,7 +38,7 @@ function CardBody(props: { children: React.ReactNode }) {
 }
 
 function Checkbox(props: { config: Config, label: string }) {
-    const [checked, setChecked] = useState((GM_getValue(props.config, false) as boolean) ?? false);
+    const [checked, setChecked] = useState(GM_getValue(props.config, false) as boolean);
 
     const change = useCallback(() => {
         setChecked(!checked);
@@ -57,7 +56,7 @@ function Checkbox(props: { config: Config, label: string }) {
 }
 
 function TextBox(props: { config: Config, label: string }) {
-    const [value, setValue] = useState((GM_getValue(props.config, "") as string) ?? "");
+    const [value, setValue] = useState(GM_getValue(props.config, "") as string);
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         GM_setValue(props.config, e.target.value);
@@ -75,7 +74,7 @@ function TextBox(props: { config: Config, label: string }) {
 }
 
 function NumberBox(props: { config: Config, label: string, min: number, max: number }) {
-    const [value, setValue] = useState((GM_getValue(props.config, 0) as number) ?? 0);
+    const [value, setValue] = useState(GM_getValue(props.config, 0) as number);
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const changeValue = e.target.value;
@@ -112,10 +111,7 @@ function Setting() {
 
     const forceUpdate = useForceUpdate();
 
-    const quit = useCallback(() => {
-        $(".loads").show();
-        location.reload();
-    }, []);
+    const quit = useCallback(() => location.reload(), []);
 
     const backup = useCallback(() => {
         const data = exportConfig();
@@ -147,14 +143,7 @@ function Setting() {
         forceUpdate();
     }, []);
 
-    useEffect(() => {
-        appendSide(`<hr style="margin: 3px 0;">`);
-
-        appendSide(
-            $(`<li style="padding: 10px 25px;"><span style="width:20px;display: inline-block;text-align:center;"><i class="icon ion-ios-gear"></i></span> 설정</li>`)
-                .on("click", () => setHide(false))
-        );
-    }, []);
+    useEffect(() => appendSide("ion-ios-gear", "설정", () => setHide(false)), []);
 
     const MainDiv = styled.div`
       overflow: auto;
