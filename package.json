@@ -1,6 +1,6 @@
 {
   "name": "betternovelpia",
-  "version": "9.0.5",
+  "version": "9.1.5",
   "license": "UNLICENSED",
   "scripts": {
     "build": "webpack",
