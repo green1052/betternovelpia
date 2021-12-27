@@ -12,6 +12,6 @@ export default {
         }
     },
     start() {
-        setTimeout(() => comment_load(), 500);
+        setTimeout(comment_load, 500);
     }
 } as Module;

@@ -1,12 +1,11 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
-import {EP_List, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
+import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
 import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
 import $ from "jquery";
 import toastr from "toastr";
 import {element} from "../../util/Element";
-import {appendHeader} from "../../util/AppendHeader";
 import {isDarkMode} from "../../util/IsDarkMode";
 import {isPageViewer} from "../../util/IsPageViewer";
 import {appendSide} from "../../util/AppendSide";
@@ -63,14 +62,6 @@ function Bookmark() {
     }, [bookmarks]);
 
     const GlobalStyles = createGlobalStyle`
-      * {
-        -ms-user-select: none !important;
-        -moz-user-select: none !important;
-        -webkit-user-select: none !important;
-        -khtml-user-select: none !important;
-        user-select: none !important;
-      }
-
       .no-overflow {
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -139,7 +130,20 @@ function Bookmark() {
                         marginLeft: "-10px"
                     }}>
                     {
-                        Object.entries(bookmarks).map(([key, value]) =>
+                        (
+                            GM_getValue("Bookmark_Sort", false)
+                                ? Object.entries(bookmarks).sort((a, b) => {
+                                    const aTitle = decodeURIComponent(a[1].title);
+                                    const bTitle = decodeURIComponent(b[1].title);
+
+                                    return aTitle < bTitle
+                                        ? -1
+                                        : aTitle > bTitle
+                                            ? 1
+                                            : 0;
+                                })
+                                : Object.entries(bookmarks)
+                        ).map(([key, value]) =>
                             <li>
                                 <div>
                                     <a href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
@@ -244,75 +248,70 @@ function novel() {
     });
 }
 
-function viewer() {
-    if (!/^\/viewer\//.test(location.pathname))
-        return;
+function Viewer() {
+    const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
+    const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
 
-    const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
+    const click = useCallback(() => {
+        if (location.hash !== "")
+            return;
 
-    const td = $("<td>")
-        .css("text-align", "center")
-        .css("font-size", "25px")
-        .css("font-style", "12px")
-        .css("width", 63)
-        .css("z-index", 10000)
-        .on("click", () => {
-            const scrollTop = $(NOVEL_BOX).scrollTop();
+        const scrollTop = $(NOVEL_BOX).scrollTop();
 
-            if (scrollTop === undefined)
-                return;
+        if (scrollTop === undefined)
+            return;
 
-            const chapter = $(NOVEL_EP).text();
+        const bookmark1 = {...bookmarks};
 
-            if (!chapter)
-                return;
+        bookmark1[location.href] = {
+            scrollTop: scrollTop,
+            title: encodeURIComponent($(NOVEL_TITLE).text()),
+            chapter: chapter
+        };
 
-            bookmarks[location.href] = {
-                scrollTop: scrollTop,
-                title: encodeURIComponent($(NOVEL_TITLE).text()),
-                chapter: chapter
-            };
+        GM_setValue("bookmarks", bookmark1);
+        setBookmarks(bookmark1);
 
-            GM_setValue("bookmarks", bookmarks);
+        toastr.info("저장되었습니다.", "북마크");
+    }, [bookmarks]);
 
-            $("#Bookmark").css("color",
-                isDarkMode()
-                    ? "rgb(117, 242, 70)"
-                    : "rgb(160, 73, 180)"
-            );
+    useEffect(() => {
+        const scrollTop = bookmarks[location.href]?.scrollTop;
 
-            toastr.info("저장되었습니다.", "북마크");
-        })
-        .append(
-            $(`<i id="Bookmark" class="icon ion-bookmark">`)
-                .css("color",
-                    bookmarks?.hasOwnProperty(location.href)
-                        ? isDarkMode()
-                            ? "rgb(117, 242, 70)"
-                            : "rgb(160, 73, 180)"
-                        : isDarkMode()
-                            ? "#ffffff7a"
-                            : "#0000007a"
-                )
-        );
+        if (!scrollTop || !isFirst("bookmark"))
+            return;
 
-    appendHeader(td);
+        if (GM_getValue("Bookmark_OneUse", false))
+            removeBookmark(bookmarks, location.href);
 
-    if (!bookmarks)
-        return;
+        element($(NOVEL_DRAWING), () => {
+            if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+            $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
+        });
+    }, []);
 
-    const scrollTop = bookmarks[location.href]?.scrollTop;
+    const MainTd = styled.td`
+      text-align: center;
+      font-size: 25px;
+      width: 63px;
+      z-index: 10000;
+    `;
 
-    if (!scrollTop || !isFirst("bookmark"))
-        return;
+    const BookmarkIcon = styled.i`
+      color: ${bookmarks.hasOwnProperty(location.href)
+              ? isDarkMode()
+                      ? "rgb(117, 242, 70)"
+                      : "rgb(160, 73, 180)"
+              : isDarkMode()
+                      ? "#ffffff7a"
+                      : "#0000007a"};
+    `;
 
-    if (GM_getValue("Bookmark_OneUse", false))
-        removeBookmark(bookmarks, location.href);
-
-    element($(NOVEL_DRAWING), () => {
-        if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-        $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
-    });
+    return (
+        <MainTd onClick={click}>
+            <BookmarkIcon className="icon ion-bookmark"/>
+        </MainTd>
+    );
 }
 
 export default {
@@ -334,16 +333,27 @@ export default {
                 label: "북마크 자동 이동",
                 type: "checkbox",
                 default: false
+            },
+            Bookmark_Sort: {
+                label: "북마크 올림차순 정렬",
+                type: "checkbox",
+                default: false
             }
         }
     },
     start() {
         if (isPageViewer()) {
             toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
+            return;
         }
 
         bookmark();
         novel();
-        viewer();
+
+        if (/^\/viewer\//.test(location.pathname)) {
+            const appContainer = document.createElement("td");
+            $(HEADER_BAR).children().eq(6).before(appContainer);
+            ReactDOM.render(<Viewer/>, appContainer);
+        }
     }
 } as Module;

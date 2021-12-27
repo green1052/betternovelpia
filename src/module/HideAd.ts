@@ -15,18 +15,32 @@ export default {
         }
     },
     start() {
+        function hide(jquery: JQuery<HTMLElement>) {
+            jquery
+                .removeAttr("class")
+                .removeAttr("style")
+                .css("margin", "15px")
+                .empty();
+        }
+
         if (/^\/mybook/.test(location.pathname))
-            $(`img[src*="m_banner_list_03.png"]`).parent().parent().remove();
+            $(`img[alt="내서재 광고"]`).parents("div").remove();
 
         if (/^\/viewer\//.test(location.pathname)) {
             element($(NOVEL_DRAWING), () => {
-                $(`img[src*="m_banner_list_04.png"]`).parent().parent().remove();
+                $(`img[src*="m_banner_list_04.png"]`).parents("div").remove();
             });
 
             $(`img[alt="댓글광고"]`).remove();
         }
 
         if (/^\/freestory|plus/.test(location.pathname))
-            $(`img[alt="자유연재 광고"]`).parent().parent().remove();
+            $(`img[alt="자유연재 광고"]`).parents("div").remove();
+
+        if (/^\/freestory/.test(location.pathname))
+            hide($(`a[href="/viewer/304048"]`).children("div"));
+
+        if (/^\/plus/.test(location.pathname))
+            hide($(`a[href="/plus_shop"]`).children("div"));
     }
 } as Module;

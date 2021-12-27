@@ -29,6 +29,7 @@ declare global {
         "Bookmark" |
         "Bookmark_AutoUse" |
         "Bookmark_OneUse" |
+        "Bookmark_Sort" |
         "ClickNextChapter" |
         "CommentBlockUser" |
         "CommentReportConfirm" |

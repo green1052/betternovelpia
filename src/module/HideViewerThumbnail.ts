@@ -14,6 +14,6 @@ export default {
         }
     },
     start() {
-        $(`img[id="imgs_0"]:not([class]):not([data-filename])`).remove();
+        $(`div[class="cover-wrapper"]`).parent().remove();
     }
 } as Module;
