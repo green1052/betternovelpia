@@ -19,7 +19,6 @@ export default {
         }
 
         $(`div.swiper-container[class*="mobile_show"]`).remove();
-
         $(`div[onclick*="/notice/all/view_171726"]`).remove();
     }
 } as Module;
