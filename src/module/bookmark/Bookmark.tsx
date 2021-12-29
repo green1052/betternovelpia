@@ -264,9 +264,9 @@ function Viewer() {
         const bookmark1 = {...bookmarks};
 
         bookmark1[location.href] = {
-            scrollTop: scrollTop,
+            scrollTop,
             title: encodeURIComponent($(NOVEL_TITLE).text()),
-            chapter: chapter
+            chapter
         };
 
         GM_setValue("bookmarks", bookmark1);

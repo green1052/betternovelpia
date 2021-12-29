@@ -10,6 +10,8 @@ function novel() {
 
     const previousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
 
+    if (!previousBookmark.title || !previousBookmark.chapter || !previousBookmark.url || previousBookmark.scrollTop === undefined) return;
+
     if (previousBookmark.title === document.title.split("-")[2].trimLeft())
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
@@ -20,12 +22,10 @@ function viewer() {
     if (!/^\/viewer\//.test(location.pathname)) return;
 
     const title = encodeURIComponent($(NOVEL_TITLE).text());
-    const chapter = $(NOVEL_EP).text();
-
-    if (!chapter)
-        return;
+    const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
 
     const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
+    const url = location.href;
 
     let scrollTop = -1;
 
@@ -34,15 +34,10 @@ function viewer() {
     $(window).on("beforeunload", () => {
         if (scrollTop === -1) return;
 
-        GM_setValue("previousBookmark", {
-            url: location.href,
-            scrollTop: scrollTop,
-            title: title,
-            chapter: chapter
-        } as PreviousBookmark);
+        GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
     });
 
-    if (!bookmark || !bookmark.scrollTop || location.href !== bookmark.url || !isFirst("previous"))
+    if ((bookmark.url === undefined || location.href !== bookmark.url) || !bookmark.scrollTop || !isFirst("previous"))
         return;
 
     if (GM_getValue("PreviousBookmark_OneUse", false))

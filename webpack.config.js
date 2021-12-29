@@ -39,7 +39,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: /src/,
-                loader: "babel-loader"
+                loader: "swc-loader"
             }
         ]
     },
