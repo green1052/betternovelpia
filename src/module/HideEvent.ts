@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {hideElement} from "../util/HideElement";
 
 export default {
     enable: ["HideEvent"],
@@ -14,11 +15,11 @@ export default {
     },
     start() {
         if (location.pathname === "/") {
-            $("#slider-wrap[class*=mobile_show]").remove();
+            $(`div[class*="main-slide-wrapper"][class*="mobile_show"]`).remove();
             return;
         }
 
         $(`div.swiper-container[class*="mobile_show"]`).remove();
-        $(`div[onclick*="/notice/all/view_171726"]`).remove();
+        hideElement($(`div[onclick*="/notice/all/view_171726"]`));
     }
 } as Module;

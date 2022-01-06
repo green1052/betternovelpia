@@ -9,6 +9,7 @@ import {element} from "../../util/Element";
 import {isDarkMode} from "../../util/IsDarkMode";
 import {isPageViewer} from "../../util/IsPageViewer";
 import {appendSide} from "../../util/AppendSide";
+import {useLongPress} from "use-long-press";
 
 function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
@@ -275,6 +276,22 @@ function Viewer() {
         toastr.info("저장되었습니다.", "북마크");
     }, [bookmarks]);
 
+    const longClick = useLongPress(() => {
+        if (location.hash !== "")
+            return;
+
+        const bookmark1 = {...bookmarks};
+
+        if (!bookmark1.hasOwnProperty(location.href)) return;
+
+        delete bookmark1[location.href];
+
+        GM_setValue("bookmarks", bookmark1);
+        setBookmarks(bookmark1);
+
+        toastr.info("삭제되었습니다.", "북마크");
+    });
+
     useEffect(() => {
         const scrollTop = bookmarks[location.href]?.scrollTop;
 
@@ -308,7 +325,7 @@ function Viewer() {
     `;
 
     return (
-        <MainTd onClick={click}>
+        <MainTd onClick={click} {...longClick}>
             <BookmarkIcon className="icon ion-bookmark"/>
         </MainTd>
     );

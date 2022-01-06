@@ -32,9 +32,7 @@ function viewer() {
     $(NOVEL_BOX).on("scroll", (e) => scrollTop = e.currentTarget.scrollTop);
 
     $(window).on("beforeunload", () => {
-        if (scrollTop === -1) return;
-
-        GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
+        if (scrollTop > -1) GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
     });
 
     if ((bookmark.url === undefined || location.href !== bookmark.url) || !bookmark.scrollTop || !isFirst("previous"))

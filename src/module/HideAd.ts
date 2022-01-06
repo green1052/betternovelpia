@@ -1,6 +1,7 @@
 import $ from "jquery";
 import {element} from "../util/Element";
 import {NOVEL_DRAWING} from "../util/Selectors";
+import {hideElement} from "../util/HideElement";
 
 export default {
     enable: ["HideAd"],
@@ -15,20 +16,14 @@ export default {
         }
     },
     start() {
-        function hide(jquery: JQuery<HTMLElement>) {
-            jquery
-                .removeAttr("class")
-                .removeAttr("style")
-                .css("margin", "15px")
-                .empty();
-        }
-
         if (/^\/mybook/.test(location.pathname))
-            $(`img[alt="내서재 광고"]`).closest("div").remove();
+            hideElement($(`img[alt="내서재 광고"]`).closest("div"));
 
         if (/^\/viewer\//.test(location.pathname)) {
             element($(NOVEL_DRAWING), () => {
-                $(`img[src*="m_banner_list_04.png"]`).closest("div").remove();
+                setTimeout(() => {
+                    $(`img[src*="m_banner_list_04.png"]`).closest("div").remove();
+                }, 500);
             });
 
             $(`img[alt="댓글광고"]`).remove();
@@ -38,9 +33,9 @@ export default {
             $(`img[alt="자유연재 광고"]`).closest("div").remove();
 
         if (/^\/freestory/.test(location.pathname))
-            hide($(`a[href="/viewer/304048"]`).children("div"));
+            hideElement($(`a[href="/viewer/304048"]`).children("div"));
 
         if (/^\/plus/.test(location.pathname))
-            hide($(`a[href="/plus_shop"]`).children("div"));
+            hideElement($(`a[href="/plus_shop"]`).children("div"));
     }
 } as Module;

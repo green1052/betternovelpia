@@ -1,5 +1,4 @@
 import $ from "jquery";
-import {isDarkMode} from "../util/IsDarkMode";
 import {FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 
 export default {
@@ -16,44 +15,11 @@ export default {
         }
     },
     start() {
-        function getTheme() {
-            if (isDarkMode())
-                switch (localStorage.getItem("viewer_bg")) {
-                    case "1":
-                    case "":
-                    case undefined:
-                        return "#000";
-                    case "2":
-                        return "#4e4e4e";
-                    case "3":
-                        return "#565314";
-                    case "4":
-                        return "#225816";
-                    default:
-                        return localStorage["viewer_bg"];
-                }
-            else
-                switch (localStorage.getItem("viewer_bg")) {
-                    case "1":
-                    case "":
-                    case undefined:
-                        return "#fff";
-                    case "2":
-                        return "#e3e3e3";
-                    case "3":
-                        return "#fffddb";
-                    case "4":
-                        return "#c4ecbb";
-                    default:
-                        return localStorage["viewer_bg"];
-                }
-        }
-
         function changeTheme() {
-            const theme = getTheme();
+            const color = $("#viewer_no_drag").css("background-color");
 
-            $(HEADER_BAR).css("background-color", theme);
-            $(FOOTER_BAR).css("background-color", theme);
+            $(HEADER_BAR).css("background-color", color);
+            $(FOOTER_BAR).css("background-color", color);
         }
 
         const oldViewerDisplay = unsafeWindow.viewer_display;
