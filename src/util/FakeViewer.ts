@@ -6,7 +6,7 @@ export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: stri
         .closest("#novel_text")
         .append(`<ol class="no-drag np"id=novel_drawing onclick=navi_view() style=padding:0;margin:0>`);
 
-    blocked.parent().parent().remove();
+    blocked.remove();
 
     novel_data = novelData;
 

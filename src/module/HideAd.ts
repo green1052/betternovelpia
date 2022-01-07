@@ -16,12 +16,16 @@ export default {
         }
     },
     start() {
+        if (location.pathname === "/")
+            $(`.detail-modal-background button[class*="detail-modal-close"]`).get(0)?.click();
+
         if (/^\/mybook/.test(location.pathname))
             hideElement($(`img[alt="내서재 광고"]`).closest("div"));
 
         if (/^\/viewer\//.test(location.pathname)) {
             element($(NOVEL_DRAWING), () => {
                 setTimeout(() => {
+                    $(`div[class="one-event-wrapper"]`).parent().remove();
                     $(`img[src*="m_banner_list_04.png"]`).closest("div").remove();
                 }, 500);
             });

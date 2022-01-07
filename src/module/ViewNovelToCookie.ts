@@ -33,7 +33,7 @@ export default {
         }
     },
     async start() {
-        const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
+        const blocked = $(`.one-event-viewer-plus`);
 
         if (!blocked.length)
             return;
