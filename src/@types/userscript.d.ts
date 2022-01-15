@@ -8,6 +8,7 @@ declare global {
         viewer_display: Function;
         comment_load: Function;
         option_proc: Function;
+        get_comment_box: Function;
     }
 
     const unsafeWindow: CustomWindow & Window & typeof globalThis;

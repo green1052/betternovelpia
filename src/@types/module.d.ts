@@ -36,6 +36,7 @@ declare global {
         "DisableNovelAlert" |
         "DisableViewLog" |
         "Eval" |
+        "FreeBadge" |
         "FreeEmoji" |
         "HideAddNovel" |
         "HideEvent" |

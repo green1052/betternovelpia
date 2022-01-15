@@ -4,7 +4,7 @@ export default {
     include: /^\/viewer\//,
     enable: ["FreeEmoji"],
     config: {
-        head: "유로 이모지 무료 사용",
+        head: "이모지 무료 사용",
         configs: {
             FreeEmoji: {
                 label: "활성화",

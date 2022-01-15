@@ -1,3 +1,7 @@
+import {element} from "../util/Element";
+import {NOVEL_DRAWING} from "../util/Selectors";
+import $ from "jquery";
+
 export default {
     include: /^\/viewer\//,
     enable: ["PreLoadComment"],
@@ -12,6 +16,8 @@ export default {
         }
     },
     start() {
-        setTimeout(comment_load, 500);
+        element($(NOVEL_DRAWING), () => {
+            setTimeout(unsafeWindow.get_comment_box, 500);
+        });
     }
 } as Module;
