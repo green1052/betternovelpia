@@ -35,15 +35,17 @@ function viewer() {
         if (scrollTop > -1) GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
     });
 
-    if ((bookmark.url === undefined || location.href !== bookmark.url) || !bookmark.scrollTop || !isFirst("previous"))
+    if (location.href !== bookmark.url || !bookmark.scrollTop || !isFirst("previous"))
         return;
 
-    if (GM_getValue("PreviousBookmark_OneUse", false))
-        GM_setValue("previousBookmark", {});
-
     element($(NOVEL_DRAWING), () => {
-        if (!GM_getValue("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
-        $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
+        setTimeout(() => {
+            if (GM_getValue("PreviousBookmark_OneUse", false))
+                GM_setValue("previousBookmark", {});
+
+            if (!GM_getValue("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
+            $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
+        }, 500);
     });
 }
 

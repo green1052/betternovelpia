@@ -1,13 +1,13 @@
 {
   "name": "betternovelpia",
-  "version": "9.3.9",
+  "version": "9.3.10",
   "license": "UNLICENSED",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.129",
+    "@swc/core": "^1.2.130",
     "@types/file-saver": "^2.0.5",
     "@types/jquery": "^3.5.13",
     "@types/js-cookie": "^3.0.1",

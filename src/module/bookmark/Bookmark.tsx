@@ -298,12 +298,14 @@ function Viewer() {
         if (!scrollTop || !isFirst("bookmark"))
             return;
 
-        if (GM_getValue("Bookmark_OneUse", false))
-            removeBookmark(bookmarks, location.href);
-
         element($(NOVEL_DRAWING), () => {
-            if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-            $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
+            setTimeout(() => {
+                if (GM_getValue("Bookmark_OneUse", false))
+                    removeBookmark(bookmarks, location.href);
+
+                if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+                $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
+            }, 500);
         });
     }, []);
 

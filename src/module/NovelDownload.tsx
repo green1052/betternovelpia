@@ -4,6 +4,7 @@ import {saveAs} from "file-saver";
 import React, {useCallback} from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
+import toastr from "toastr";
 
 function NovelDownload() {
     const click = useCallback(() => {
