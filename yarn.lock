@@ -190,22 +190,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@napi-rs/triples@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@napi-rs/triples@npm:1.1.0"
-  checksum: 8da77d47ec15704b1936f5f3995951459fc5d604bf2ed400d9579e3356dc0aeb486b217a503f675dda653221751e1fd5dcaaf8de1bab3c71853e8cfd72309709
-  languageName: node
-  linkType: hard
-
-"@node-rs/helper@npm:^1.0.0":
-  version: 1.3.0
-  resolution: "@node-rs/helper@npm:1.3.0"
-  dependencies:
-    "@napi-rs/triples": ^1.1.0
-  checksum: 1d081759530f3daaab12e510b001c74ebc009ee6f02c3136a2eefb34aca2554d8e3ca0b1beb2bbd32b49994109cbbaaec2396bf18ca6876db2724d9684a74841
-  languageName: node
-  linkType: hard
-
 "@npmcli/fs@npm:^1.0.0":
   version: 1.0.0
   resolution: "@npmcli/fs@npm:1.0.0"
@@ -226,115 +210,114 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm-eabi@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-android-arm-eabi@npm:1.2.130"
+"@swc/core-android-arm-eabi@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-android-arm-eabi@npm:1.2.133"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm64@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-android-arm64@npm:1.2.130"
+"@swc/core-android-arm64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-android-arm64@npm:1.2.133"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-darwin-arm64@npm:1.2.130"
+"@swc/core-darwin-arm64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-darwin-arm64@npm:1.2.133"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-darwin-x64@npm:1.2.130"
+"@swc/core-darwin-x64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-darwin-x64@npm:1.2.133"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-freebsd-x64@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-freebsd-x64@npm:1.2.130"
+"@swc/core-freebsd-x64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-freebsd-x64@npm:1.2.133"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.130"
+"@swc/core-linux-arm-gnueabihf@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.133"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.130"
+"@swc/core-linux-arm64-gnu@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.133"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-linux-arm64-musl@npm:1.2.130"
+"@swc/core-linux-arm64-musl@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm64-musl@npm:1.2.133"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-linux-x64-gnu@npm:1.2.130"
+"@swc/core-linux-x64-gnu@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-x64-gnu@npm:1.2.133"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-linux-x64-musl@npm:1.2.130"
+"@swc/core-linux-x64-musl@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-x64-musl@npm:1.2.133"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.130"
+"@swc/core-win32-arm64-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.133"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.130"
+"@swc/core-win32-ia32-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.133"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core-win32-x64-msvc@npm:1.2.130"
+"@swc/core-win32-x64-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-x64-msvc@npm:1.2.133"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.2.130":
-  version: 1.2.130
-  resolution: "@swc/core@npm:1.2.130"
+"@swc/core@npm:^1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core@npm:1.2.133"
   dependencies:
-    "@node-rs/helper": ^1.0.0
-    "@swc/core-android-arm-eabi": 1.2.130
-    "@swc/core-android-arm64": 1.2.130
-    "@swc/core-darwin-arm64": 1.2.130
-    "@swc/core-darwin-x64": 1.2.130
-    "@swc/core-freebsd-x64": 1.2.130
-    "@swc/core-linux-arm-gnueabihf": 1.2.130
-    "@swc/core-linux-arm64-gnu": 1.2.130
-    "@swc/core-linux-arm64-musl": 1.2.130
-    "@swc/core-linux-x64-gnu": 1.2.130
-    "@swc/core-linux-x64-musl": 1.2.130
-    "@swc/core-win32-arm64-msvc": 1.2.130
-    "@swc/core-win32-ia32-msvc": 1.2.130
-    "@swc/core-win32-x64-msvc": 1.2.130
+    "@swc/core-android-arm-eabi": 1.2.133
+    "@swc/core-android-arm64": 1.2.133
+    "@swc/core-darwin-arm64": 1.2.133
+    "@swc/core-darwin-x64": 1.2.133
+    "@swc/core-freebsd-x64": 1.2.133
+    "@swc/core-linux-arm-gnueabihf": 1.2.133
+    "@swc/core-linux-arm64-gnu": 1.2.133
+    "@swc/core-linux-arm64-musl": 1.2.133
+    "@swc/core-linux-x64-gnu": 1.2.133
+    "@swc/core-linux-x64-musl": 1.2.133
+    "@swc/core-win32-arm64-msvc": 1.2.133
+    "@swc/core-win32-ia32-msvc": 1.2.133
+    "@swc/core-win32-x64-msvc": 1.2.133
   dependenciesMeta:
     "@swc/core-android-arm-eabi":
       optional: true
@@ -362,7 +345,7 @@ __metadata:
       optional: true
     "@swc/core-win32-x64-msvc":
       optional: true
-  checksum: 759f3658dce1b47891894df32c2bcffa516e5cbddf01c576a9792264af9fd0f9a762870cd919059c3ce502ff77fb92b89be3f07165dc88fc5f6aec54137b08d7
+  checksum: cc2f28ce7f70e7d94491fef9ed75f3db564f0f00c54d6230e8acac466ec0301481a2bbde8c85daa03bbf9f796cabf11e57b27524495e8db6daa62cdd9bb3ad9b
   languageName: node
   linkType: hard
 
@@ -983,7 +966,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "betternovelpia@workspace:."
   dependencies:
-    "@swc/core": ^1.2.130
+    "@swc/core": ^1.2.133
     "@types/file-saver": ^2.0.5
     "@types/jquery": ^3.5.13
     "@types/js-cookie": ^3.0.1
@@ -1007,7 +990,7 @@ __metadata:
     swc-loader: ^0.1.15
     terser-webpack-plugin: ^5.3.0
     toastr: ^2.1.4
-    typescript: ^4.5.4
+    typescript: ^4.5.5
     url-regex-safe: ^3.0.0
     use-force-update: ^1.0.7
     use-long-press: ^1.1.2
@@ -3540,23 +3523,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.5.4":
-  version: 4.5.4
-  resolution: "typescript@npm:4.5.4"
+"typescript@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 59f3243f9cd6fe3161e6150ff6bf795fc843b4234a655dbd938a310515e0d61afd1ac942799e7415e4334255e41c2c49b7dd5d9fd38a17acd25a6779ca7e0961
+  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.5.4#~builtin<compat/typescript>":
-  version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"
+"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2e488dde7d2c4a2fa2e79cf2470600f8ce81bc0563c276b72df8ff412d74456ae532ba824650ae936ce207440c79720ddcfaa25e3cb4477572b8534fa4e34d49
+  checksum: c05c318d79c690f101d7ffb34cd6c7d6bbd884d3af9cefe7749ad0cd6be43c7082f098280982ca945dcba23fde34a08fed9602bb26540936baf8c0520727d3ba
   languageName: node
   linkType: hard
 

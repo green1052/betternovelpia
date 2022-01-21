@@ -17,7 +17,7 @@ export default {
     },
     start() {
         if (location.pathname === "/")
-            $(`.detail-modal-background button[class*="detail-modal-close"]`).get(0)?.click();
+            $(`button[class*="detail-modal-24close"]`).get(0)?.click();
 
         if (/^\/mybook/.test(location.pathname))
             hideElement($(`img[alt="내서재 광고"]`).closest("div"));
