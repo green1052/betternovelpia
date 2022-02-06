@@ -32,7 +32,6 @@ declare global {
         "Bookmark_Sort" |
         "ClickNextChapter" |
         "CommentBlockUser" |
-        "CommentReportConfirm" |
         "DisableNovelAlert" |
         "DisableViewLog" |
         "Eval" |

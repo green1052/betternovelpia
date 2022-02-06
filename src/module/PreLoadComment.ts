@@ -1,6 +1,4 @@
-import {element} from "../util/Element";
-import {NOVEL_DRAWING} from "../util/Selectors";
-import $ from "jquery";
+import {novelLoad} from "../util/NovelLoad";
 
 export default {
     include: /^\/viewer\//,
@@ -16,8 +14,6 @@ export default {
         }
     },
     start() {
-        element($(NOVEL_DRAWING), () => {
-            setTimeout(unsafeWindow.get_comment_box, 500);
-        });
+        novelLoad(unsafeWindow.get_comment_box);
     }
 } as Module;

@@ -1,5 +1,6 @@
-export function waitElement(dom: HTMLElement, code: () => void | Promise<void>, timeout: number = 5000) {
-    if (!dom) return;
+export function waitElement(element: HTMLElement | null, code: () => void | Promise<void>, timeout: number = 5000) {
+    if (element === null)
+        throw "element is null";
 
     let isDone = false;
 
@@ -12,7 +13,7 @@ export function waitElement(dom: HTMLElement, code: () => void | Promise<void>, 
         }
     });
 
-    observer.observe(dom, {
+    observer.observe(element, {
         childList: true,
         attributes: true,
         characterData: true,

@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     enable: ["AbsoluteDrag"],
     config: {
@@ -18,6 +16,6 @@ export default {
             playAlert = undefined;
         }
 
-        $(document.body).append("<style>*{user-select:initial!important;}</style>");
+        document.body.append("<style>*{user-select:initial!important;}</style>");
     }
 } as Module;

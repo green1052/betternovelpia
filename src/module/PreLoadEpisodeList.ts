@@ -1,6 +1,4 @@
-import $ from "jquery";
-import {element} from "../util/Element";
-import {NOVEL_DRAWING} from "../util/Selectors";
+import {novelLoad} from "../util/NovelLoad";
 
 export default {
     include: /^\/viewer\//,
@@ -16,8 +14,8 @@ export default {
         }
     },
     start() {
-        element($(NOVEL_DRAWING), () => {
-            setTimeout(() => episode_list_viewer(Number(localStorage.getItem(`novel_page_${$("#novel_no").val()}`))), 500);
-        });
+        novelLoad(() =>
+            episode_list_viewer(Number(localStorage.getItem(`novel_page_${(document.querySelector("#novel_no") as HTMLInputElement).value}`)))
+        );
     }
 } as Module;

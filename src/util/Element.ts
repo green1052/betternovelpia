@@ -1,10 +1,13 @@
 import {waitElement} from "./WaitElement";
 
-export function element($element: JQuery<HTMLElement>, code: () => void | Promise<void>, timeout: number = 5000) {
-    if ($element.children().length > 0) {
+export function element(element: HTMLElement | null, code: () => void | Promise<void>, timeout: number = 5000) {
+    if (element === null)
+        throw "element is null";
+
+    if (element.childNodes.length > 0) {
         code();
         return;
     }
 
-    waitElement($element.get(0)!, code, timeout);
+    waitElement(element, code, timeout);
 }

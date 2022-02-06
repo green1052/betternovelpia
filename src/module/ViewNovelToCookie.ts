@@ -33,7 +33,7 @@ export default {
         }
     },
     async start() {
-        const blocked = $(`.one-event-viewer-plus`);
+        const blocked = $(".one-event-viewer-plus");
 
         if (!blocked.length)
             return;

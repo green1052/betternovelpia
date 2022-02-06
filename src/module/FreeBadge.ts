@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     include: /^\/page\/useredit/,
     enable: ["FreeBadge"],
@@ -14,9 +12,9 @@ export default {
         }
     },
     start() {
-        $(document.body).append("<style>#badge_list div.badge_list>div img{filter:initial!important}</style>");
+        document.body.append("<style>#badge_list div.badge_list>div img{filter:initial!important}</style>");
 
-        for (const element of $(`input[name="badge_no"]`))
-            $(element).removeAttr("disabled");
+        for (const element of document.querySelectorAll("input[name=badge_no]"))
+            element.removeAttribute("disabled");
     }
 } as Module;

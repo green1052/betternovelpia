@@ -38,7 +38,7 @@ function viewer() {
     if (location.href !== bookmark.url || !bookmark.scrollTop || !isFirst("previous"))
         return;
 
-    element($(NOVEL_DRAWING), () => {
+    element(document.querySelector(NOVEL_DRAWING), () => {
         setTimeout(() => {
             if (GM_getValue("PreviousBookmark_OneUse", false))
                 GM_setValue("previousBookmark", {});

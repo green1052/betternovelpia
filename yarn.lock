@@ -237,114 +237,114 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm-eabi@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-android-arm-eabi@npm:1.2.135"
+"@swc/core-android-arm-eabi@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-android-arm-eabi@npm:1.2.136"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm64@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-android-arm64@npm:1.2.135"
+"@swc/core-android-arm64@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-android-arm64@npm:1.2.136"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-darwin-arm64@npm:1.2.135"
+"@swc/core-darwin-arm64@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-darwin-arm64@npm:1.2.136"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-darwin-x64@npm:1.2.135"
+"@swc/core-darwin-x64@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-darwin-x64@npm:1.2.136"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-freebsd-x64@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-freebsd-x64@npm:1.2.135"
+"@swc/core-freebsd-x64@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-freebsd-x64@npm:1.2.136"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.135"
+"@swc/core-linux-arm-gnueabihf@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.136"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.135"
+"@swc/core-linux-arm64-gnu@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.136"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-linux-arm64-musl@npm:1.2.135"
+"@swc/core-linux-arm64-musl@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-linux-arm64-musl@npm:1.2.136"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-linux-x64-gnu@npm:1.2.135"
+"@swc/core-linux-x64-gnu@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-linux-x64-gnu@npm:1.2.136"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-linux-x64-musl@npm:1.2.135"
+"@swc/core-linux-x64-musl@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-linux-x64-musl@npm:1.2.136"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.135"
+"@swc/core-win32-arm64-msvc@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.136"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.135"
+"@swc/core-win32-ia32-msvc@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.136"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core-win32-x64-msvc@npm:1.2.135"
+"@swc/core-win32-x64-msvc@npm:1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core-win32-x64-msvc@npm:1.2.136"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.2.135":
-  version: 1.2.135
-  resolution: "@swc/core@npm:1.2.135"
+"@swc/core@npm:^1.2.136":
+  version: 1.2.136
+  resolution: "@swc/core@npm:1.2.136"
   dependencies:
-    "@swc/core-android-arm-eabi": 1.2.135
-    "@swc/core-android-arm64": 1.2.135
-    "@swc/core-darwin-arm64": 1.2.135
-    "@swc/core-darwin-x64": 1.2.135
-    "@swc/core-freebsd-x64": 1.2.135
-    "@swc/core-linux-arm-gnueabihf": 1.2.135
-    "@swc/core-linux-arm64-gnu": 1.2.135
-    "@swc/core-linux-arm64-musl": 1.2.135
-    "@swc/core-linux-x64-gnu": 1.2.135
-    "@swc/core-linux-x64-musl": 1.2.135
-    "@swc/core-win32-arm64-msvc": 1.2.135
-    "@swc/core-win32-ia32-msvc": 1.2.135
-    "@swc/core-win32-x64-msvc": 1.2.135
+    "@swc/core-android-arm-eabi": 1.2.136
+    "@swc/core-android-arm64": 1.2.136
+    "@swc/core-darwin-arm64": 1.2.136
+    "@swc/core-darwin-x64": 1.2.136
+    "@swc/core-freebsd-x64": 1.2.136
+    "@swc/core-linux-arm-gnueabihf": 1.2.136
+    "@swc/core-linux-arm64-gnu": 1.2.136
+    "@swc/core-linux-arm64-musl": 1.2.136
+    "@swc/core-linux-x64-gnu": 1.2.136
+    "@swc/core-linux-x64-musl": 1.2.136
+    "@swc/core-win32-arm64-msvc": 1.2.136
+    "@swc/core-win32-ia32-msvc": 1.2.136
+    "@swc/core-win32-x64-msvc": 1.2.136
   dependenciesMeta:
     "@swc/core-android-arm-eabi":
       optional: true
@@ -372,7 +372,7 @@ __metadata:
       optional: true
     "@swc/core-win32-x64-msvc":
       optional: true
-  checksum: 5110d6c4f0a4963d6855ca36348fe6ec858677d4a0b04fa8c3b19b4361a2fc687282522e0c18461084f9ced067fb759b307515a6f587f4c62ece8d010b648ce0
+  checksum: e0279ff60ddc7af22c58ed5dd031b970be2fef739dc3cd8910d384372d0014a6982c4e1088a85907eb00e08332499a3c102305bc1c04f07309d562da86dc9a9b
   languageName: node
   linkType: hard
 
@@ -507,14 +507,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.38":
-  version: 17.0.38
-  resolution: "@types/react@npm:17.0.38"
+"@types/react@npm:^17.0.39":
+  version: 17.0.39
+  resolution: "@types/react@npm:17.0.39"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4079f4f959cd4a4bfaeda8b89fe8a1b1f8bdc9d87acfdc5f74a0b39cec9ec6a470724357c62778c0f063180b360c250e920c5a142f1dbcda67d9cc25a6d43a85
+  checksum: bf04d3c2894559012710d595553e12b422d3b91cd8f4f7e122d8cb044ba9c2ba17f6e8a4e09581359cc5509ddc59cd8c8fabd6774f3505a40a45393f074d6e6e
   languageName: node
   linkType: hard
 
@@ -532,14 +532,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:^5.1.21":
-  version: 5.1.21
-  resolution: "@types/styled-components@npm:5.1.21"
+"@types/styled-components@npm:^5.1.22":
+  version: 5.1.22
+  resolution: "@types/styled-components@npm:5.1.22"
   dependencies:
     "@types/hoist-non-react-statics": "*"
     "@types/react": "*"
     csstype: ^3.0.2
-  checksum: d53065f65052dd407516f1d37cc9bce33df6f4da31cbc7ef5a6b1e1fed6f14497456a13d809c065c15b963d73dc9b877613e3fb8dfa66074bfac60a94e561b04
+  checksum: f25850590772ffc3da672a89f89847b92994d78c28f7d37a31a792fee868ae4b2ae040e7be1b9959631dcfbf82296b3ed1f19f4cf28bd0c82e15727c1022f01c
   languageName: node
   linkType: hard
 
@@ -1023,13 +1023,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "betternovelpia@workspace:."
   dependencies:
-    "@swc/core": ^1.2.135
+    "@swc/core": ^1.2.136
     "@types/file-saver": ^2.0.5
     "@types/jquery": ^3.5.13
     "@types/js-cookie": ^3.0.1
-    "@types/react": ^17.0.38
+    "@types/react": ^17.0.39
     "@types/react-dom": ^17.0.11
-    "@types/styled-components": ^5.1.21
+    "@types/styled-components": ^5.1.22
     "@types/toastr": ^2.1.39
     "@types/url-regex-safe": ^1.0.0
     "@types/webpack-env": ^1.16.3
@@ -1045,13 +1045,13 @@ __metadata:
     regenerator-runtime: ^0.13.9
     styled-components: ^5.3.3
     swc-loader: ^0.1.15
-    terser-webpack-plugin: ^5.3.0
+    terser-webpack-plugin: ^5.3.1
     toastr: ^2.1.4
     typescript: ^4.5.5
     url-regex-safe: ^3.0.0
     use-force-update: ^1.0.7
     use-long-press: ^1.1.2
-    webpack: ^5.67.0
+    webpack: ^5.68.0
     webpack-cli: ^4.9.2
     webpack-userscript: ^2.5.8
   languageName: unknown
@@ -2214,14 +2214,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^27.4.1":
-  version: 27.4.5
-  resolution: "jest-worker@npm:27.4.5"
+"jest-worker@npm:^27.4.5":
+  version: 27.4.6
+  resolution: "jest-worker@npm:27.4.6"
   dependencies:
     "@types/node": "*"
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
-  checksum: eb0b6be412103299c3d8643ad26daf862826ca841bd2a3ff47d2d931804ab7d7f0db2fcdea7dbf47ce8eacb7742b3f2586c2d6ebdaa8d0ac77c65f7b698e7683
+  checksum: 105bcdf5c66700bbfe352bc09476629ca0858cfa819fcc1a37ea76660f0168d586c6e77aee8ea91eded5a20f40f331a0a81e503b5ba19f7b566204406b239466
   languageName: node
   linkType: hard
 
@@ -3482,11 +3482,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "terser-webpack-plugin@npm:5.3.0"
+"terser-webpack-plugin@npm:^5.3.1":
+  version: 5.3.1
+  resolution: "terser-webpack-plugin@npm:5.3.1"
   dependencies:
-    jest-worker: ^27.4.1
+    jest-worker: ^27.4.5
     schema-utils: ^3.1.1
     serialize-javascript: ^6.0.0
     source-map: ^0.6.1
@@ -3500,7 +3500,7 @@ __metadata:
       optional: true
     uglify-js:
       optional: true
-  checksum: f6735b8bb2604e8ca8b78d21f610fb2488866db72bb38e8d7c32aab97ea81fa0a19cabed074a431ff3dd9510d6efd505fc6930cdd8c1d3faa71c1bf7da4c7469
+  checksum: 1b808fd4f58ce0b532baacc50b9a850fc69ce0077a0e9e5076d4156c52fab3d40b02d5d9148a3eba64630cf7f40057de54f6a5a87fac1849b1f11d6bfdb42072
   languageName: node
   linkType: hard
 
@@ -3782,9 +3782,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.67.0":
-  version: 5.67.0
-  resolution: "webpack@npm:5.67.0"
+"webpack@npm:^5.68.0":
+  version: 5.68.0
+  resolution: "webpack@npm:5.68.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -3815,7 +3815,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a7f810a5e1d4d78b533ca0caf42fa889839326073cedd3ac8e59e5c4890ca864ab0265fa5b2608715746ff3e34cbfaf4f15d56a92bc3f717a2f5c13202d58b6c
+  checksum: ac6efd861a0bfb35d8a467fba0d87f905ef6e1a9a9f7e3db42ea459cf191268094cedd025d3eb36a1464e2208a0c193f3f4a92531ba58850246f3c6b8f210b03
   languageName: node
   linkType: hard
 

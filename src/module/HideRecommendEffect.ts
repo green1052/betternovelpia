@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     include: /^\/viewer\//,
     enable: ["HideRecommendEffect"],
@@ -14,6 +12,6 @@ export default {
         }
     },
     start() {
-        $(".like_btn").remove();
+        document.querySelector(".like_btn")?.remove();
     }
 } as Module;

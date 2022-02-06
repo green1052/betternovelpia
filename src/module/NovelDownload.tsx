@@ -2,9 +2,9 @@ import $ from "jquery";
 import {HEADER_BAR, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../util/Selectors";
 import {saveAs} from "file-saver";
 import React, {useCallback} from "react";
-import ReactDOM from "react-dom";
-import styled from "styled-components";
 import toastr from "toastr";
+import {Header} from "../util/ApeendHeader";
+import ReactDOM from "react-dom";
 
 function NovelDownload() {
     const click = useCallback(() => {
@@ -20,17 +20,10 @@ function NovelDownload() {
         toastr.info("복사됐습니다.", "소설 다운로드");
     }, []);
 
-    const MainTd = styled.td`
-      text-align: center;
-      font-size: 25px;
-      width: 63px;
-      z-index: 10000;
-    `;
-
     return (
-        <MainTd onClick={click}>
-            <i className="icon ion-code-download"/>
-        </MainTd>
+        <Header>
+            <i className="icon ion-code-download" onClick={click}/>
+        </Header>
     );
 }
 
@@ -54,6 +47,7 @@ export default {
     },
     start() {
         const appContainer = document.createElement("td");
+        appContainer.style.width = "63px";
         $(HEADER_BAR).children().eq(6).before(appContainer);
         ReactDOM.render(<NovelDownload/>, appContainer);
     }

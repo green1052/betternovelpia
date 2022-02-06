@@ -17,7 +17,7 @@ export default {
         }
     },
     start() {
-        element($(EP_List), () => {
+        element(document.querySelector(EP_List), () => {
             const csrf = /"csrf": "(.*)"/.exec(unsafeWindow.alarm_btn.toString())?.[1];
 
             if (!csrf) return;
@@ -83,7 +83,7 @@ export default {
                 toastr.info("완료", "소설 일괄 추천/비추천");
             };
 
-            $(`ul[style=""][class="mobile_center"]`)
+            $(`ul[style=""][class=mobile_center]`)
                 .prepend(
                     $("<li><button>일괄 비추천</button></li>")
                         .on("click", () => recommendList(false))

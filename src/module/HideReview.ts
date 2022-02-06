@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     include: /^\/novel\//,
     enable: ["HideReview"],
@@ -14,6 +12,6 @@ export default {
         }
     },
     start() {
-        $(".novel_review_mob").remove();
+        document.querySelector(".novel_review_mob")?.remove();
     }
 } as Module;

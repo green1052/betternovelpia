@@ -15,7 +15,7 @@ export default {
     },
     start() {
         const plusCount = $(".b_plus").map((_, element) =>
-            $(element).closest(`div[class="mobile_show"]`).eq(0).remove()
+            $(element).closest(`div[class=mobile_show]`).eq(0).remove()
         ).length;
 
         $(`span[style="font-size: 14px;font-weight: 600;"]`)

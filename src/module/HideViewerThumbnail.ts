@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     include: /^\/viewer\//,
     enable: ["HideViewerThumbnail"],
@@ -14,6 +12,6 @@ export default {
         }
     },
     start() {
-        $(`div[class="cover-wrapper"]`).parent().remove();
+        document.querySelector("div[class=cover-wrapper]")?.parentElement?.remove();
     }
 } as Module;

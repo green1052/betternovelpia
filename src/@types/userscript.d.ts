@@ -2,13 +2,19 @@ export {};
 
 declare global {
     interface CustomWindow {
-        up_down_btn_view: Function;
-        navi_view: Function;
-        alarm_btn: Function;
-        viewer_display: Function;
-        comment_load: Function;
-        option_proc: Function;
-        get_comment_box: Function;
+        up_down_btn_view(option: "on" | "off"): void;
+
+        navi_view(): void;
+
+        alarm_btn(): void;
+
+        viewer_display(): void;
+
+        get_comment_box(): void;
+
+        get_comment_load(comment_re_no = 0, comment_ori_no = 0): void;
+
+        novel_drawing(novel_d: NovelData[] | []): void;
     }
 
     const unsafeWindow: CustomWindow & Window & typeof globalThis;
@@ -24,39 +30,4 @@ declare global {
     function GM_listValues(): GMValue[]
 
     function GM_setClipboard(data: string, type: string = "text/plain"): undefined
-
-    interface ResponseType {
-        status: number;
-        statusText: string;
-        readyState: number;
-        responseHeaders: string,
-        response: string | Blob | ArrayBuffer | Document | Object | null
-        responseText: string | undefined,
-        finalUrl: string,
-        context: any,
-    }
-
-    function GM_xmlhttpRequest(details: {
-        url: string,
-        method?: string,
-        user?: string,
-        password?: string,
-        overrideMimeType?: string,
-        headers?: { [key in string]: string },
-        responseType?: "text" | "json" | "blob" | "arraybuffer" | "document"
-        timeout?: number,
-        data?: string | FormData | Blob,
-        binary?: boolean,
-        context?: any,
-        anonymous?: boolean,
-        abort?(): void,
-        onabort?(response: ResponseType): void,
-        onerror?(response: ResponseType): void,
-        onload?(response: ResponseType): void,
-        onloadend?(response: ResponseType): void,
-        onloadstart?(response: ResponseType): void,
-        onprogress?(response: ResponseType): void,
-        onreadystatechange?(response: ResponseType): void,
-        ontimeout?(response: ResponseType): void
-    }): void
 }

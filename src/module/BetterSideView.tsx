@@ -1,4 +1,3 @@
-import $ from "jquery";
 import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {css} from "styled-components";
@@ -7,13 +6,13 @@ function BetterSideView() {
     const [hide, setHide] = useState(true);
 
     useEffect(() => {
-        $("span#naviconLeftMobile").on("click", () =>
-            setHide(!$(document.body).hasClass("show-left"))
+        document.querySelector("span#naviconLeftMobile")?.addEventListener("click", () =>
+            setHide(!document.body.classList.contains("show-left"))
         );
     }, []);
 
     const click = useCallback(() => {
-        $(document.body).removeClass("show-left");
+        document.body.classList.remove("show-left");
         setHide(true);
     }, []);
 

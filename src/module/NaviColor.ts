@@ -1,6 +1,3 @@
-import $ from "jquery";
-import {FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
-
 export default {
     include: /^\/viewer\//,
     enable: ["NaviColor"],
@@ -16,10 +13,10 @@ export default {
     },
     start() {
         function changeTheme() {
-            const color = $("#viewer_no_drag").css("background-color");
+            const color = (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor;
 
-            $(HEADER_BAR).css("background-color", color);
-            $(FOOTER_BAR).css("background-color", color);
+            (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor = color;
+            (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor = color;
         }
 
         const oldViewerDisplay = unsafeWindow.viewer_display;

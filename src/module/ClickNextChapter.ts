@@ -1,4 +1,3 @@
-import $ from "jquery";
 import {NOVEL_BOX} from "../util/Selectors";
 
 export default {
@@ -21,7 +20,7 @@ export default {
         if (clickNextChapter !== 0)
             document.querySelector(NOVEL_BOX)!.addEventListener("click", event => {
                 if ((<CustomEvent>event).detail === clickNextChapter)
-                    $(`img[src*="btn_next.png"]`).get(0)?.click();
+                    (document.querySelector(`img[src*="btn_next.png"]`) as HTMLElement)?.click();
             });
     }
 } as Module;

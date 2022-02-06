@@ -15,11 +15,11 @@ export default {
     },
     start() {
         if (location.pathname === "/") {
-            $(`div[class*="main-slide-wrapper"][class*="mobile_show"]`).remove();
+            document.querySelector("div[class*=main-slide-wrapper][class*=mobile_show]")?.remove();
             return;
         }
 
-        $(`div.swiper-container[class*="mobile_show"]`).remove();
+        document.querySelector("div.swiper-container[class*=mobile_show]")?.remove();
         hideElement($(`div[onclick*="/notice/all/view_171726"]`));
     }
 } as Module;

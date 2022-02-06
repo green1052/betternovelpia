@@ -1,15 +1,16 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
-import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_DRAWING, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
+import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
 import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
 import $ from "jquery";
 import toastr from "toastr";
-import {element} from "../../util/Element";
 import {isDarkMode} from "../../util/IsDarkMode";
 import {isPageViewer} from "../../util/IsPageViewer";
 import {appendSide} from "../../util/AppendSide";
 import {useLongPress} from "use-long-press";
+import {Header} from "../../util/ApeendHeader";
+import {novelLoad} from "../../util/NovelLoad";
 
 function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
@@ -292,29 +293,20 @@ function Viewer() {
         toastr.info("삭제되었습니다.", "북마크");
     });
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const scrollTop = bookmarks[location.href]?.scrollTop;
 
         if (!scrollTop || !isFirst("bookmark"))
             return;
 
-        element($(NOVEL_DRAWING), () => {
-            setTimeout(() => {
-                if (GM_getValue("Bookmark_OneUse", false))
-                    removeBookmark(bookmarks, location.href);
+        novelLoad(() => {
+            if (GM_getValue("Bookmark_OneUse", false))
+                removeBookmark(bookmarks, location.href);
 
-                if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-                $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
-            }, 500);
+            if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+            $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
         });
     }, []);
-
-    const MainTd = styled.td`
-      text-align: center;
-      font-size: 25px;
-      width: 63px;
-      z-index: 10000;
-    `;
 
     const BookmarkIcon = styled.i`
       color: ${bookmarks.hasOwnProperty(location.href)
@@ -327,9 +319,9 @@ function Viewer() {
     `;
 
     return (
-        <MainTd onClick={click} {...longClick}>
-            <BookmarkIcon className="icon ion-bookmark"/>
-        </MainTd>
+        <Header>
+            <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>
+        </Header>
     );
 }
 
@@ -371,6 +363,7 @@ export default {
 
         if (/^\/viewer\//.test(location.pathname)) {
             const appContainer = document.createElement("td");
+            appContainer.style.width = "63px";
             $(HEADER_BAR).children().eq(6).before(appContainer);
             ReactDOM.render(<Viewer/>, appContainer);
         }

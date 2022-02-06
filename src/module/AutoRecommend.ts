@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export default {
     include: /^\/viewer\//,
     enable: ["AutoRecommend"],
@@ -14,6 +12,6 @@ export default {
         }
     },
     start() {
-        $(`#btn_episode_vote[src="/img/new/viewer/btn_vote.png"]`).get(0)?.click();
+        (document.querySelector(`#btn_episode_vote[src="/img/new/viewer/btn_vote.png"]`) as HTMLElement).click();
     }
 } as Module;

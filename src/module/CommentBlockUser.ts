@@ -1,5 +1,4 @@
 import $ from "jquery";
-import {waitElement} from "../util/WaitElement";
 import toastr from "toastr";
 
 export default {
@@ -16,31 +15,34 @@ export default {
         }
     },
     start() {
-        const oldCommentLoad = unsafeWindow.comment_load;
+        const oldCommentLoad = unsafeWindow.get_comment_load;
 
-        unsafeWindow.comment_load = () => {
-            oldCommentLoad();
-            waitElement($("#comment_load").get(0)!, () => {
-                for (const element of $(`div[class="row"][id*="comment_"] > div > table > tbody > tr:nth-child(3) > td`)) {
+        unsafeWindow.get_comment_load = (comment_re_no = 0, comment_ori_no = 0) => {
+            oldCommentLoad(comment_re_no, comment_ori_no);
+
+            setTimeout(() => {
+                for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_footer > div")) {
                     const $element = $(element);
 
+                    if ($element.children(`span:contains("차단")`).length > 0) return;
+
                     $element
-                        .append("<font style=color:#eee;font-size:11px>|</font>")
-                        .append(`<font style=cursor:pointer;color:#bc143b;font-size:11px><font> 차단</font></font>`)
+                        .append("<span class=line>|</span>")
+                        .append(`<span class="comment_option option_rpt">차단</span>`)
                         .on("click", () => {
                             const memberNo = /'\/user\/(\d*)';$/
                                 .exec(
                                     $element
-                                        .closest("tbody")
-                                        .children("tr:nth-child(1)")
-                                        .children("td")
-                                        .children("span")
+                                        .parent()
+                                        .parent()
+                                        .children(".comment_header")
+                                        .children(".user_name")
                                         .children("b")
                                         .attr("onclick")!
                                 )?.[1];
 
                             $.ajax({
-                                data: {"member_no": memberNo, "csrf": `${$("#csrf").val()}`},
+                                data: {member_no: memberNo, csrf: `${$("#csrf").val()}`},
                                 type: "POST",
                                 url: "/proc/member_block",
                                 cache: false,
@@ -60,7 +62,7 @@ export default {
                             });
                         });
                 }
-            }, 10000);
+            }, 500);
         };
     }
 } as Module;

@@ -1,5 +1,4 @@
 import $ from "jquery";
-import {waitElement} from "../util/WaitElement";
 
 export default {
     include: /^\/viewer\//,
@@ -20,34 +19,42 @@ export default {
         }
     },
     start() {
-        const oldCommentLoad = unsafeWindow.comment_load;
+        const oldCommentLoad = unsafeWindow.get_comment_load;
 
-        unsafeWindow.comment_load = () => {
-            oldCommentLoad();
-            waitElement($("#comment_load").get(0)!, () => {
-                for (const element of $(`div[class="row"][id*="comment_"] > div > table > tbody > tr:nth-child(2) > td`)) {
+        unsafeWindow.get_comment_load = (comment_re_no = 0, comment_ori_no = 0) => {
+            oldCommentLoad(comment_re_no, comment_ori_no);
+
+            setTimeout(() => {
+                for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_content > .comment_img")) {
                     const $element = $(element);
 
-                    if ($element.children(`div[id*="comment_text_"]`).text().length ||
-                        $element.children("font:last").text() === "삭제된 댓글 입니다.") continue;
+                    if (
+                        $element.css("display") === "none" ||
+                        $element.parent().children(".comment_text").text().length > 0 ||
+                        $element.closest(".comment").attr("data-status") !== "1"
+                    ) continue;
 
                     if (GM_getValue("HideOnlyEmojiComment_Remove", false)) {
-                        $element.closest(".row").remove();
+                        $element.closest(".comment").remove();
                         continue;
                     }
 
                     $element
-                        .closest("div")
-                        .css("background-color", "#ffc5c5");
+                        .closest(".comment")
+                        .attr("data-status", "0");
 
-                    $element
-                        .children("font:last")
-                        .nextAll()
-                        .remove();
+                    const regDate = $element
+                        .parent()
+                        .children(".comment_regdate")
+                        .nextAll();
 
-                    $(`<br><font style=color:#999>노벨티콘만 있는 댓글입니다.</font>`).insertAfter($element.children("font:last"));
+                    regDate
+                        .parent()
+                        .append(`<span style="color: #999;">노벨티콘만 있는 댓글 입니다.</span><br>`);
+
+                    regDate.remove();
                 }
-            }, 10000);
+            }, 500);
         };
     }
 } as Module;

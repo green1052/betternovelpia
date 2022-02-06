@@ -13,5 +13,3 @@ export const NOVEL_EP = "span.cut_line_one > span:not(.b_19)";
 export const EP_List = "#episode_list";
 
 export const NOTICE_LIST = ".ep_style4";
-
-export const FOOTER_BAR = "#footer_bar";
