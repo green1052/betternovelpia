@@ -1,4 +1,5 @@
 export default {
+    include: /^\/viewer\//,
     enable: ["AbsoluteDrag"],
     config: {
         head: "드래그 허용",
@@ -11,11 +12,9 @@ export default {
         }
     },
     start() {
-        if (/^\/viewer\//.test(location.pathname)) {
-            clearInterval(playAlert);
-            playAlert = undefined;
-        }
+        clearInterval(playAlert);
+        playAlert = undefined;
 
-        document.body.append("<style>*{user-select:initial!important;}</style>");
+        document.body.innerHTML += "<style>.no-drag{user-select:initial!important;}</style>";
     }
 } as Module;

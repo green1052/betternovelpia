@@ -12,7 +12,7 @@ export default {
         }
     },
     start() {
-        document.body.append("<style>#badge_list div.badge_list>div img{filter:initial!important}</style>");
+        document.body.innerHTML += "<style>#badge_list div.badge_list>div img{filter:initial!important}</style>";
 
         for (const element of document.querySelectorAll("input[name=badge_no]"))
             element.removeAttribute("disabled");

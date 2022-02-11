@@ -15,7 +15,7 @@ export default {
         }
     },
     start() {
-        const clickNextChapter = GM_getValue("ClickNextChapter", 0) as number;
+        const clickNextChapter = GM_getValue<number>("ClickNextChapter", 0);
 
         if (clickNextChapter !== 0)
             document.querySelector(NOVEL_BOX)!.addEventListener("click", event => {

@@ -14,18 +14,13 @@ export interface PreviousBookmark {
 }
 
 export function isFirst(who: "previous" | "bookmark") {
-    const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
-    const previousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
+    const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
+    const previousBookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);
 
     if (who === "previous")
-        return GM_getValue("PreviousBookmark_First", false) && previousBookmark !== undefined
+        return GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark !== undefined
             ? true
             : !(bookmarks && bookmarks.hasOwnProperty(location.href));
 
-    return !GM_getValue("PreviousBookmark_First", false) && previousBookmark !== undefined;
-}
-
-export function removeBookmark(bookmarks: Bookmarks, url: string) {
-    delete bookmarks[url];
-    GM_setValue("bookmarks", bookmarks);
+    return !GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark !== undefined;
 }

@@ -14,6 +14,6 @@ export default {
         }
     },
     start() {
-        novelLoad(unsafeWindow.get_comment_box);
+        novelLoad(() => unsafeWindow.get_comment_box());
     }
 } as Module;

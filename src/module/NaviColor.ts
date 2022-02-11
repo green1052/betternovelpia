@@ -1,3 +1,5 @@
+import {FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
+
 export default {
     include: /^\/viewer\//,
     enable: ["NaviColor"],
@@ -15,8 +17,8 @@ export default {
         function changeTheme() {
             const color = (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor;
 
-            (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor = color;
-            (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor = color;
+            (document.querySelector(HEADER_BAR) as HTMLElement).style.backgroundColor = color;
+            (document.querySelector(FOOTER_BAR) as HTMLElement).style.backgroundColor = color;
         }
 
         const oldViewerDisplay = unsafeWindow.viewer_display;

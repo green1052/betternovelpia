@@ -14,14 +14,14 @@ declare global {
 
         get_comment_load(comment_re_no = 0, comment_ori_no = 0): void;
 
-        novel_drawing(novel_d: NovelData[] | []): void;
+        novel_drawing(novel_d: NovelData[]): void;
     }
 
     const unsafeWindow: CustomWindow & Window & typeof globalThis;
 
     type GMValue = "bookmarks" | "previousBookmark" | Config;
 
-    function GM_getValue(key: GMValue, defaultValue?: unknown): unknown
+    function GM_getValue<T>(key: GMValue, defaultValue?: T): T
 
     function GM_setValue(key: GMValue, value: any): void
 
@@ -29,5 +29,5 @@ declare global {
 
     function GM_listValues(): GMValue[]
 
-    function GM_setClipboard(data: string, type: string = "text/plain"): undefined
+    function GM_setClipboard(data: string, type = "text/plain"): undefined
 }

@@ -8,11 +8,11 @@ import {isPageViewer} from "../../util/IsPageViewer";
 function novel() {
     if (!/^\/novel\//.test(location.pathname)) return;
 
-    const previousBookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
+    const previousBookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);
 
-    if (!previousBookmark.title || !previousBookmark.chapter || !previousBookmark.url || previousBookmark.scrollTop === undefined) return;
+    if (previousBookmark === undefined || !previousBookmark.title || !previousBookmark.chapter || !previousBookmark.url || previousBookmark.scrollTop === undefined) return;
 
-    if (previousBookmark.title === document.title.split("-")[2].trimLeft())
+    if (previousBookmark.title === document.title.split("-")[2].trimStart())
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
             .append(`<div onclick='$(".loads").show(),location="${previousBookmark.url}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${previousBookmark.chapter}</span> 이어보기</div>`);
@@ -24,7 +24,7 @@ function viewer() {
     const title = encodeURIComponent($(NOVEL_TITLE).text());
     const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
 
-    const bookmark = GM_getValue("previousBookmark", {}) as PreviousBookmark;
+    const bookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);
     const url = location.href;
 
     let scrollTop = -1;
@@ -35,15 +35,15 @@ function viewer() {
         if (scrollTop > -1) GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
     });
 
-    if (location.href !== bookmark.url || !bookmark.scrollTop || !isFirst("previous"))
+    if (bookmark === undefined || location.href !== bookmark.url || !bookmark.scrollTop || !isFirst("previous"))
         return;
 
     element(document.querySelector(NOVEL_DRAWING), () => {
         setTimeout(() => {
-            if (GM_getValue("PreviousBookmark_OneUse", false))
+            if (GM_getValue<boolean>("PreviousBookmark_OneUse", false))
                 GM_setValue("previousBookmark", {});
 
-            if (!GM_getValue("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
+            if (!GM_getValue<boolean>("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
             $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
         }, 500);
     });

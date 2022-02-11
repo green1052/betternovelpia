@@ -1,4 +1,3 @@
-import $ from "jquery";
 import {hideElement} from "../util/HideElement";
 import {novelLoad} from "../util/NovelLoad";
 
@@ -15,13 +14,13 @@ export default {
         }
     },
     start() {
-        document.querySelector("");
-
         if (location.pathname === "/")
-            (document.querySelector("button[class*=detail-modal-24close]") as HTMLElement).click();
+            setTimeout(() => {
+                (document.querySelector("button[class*=detail-modal-24close]") as HTMLElement)?.click();
+            }, 500);
 
         if (/^\/mybook/.test(location.pathname))
-            hideElement($(`img[alt="내서재 광고"]`).closest("div"));
+            hideElement(document.querySelector(`img[src*=m_banner][alt="내서재 광고"]`)?.closest("div") as HTMLElement);
 
         if (/^\/viewer\//.test(location.pathname)) {
             novelLoad(() => {
@@ -32,15 +31,15 @@ export default {
             document.querySelector("img[alt=댓글광고]")?.remove();
         }
 
-        if (/^\/freestory|plus/.test(location.pathname))
-            document.querySelector(`img[alt="자유연재 광고"]`)?.closest("div")?.remove();
-
-        if (/^\/freestory/.test(location.pathname))
-            hideElement($(`a[href="/viewer/304048"]`).children("div"));
+        if (/^\/freestory|plus/.test(location.pathname)) {
+            for (const element of document.querySelectorAll(`img[alt="자유연재 광고"]`))
+                element.closest("div")?.remove();
+        }
 
         if (/^\/plus/.test(location.pathname))
-            hideElement($(`a[href="/plus_shop"]`).children("div"));
+            document.querySelector(`div[class="plus_bg mobile_show"]`)?.parentElement?.remove();
 
-        document.querySelector(`img[src*="won_m.gif"]`)?.remove();
+        if (!/^\/viewer\//.test(location.pathname))
+            document.querySelector(`img[src*="won_m.gif"]`)?.remove();
     }
 } as Module;

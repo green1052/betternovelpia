@@ -1,13 +1,13 @@
 import toastr from "toastr";
 
-export const configs: Configs[] = [];
-
 toastr.options = {
     escapeHtml: true,
     closeButton: true,
     newestOnTop: false,
     progressBar: true
 };
+
+export const configs: Configs[] = [];
 
 const context = require.context("./module/", true, /\.tsx?$/);
 
@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if ((module.include === undefined || module.include.test(location.pathname)) &&
                 (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
-                (module.enable === undefined || !module.enable.map(setting => GM_getValue(setting, false)).includes(false))) {
+                (module.enable === undefined || !module.enable.map(setting => GM_getValue<boolean>(setting, false)).includes(false))) {
                 module.start();
                 console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms`);
             }

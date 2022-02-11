@@ -10,7 +10,7 @@ function NovelDownload() {
     const click = useCallback(() => {
         const novelText = $(NOVEL_DRAWING).text().replace(/다음화 보기|여기까지가 등록된 마지막 회차입니다/, "");
 
-        if (GM_getValue("NovelDownload_Copy", false))
+        if (GM_getValue<boolean>("NovelDownload_Copy", false))
             GM_setClipboard(novelText);
         else {
             const blob = new Blob([novelText], {type: "text/plain;charset=utf-8"});

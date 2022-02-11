@@ -34,7 +34,7 @@ export default {
                         $element.closest(".comment").attr("data-status") !== "1"
                     ) continue;
 
-                    if (GM_getValue("HideOnlyEmojiComment_Remove", false)) {
+                    if (GM_getValue<boolean>("HideOnlyEmojiComment_Remove", false)) {
                         $element.closest(".comment").remove();
                         continue;
                     }

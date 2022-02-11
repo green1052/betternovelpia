@@ -1,4 +1,3 @@
-import $ from "jquery";
 import {hideElement} from "../util/HideElement";
 
 export default {
@@ -19,7 +18,12 @@ export default {
             return;
         }
 
-        document.querySelector("div.swiper-container[class*=mobile_show]")?.remove();
-        hideElement($(`div[onclick*="/notice/all/view_171726"]`));
+        if (/^\/freestory/.test(location.pathname)) {
+            document.querySelector("div.swiper-container[class*=mobile_show]")?.remove();
+            document.querySelector(`div[class=""] > div[class*="swiper-container mobile_show"]`)?.remove();
+            return;
+        }
+
+        hideElement(document.querySelector(`div[onclick*="/notice/all/view_171726"]`));
     }
 } as Module;

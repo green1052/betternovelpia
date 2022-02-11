@@ -38,7 +38,7 @@ function CardBody(props: { children: React.ReactNode }) {
 }
 
 function Checkbox(props: { config: Config, label: string }) {
-    const [checked, setChecked] = useState(GM_getValue(props.config, false) as boolean);
+    const [checked, setChecked] = useState(GM_getValue<boolean>(props.config, false));
 
     const change = useCallback(() => {
         setChecked(!checked);
@@ -56,7 +56,7 @@ function Checkbox(props: { config: Config, label: string }) {
 }
 
 function TextBox(props: { config: Config, label: string }) {
-    const [value, setValue] = useState(GM_getValue(props.config, "") as string);
+    const [value, setValue] = useState(GM_getValue<string>(props.config, ""));
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         GM_setValue(props.config, e.target.value);
@@ -74,7 +74,7 @@ function TextBox(props: { config: Config, label: string }) {
 }
 
 function NumberBox(props: { config: Config, label: string, min: number, max: number }) {
-    const [value, setValue] = useState(GM_getValue(props.config, 0) as number);
+    const [value, setValue] = useState(GM_getValue<number>(props.config, 0));
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const changeValue = e.target.value;

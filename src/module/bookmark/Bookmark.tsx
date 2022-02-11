@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
-import {Bookmarks, isFirst, PreviousBookmark, removeBookmark} from "../../util/Bookmark";
+import {Bookmarks, isFirst, PreviousBookmark} from "../../util/Bookmark";
 import $ from "jquery";
 import toastr from "toastr";
 import {isDarkMode} from "../../util/IsDarkMode";
@@ -13,8 +13,8 @@ import {Header} from "../../util/ApeendHeader";
 import {novelLoad} from "../../util/NovelLoad";
 
 function Bookmark() {
-    const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
-    const [previousBookmark] = useState((GM_getValue("previousBookmark", {}) as PreviousBookmark));
+    const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
+    const [previousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
     const [hide, setHide] = useState(true);
     const [inputHide, setInputHide] = useState(true);
     const [data, setData] = useState("");
@@ -23,7 +23,7 @@ function Bookmark() {
     const bookmarkList = useRef<HTMLOListElement>(null);
 
     useLayoutEffect(() => {
-        if (scrollTop !== 0)
+        if (scrollTop > 0)
             bookmarkList.current?.scroll(0, scrollTop);
     }, [scrollTop]);
 
@@ -34,6 +34,8 @@ function Bookmark() {
 
         const bookmarks1 = {...bookmarks};
         delete bookmarks1[url];
+
+        GM_setValue("bookmarks", bookmarks1);
         setBookmarks(bookmarks1);
     }, [bookmarks]);
 
@@ -47,7 +49,10 @@ function Bookmark() {
 
     const restore = useCallback(() => {
         if (data) {
-            setBookmarks(JSON.parse(data));
+            const json = JSON.parse(data);
+            GM_setValue("bookmarks", json);
+            setBookmarks(json);
+
             toastr.info("복원되었습니다.", "북마크");
         } else
             toastr.info("데이터가 비어있습니다.", "북마크");
@@ -59,9 +64,8 @@ function Bookmark() {
     const reset = useCallback(() => setBookmarks({}), []);
 
     const quit = useCallback(() => {
-        GM_setValue("bookmarks", bookmarks);
         setHide(true);
-    }, [bookmarks]);
+    }, []);
 
     const GlobalStyles = createGlobalStyle`
       .no-overflow {
@@ -102,120 +106,108 @@ function Bookmark() {
     `;
 
     return (
-        <>
-            <MainDiv>
-                <GlobalStyles/>
-                {
-                    !inputHide && <div style={{
-                        display: "flex",
-                        position: "fixed",
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-50%, -50%)"
-                    }}>
-                        <input autoFocus onChange={(e) => setData(e.target.value)}
-                               value={data}
-                               type="text"
-                               placeholder="데이터를 입력해주세요"/>
-                        <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
-                        <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
-                    </div>
-                }
+        <MainDiv>
+            <GlobalStyles/>
 
-                <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
-
-                <ol ref={bookmarkList} className="no-overflow bookmark"
-                    style={{
-                        height: "85vh",
-                        overflow: "auto",
-                        fontSize: "15px",
-                        marginLeft: "-10px"
-                    }}>
-                    {
-                        (
-                            GM_getValue("Bookmark_Sort", false)
-                                ? Object.entries(bookmarks).sort((a, b) => {
-                                    const aTitle = decodeURIComponent(a[1].title);
-                                    const bTitle = decodeURIComponent(b[1].title);
-
-                                    return aTitle < bTitle
-                                        ? -1
-                                        : aTitle > bTitle
-                                            ? 1
-                                            : 0;
-                                })
-                                : Object.entries(bookmarks)
-                        ).map(([key, value]) =>
-                            <li>
-                                <div>
-                                    <a href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
-                                    <h5 onClick={() => deleteBookmark(key)}>X</h5>
-                                </div>
-                            </li>
-                        )
-                    }
-                </ol>
-
-                <div style={{
+            {
+                !inputHide && <div style={{
                     display: "flex",
                     position: "fixed",
-                    bottom: "35px",
-                    right: "5px"
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)"
                 }}>
-                    <h5 onClick={backup}>백업</h5>
-                    <h5 onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</h5>
+                    <input autoFocus onChange={(e) => setData(e.target.value)}
+                           value={data}
+                           type="text"
+                           placeholder="데이터를 입력해주세요"/>
+                    <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
+                    <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
                 </div>
+            }
 
-                <div style={{
-                    display: "flex",
-                    position: "fixed",
-                    bottom: "5px",
-                    left: "5px"
+            <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
+
+            <ol ref={bookmarkList} className="no-overflow bookmark"
+                style={{
+                    height: "85vh",
+                    overflow: "auto",
+                    fontSize: "15px",
+                    marginLeft: "-10px"
                 }}>
-                    <h5 style={{fontSize: ".83em"}}>이전 소설:&nbsp;</h5>
+                {
+                    (
+                        GM_getValue<boolean>("Bookmark_Sort", false)
+                            ? Object.entries(bookmarks).sort((a, b) => {
+                                const aTitle = decodeURIComponent(a[1].title);
+                                const bTitle = decodeURIComponent(b[1].title);
 
-                    <a className="no-overflow" href={previousBookmark.url ?? "#"}
-                       style={{
-                           fontSize: ".83em",
-                           width: "20vh"
-                       }}>
+                                return aTitle < bTitle
+                                    ? -1
+                                    : aTitle > bTitle
+                                        ? 1
+                                        : 0;
+                            })
+                            : Object.entries(bookmarks)
+                    ).map(([key, value]) =>
+                        <li>
+                            <div>
+                                <a href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
+                                <h5 onClick={() => deleteBookmark(key)}>X</h5>
+                            </div>
+                        </li>
+                    )
+                }
+            </ol>
+
+            <div style={{
+                display: "flex",
+                position: "fixed",
+                bottom: "35px",
+                right: "5px"
+            }}>
+                <h5 onClick={backup}>백업</h5>
+                <h5 onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</h5>
+            </div>
+
+            <div style={{
+                display: "flex",
+                position: "fixed",
+                bottom: "5px",
+                left: "5px"
+            }}>
+                <h5 className="no-overflow" style={{fontSize: ".83em", width: "20vh"}}>
+                    이전 소설:
+                    &nbsp;
+                    <a href={previousBookmark?.url ?? "#"}>
                         {
-                            previousBookmark.title && previousBookmark.chapter
-                                ? `${previousBookmark.chapter} - ${decodeURIComponent(previousBookmark.title)}`
+                            previousBookmark?.title && previousBookmark?.chapter
+                                ? `${previousBookmark?.chapter} - ${decodeURIComponent(previousBookmark?.title)}`
                                 : "없음"
                         }
                     </a>
-                </div>
+                </h5>
+            </div>
 
-                <div style={{
-                    position: "fixed",
-                    bottom: "5px",
-                    right: "5px"
-                }}>
-                    <button onDoubleClick={reset}>초기화</button>
-                    <button onClick={quit} style={{marginLeft: "5px"}}>
-                        닫기
-                    </button>
-                </div>
-            </MainDiv>
-        </>
+            <div style={{
+                position: "fixed",
+                bottom: "5px",
+                right: "5px"
+            }}>
+                <button onDoubleClick={reset}>초기화</button>
+                <button onClick={quit} style={{marginLeft: "5px"}}>
+                    닫기
+                </button>
+            </div>
+        </MainDiv>
     );
-}
-
-function bookmark() {
-    if (/^\/viewer\//.test(location.pathname))
-        return;
-
-    const appContainer = document.createElement("div");
-    document.body.prepend(appContainer);
-    ReactDOM.render(<Bookmark/>, appContainer);
 }
 
 function novel() {
     if (!/^\/novel\//.test(location.pathname))
         return;
 
-    const bookmarks = GM_getValue("bookmarks", {}) as Bookmarks;
+    const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
 
     const bookmark = Object.entries(bookmarks).filter(([, value]) => decodeURIComponent(value.title) === document.title.split("-")[2].trimLeft()).pop();
 
@@ -251,8 +243,30 @@ function novel() {
 }
 
 function Viewer() {
-    const [bookmarks, setBookmarks] = useState((GM_getValue("bookmarks", {}) as Bookmarks));
+    const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
+
     const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
+    const title = encodeURIComponent($(NOVEL_TITLE).text()) ?? "알 수 없음";
+
+    useLayoutEffect(() => {
+        const scrollTop = bookmarks[location.href]?.scrollTop;
+
+        if (!scrollTop || !isFirst("bookmark"))
+            return;
+
+        novelLoad(() => {
+            if (GM_getValue<boolean>("Bookmark_OneUse", false)) {
+                const bookmarks1 = {...bookmarks};
+                delete bookmarks1[location.href];
+
+                setBookmarks(bookmarks1);
+                GM_setValue("bookmarks", bookmarks1);
+            }
+
+            if (!GM_getValue<boolean>("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+            $(NOVEL_BOX).animate({scrollTop}, 0);
+        });
+    }, []);
 
     const click = useCallback(() => {
         if (location.hash !== "")
@@ -267,7 +281,7 @@ function Viewer() {
 
         bookmark1[location.href] = {
             scrollTop,
-            title: encodeURIComponent($(NOVEL_TITLE).text()),
+            title,
             chapter
         };
 
@@ -292,21 +306,6 @@ function Viewer() {
 
         toastr.info("삭제되었습니다.", "북마크");
     });
-
-    useLayoutEffect(() => {
-        const scrollTop = bookmarks[location.href]?.scrollTop;
-
-        if (!scrollTop || !isFirst("bookmark"))
-            return;
-
-        novelLoad(() => {
-            if (GM_getValue("Bookmark_OneUse", false))
-                removeBookmark(bookmarks, location.href);
-
-            if (!GM_getValue("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-            $(NOVEL_BOX).animate({scrollTop: scrollTop}, 0);
-        });
-    }, []);
 
     const BookmarkIcon = styled.i`
       color: ${bookmarks.hasOwnProperty(location.href)
@@ -358,8 +357,13 @@ export default {
             return;
         }
 
-        bookmark();
         novel();
+
+        if (!/^\/viewer\//.test(location.pathname)) {
+            const appContainer = document.createElement("div");
+            document.body.prepend(appContainer);
+            ReactDOM.render(<Bookmark/>, appContainer);
+        }
 
         if (/^\/viewer\//.test(location.pathname)) {
             const appContainer = document.createElement("td");

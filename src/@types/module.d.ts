@@ -75,7 +75,7 @@ declare global {
         include?: RegExp;
         exclude?: RegExp;
         enable?: Config[];
-        config?: Configs,
+        config?: Configs;
 
         start(): void | Promise<void>;
     }

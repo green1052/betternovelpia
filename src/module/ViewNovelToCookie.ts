@@ -38,8 +38,8 @@ export default {
         if (!blocked.length)
             return;
 
-        const loginKey = GM_getValue("ViewNovelToCookie_LOGINKEY", "") as string;
-        const userKey = GM_getValue("ViewNovelToCookie_USERKEY", "") as string;
+        const loginKey = GM_getValue<string>("ViewNovelToCookie_LOGINKEY", "");
+        const userKey = GM_getValue<string>("ViewNovelToCookie_USERKEY", "");
 
         if (!loginKey || !userKey)
             return;
