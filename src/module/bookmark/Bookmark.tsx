@@ -249,7 +249,7 @@ function Viewer() {
     const title = encodeURIComponent($(NOVEL_TITLE).text()) ?? "알 수 없음";
 
     useLayoutEffect(() => {
-        const scrollTop = bookmarks[location.href]?.scrollTop;
+        const scrollTop = bookmarks[location.href]?.scrollTop ?? 0;
 
         if (!scrollTop || !isFirst("bookmark"))
             return;
@@ -279,11 +279,7 @@ function Viewer() {
 
         const bookmark1 = {...bookmarks};
 
-        bookmark1[location.href] = {
-            scrollTop,
-            title,
-            chapter
-        };
+        bookmark1[location.href] = {scrollTop, title, chapter};
 
         GM_setValue("bookmarks", bookmark1);
         setBookmarks(bookmark1);

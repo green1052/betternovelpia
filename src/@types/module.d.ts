@@ -49,6 +49,7 @@ declare global {
         "HideAd" |
         "InfoUnfold" |
         "NaviColor" |
+        "NaviScrollHide" |
         "NovelDownload" |
         "NovelDownload_Copy" |
         "PreLoadComment" |

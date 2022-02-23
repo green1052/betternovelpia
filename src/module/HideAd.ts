@@ -24,11 +24,11 @@ export default {
 
         if (/^\/viewer\//.test(location.pathname)) {
             novelLoad(() => {
-                document.querySelector("div[class=one-event-wrapper]")?.parentElement?.remove();
-                document.querySelector(`img[src*="m_banner_list_04.png"]`)?.closest("div")?.remove();
+                setTimeout(() => {
+                    document.querySelector("div[class=one-event-wrapper]")?.parentElement?.remove();
+                    document.querySelector(".ad_banner")?.remove();
+                }, 500);
             });
-
-            document.querySelector("img[alt=댓글광고]")?.remove();
         }
 
         if (/^\/freestory|plus/.test(location.pathname)) {

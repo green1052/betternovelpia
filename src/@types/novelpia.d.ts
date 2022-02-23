@@ -17,6 +17,10 @@ declare global {
 
     var novel_data: NovelData[] | [];
 
+    var toggle_navi: 0 | 1;
+
+    function navi_view(): void;
+
     function novel_drawing(novel_d: NovelData[]): void;
 
     function comment_load(): void;

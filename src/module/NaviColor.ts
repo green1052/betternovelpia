@@ -4,7 +4,7 @@ export default {
     include: /^\/viewer\//,
     enable: ["NaviColor"],
     config: {
-        head: "뷰어 배경색으로 테마 변경",
+        head: "뷰어 배경색으로 네비 색 변경",
         configs: {
             NaviColor: {
                 label: "활성화",

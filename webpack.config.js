@@ -5,12 +5,12 @@ const {DefinePlugin} = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
-const header = {
+const headers = {
     author: "green1052",
     name: "BetterNovelpia",
     namespace: "betternovelpia",
     match: "http*://novelpia.com/*",
-    version: version,
+    version,
     description: "노벨피아를 더 좋게 바꿔줍니다!",
     "rut-at": "document-start",
     noframes: true,
@@ -39,7 +39,26 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: /src/,
-                loader: "swc-loader"
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        cacheDirectory: true,
+                        presets: [
+                            "@babel/preset-typescript",
+                            "@babel/preset-react",
+                            [
+                                "@babel/preset-env",
+                                {
+                                    "targets": "> 0.25%, not dead"
+                                }
+                            ]
+                        ],
+                        plugins: [
+                            "babel-plugin-styled-components",
+                            "@babel/plugin-transform-runtime"
+                        ]
+                    }
+                }
             }
         ]
     },
@@ -54,7 +73,7 @@ module.exports = {
             beforeCompile: true
         }),
         new WebpackUserscript({
-            headers: header,
+            headers,
             metajs: false,
             pretty: false
         }),

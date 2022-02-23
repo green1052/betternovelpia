@@ -24,6 +24,6 @@ export default {
             return;
         }
 
-        hideElement(document.querySelector(`div[onclick*="/notice/all/view_171726"]`));
+        hideElement(document.querySelector(".calc-event-banner"));
     }
 } as Module;
