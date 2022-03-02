@@ -1672,12 +1672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jquery@npm:^3.5.13":
-  version: 3.5.13
-  resolution: "@types/jquery@npm:3.5.13"
+"@types/jquery@npm:^3.5.14":
+  version: 3.5.14
+  resolution: "@types/jquery@npm:3.5.14"
   dependencies:
     "@types/sizzle": "*"
-  checksum: cb4e6aacaf36905049d5ac93da1fabed17da285fafe38c88feba89d7c9912e108c934ea05c908b87ae199f2830e5e002a72d0cc8aaef4a33539581d0a7a6abe8
+  checksum: 159d6f804ed1a204b3f79f2d591a271d82e866bd45bd49fb6ef40561a25dbe0f47ec7815681b44cc2db5598425f72811e7e80ab0e983d980470998ac56feb375
   languageName: node
   linkType: hard
 
@@ -1716,12 +1716,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^17.0.11":
-  version: 17.0.11
-  resolution: "@types/react-dom@npm:17.0.11"
+"@types/react-dom@npm:^17.0.12":
+  version: 17.0.12
+  resolution: "@types/react-dom@npm:17.0.12"
   dependencies:
     "@types/react": "*"
-  checksum: 4d5730dffbef86c887cecad7e3cecda424ce6a64d0b5441c63b5b015d48219868660a2bb1aa15e897e565ad8867fa6b885d4358b04e1c4e589ba4c07c3fda55c
+  checksum: 9754e1d0c0107310eab35a2eb1dad45f6ef0a41e562c23a29d6bf723a29c8a2036c4acd6a1a1422bf7cf956d431e41b154608dd917f6e69c7ab0d87720c5e27e
   languageName: node
   linkType: hard
 
@@ -1761,14 +1761,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:^5.1.23":
-  version: 5.1.23
-  resolution: "@types/styled-components@npm:5.1.23"
+"@types/styled-components@npm:^5.1.24":
+  version: 5.1.24
+  resolution: "@types/styled-components@npm:5.1.24"
   dependencies:
     "@types/hoist-non-react-statics": "*"
     "@types/react": "*"
     csstype: ^3.0.2
-  checksum: 78bc52c70df3964cb3826bdc7f2aa298b610971b63f1e015184f425236219b97d8efaf665603960388763686335e2d8b981e4ee3d87f0e3e3781bad35b0a646a
+  checksum: 158c69085ad899622f558426c623d3052f7b521ede01c0fd342280c93ef2ac462a39c4c3b2374e7c7e2630fcc64dfcfd8f4446c8d4809cbac9a7b962a73357c0
   languageName: node
   linkType: hard
 
@@ -2294,9 +2294,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-styled-components@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "babel-plugin-styled-components@npm:2.0.5"
+"babel-plugin-styled-components@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "babel-plugin-styled-components@npm:2.0.6"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.16.0
     "@babel/helper-module-imports": ^7.16.0
@@ -2305,7 +2305,7 @@ __metadata:
     picomatch: ^2.3.0
   peerDependencies:
     styled-components: ">= 2"
-  checksum: 0aa9dd2ab650bde4916070df34d25788d7dbdec71b7192b5686bd7ba4dd9d8e9233187c3111cb1d136e6309f6636298e0f40930865da3ad7e0f67000386c8b9d
+  checksum: 7be16a06432e0acfdbef23688b0da7d2320f2c48b6639e6f18089d4cdba4784b68d99e9b90e6d2b6babfb5a370dbc71151f1160f2cd8ca611c1fbd2cb1aea0ab
   languageName: node
   linkType: hard
 
@@ -2343,16 +2343,16 @@ __metadata:
     "@babel/preset-typescript": ^7.16.7
     "@babel/runtime": ^7.17.2
     "@types/file-saver": ^2.0.5
-    "@types/jquery": ^3.5.13
+    "@types/jquery": ^3.5.14
     "@types/js-cookie": ^3.0.1
     "@types/react": ^17.0.39
-    "@types/react-dom": ^17.0.11
-    "@types/styled-components": ^5.1.23
+    "@types/react-dom": ^17.0.12
+    "@types/styled-components": ^5.1.24
     "@types/toastr": ^2.1.39
     "@types/url-regex-safe": ^1.0.0
     "@types/webpack-env": ^1.16.3
     babel-loader: ^8.2.3
-    babel-plugin-styled-components: ^2.0.5
+    babel-plugin-styled-components: ^2.0.6
     browserslist: ^4.19.3
     clean-terminal-webpack-plugin: ^3.0.0
     file-saver: ^2.0.5
@@ -2367,7 +2367,7 @@ __metadata:
     styled-components: ^5.3.3
     terser-webpack-plugin: ^5.3.1
     toastr: ^2.1.4
-    typescript: ^4.5.5
+    typescript: ^4.6.2
     url-regex-safe: ^3.0.0
     use-force-update: ^1.0.7
     use-long-press: ^1.1.2
@@ -5216,23 +5216,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "typescript@npm:4.5.5"
+"typescript@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "typescript@npm:4.6.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
+  checksum: 8a44ed7e6f6c4cb1ebe8cf236ecda2fb119d84dcf0fbd77e707b2dfea1bbcfc4e366493a143513ce7f57203c75da9d4e20af6fe46de89749366351046be7577c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
-  version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=bda367"
+"typescript@patch:typescript@^4.6.2#~builtin<compat/typescript>":
+  version: 4.6.2
+  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 858c61fa63f7274ca4aaaffeced854d550bf416cff6e558c4884041b3311fb662f476f167cf5c9f8680c607239797e26a2ee0bcc6467fbc05bfcb218e1c6c671
+  checksum: 40b493a71747fb89fa70df104e2c4a5e284b43750af5bea024090a5261cefa387f7a9372411b13030f7bf5555cee4275443d08805642ae5c74ef76740854a4c7
   languageName: node
   linkType: hard
 

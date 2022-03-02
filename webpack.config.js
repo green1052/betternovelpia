@@ -42,21 +42,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        cacheDirectory: true,
-                        presets: [
-                            "@babel/preset-typescript",
-                            "@babel/preset-react",
-                            [
-                                "@babel/preset-env",
-                                {
-                                    "targets": "> 0.25%, not dead"
-                                }
-                            ]
-                        ],
-                        plugins: [
-                            "babel-plugin-styled-components",
-                            "@babel/plugin-transform-runtime"
-                        ]
+                        cacheDirectory: true
                     }
                 }
             }
