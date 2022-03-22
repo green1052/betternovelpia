@@ -22,7 +22,8 @@ const headers = {
         "GM_setClipboard",
         "unsafeWindow"
     ],
-    homepageURL: "https://github.com/green1052/betternovelpia"
+    homepageURL: "https://github.com/green1052/betternovelpia",
+    supportURL: "https://github.com/green1052/betternovelpia/issues"
 };
 
 module.exports = {
