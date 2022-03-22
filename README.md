@@ -33,3 +33,9 @@ PC 버전 웹 이용시 오류가 발생할 수도 있습니다.
     2. 구매 후 라이센스 적용
     3. 앱에서 설정 -> 확장 프로그램 접속 후 새 확장 프로그램 클릭
     4. 경로에 https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js 넣고 설치
+
+## 사용법
+
+1. 설치 후 메인 화면에서 햄버거 버튼을 클릭
+2. 하단 설정 버튼을 클릭
+3. 설정 후 빨간 X 아이콘 클릭
