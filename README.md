@@ -24,8 +24,8 @@ PC 버전 웹 이용시 오류가 발생할 수도 있습니다.
 
 * PC 또는 모바일 웹 설치법
     1. [Violentmonkey](https://violentmonkey.github.io/get-it/) 확장 프로그렘 설치
-    2. [유저스크립트](https://github.com/green1052/betternovelpiareleases/latest/download/betternovelpia.user.js) 를 눌러 유저스크립트를
-       설치
+    2. [유저스크립트](https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js) 를 눌러
+       유저스크립트를 설치
 
 
 * 모바일 앱 설치법 [(웹소설 노벨피아)](https://play.google.com/store/apps/details?id=com.novelpia.android.me)
