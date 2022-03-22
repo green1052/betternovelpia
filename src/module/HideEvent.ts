@@ -24,6 +24,6 @@ export default {
             return;
         }
 
-        hideElement(document.querySelector(".calc-event-banner"));
+        hideElement(document.querySelector(`div[onclick*="/event/writer_sum"]`));
     }
 } as Module;

@@ -1,0 +1,14 @@
+{
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "tsx": true,
+            "decorators": false,
+            "dynamicImport": false
+        },
+        "target": "es5"
+    },
+    "env": {
+        "targets": "> 0.25%, not dead"
+    }
+}

@@ -6,12 +6,13 @@ import styled, {css} from "styled-components";
 import {isDarkMode} from "../util/IsDarkMode";
 import useForceUpdate from "use-force-update";
 import toastr from "toastr";
+import {exportConfig} from "../util/ExportConfig";
 
 function Card(props: { children: React.ReactNode }) {
     return (
         <div className="col-lg-4">
             <hr/>
-            <div className="card rounded-10 mg-b-10" style={{boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.2)"}}>
+            <div className="card rounded-10 mg-b-10" style={{boxShadow: "0px 0px 5px 0px rgb(0 0 0 / 20%)"}}>
                 {props.children}
             </div>
         </div>
@@ -22,7 +23,7 @@ function CardHead(props: { label: string }) {
     return (
         <div className="card-header card-header-default bg-dark"
              style={{borderRadius: "10px 10px 0px 0px", height: "45px"}}>
-            <span style={{color: "#eee", fontSize: "14px"}}>
+            <span style={{color: "rgb(238, 238, 238)", fontSize: "14px"}}>
                 <i className="icon ion-ios-gear"/>
                 &nbsp;
                 {props.label}
@@ -33,7 +34,9 @@ function CardHead(props: { label: string }) {
 
 function CardBody(props: { children: React.ReactNode }) {
     return (
-        <div className="card-body" style={{padding: "20px"}}>{props.children}</div>
+        <div className="card-body" style={{padding: "20px"}}>
+            {props.children}
+        </div>
     );
 }
 
@@ -98,10 +101,6 @@ function NumberBox(props: { config: Config, label: string, min: number, max: num
             <br/>
         </div>
     );
-}
-
-function exportConfig() {
-    return GM_listValues().reduce((acc, key) => ({...acc, [key]: GM_getValue(key)}), {});
 }
 
 function Setting() {

@@ -63,9 +63,7 @@ function Bookmark() {
 
     const reset = useCallback(() => setBookmarks({}), []);
 
-    const quit = useCallback(() => {
-        setHide(true);
-    }, []);
+    const quit = useCallback(() => setHide(true), []);
 
     const GlobalStyles = createGlobalStyle`
       .no-overflow {
@@ -108,7 +106,6 @@ function Bookmark() {
     return (
         <MainDiv>
             <GlobalStyles/>
-
             {
                 !inputHide && <div style={{
                     display: "flex",
@@ -264,7 +261,7 @@ function Viewer() {
             }
 
             if (!GM_getValue<boolean>("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-            $(NOVEL_BOX).animate({scrollTop}, 0);
+            document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
         });
     }, []);
 
@@ -272,7 +269,7 @@ function Viewer() {
         if (location.hash !== "")
             return;
 
-        const scrollTop = $(NOVEL_BOX).scrollTop();
+        const scrollTop = document.querySelector(NOVEL_BOX)?.scrollTop;
 
         if (scrollTop === undefined)
             return;

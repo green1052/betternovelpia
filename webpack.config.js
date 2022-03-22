@@ -40,10 +40,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 include: /src/,
                 use: {
-                    loader: "babel-loader",
-                    options: {
-                        cacheDirectory: true
-                    }
+                    loader: "swc-loader"
                 }
             }
         ]

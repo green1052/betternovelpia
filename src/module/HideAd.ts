@@ -31,6 +31,12 @@ export default {
             });
         }
 
+        if (/^\/ssul/.test(location.pathname))
+            document.querySelector(`div.story_bnr`)?.remove();
+
+        if (/^\/comic/.test(location.pathname))
+            document.querySelector(`div.comic_bnr`)?.remove();
+
         if (/^\/freestory|plus/.test(location.pathname)) {
             for (const element of document.querySelectorAll(`img[alt="자유연재 광고"]`))
                 element.closest("div")?.remove();
@@ -39,7 +45,9 @@ export default {
         if (/^\/plus/.test(location.pathname))
             document.querySelector(`div[class="plus_bg mobile_show"]`)?.parentElement?.remove();
 
-        if (!/^\/viewer\//.test(location.pathname))
+        if (!/^\/viewer\//.test(location.pathname)) {
             document.querySelector(`img[src*="won_m.gif"]`)?.remove();
+            document.querySelector(`img[alt=광고]`)?.parentElement?.parentElement?.remove();
+        }
     }
 } as Module;

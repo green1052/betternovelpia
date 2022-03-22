@@ -21,8 +21,8 @@ function novel() {
 function viewer() {
     if (!/^\/viewer\//.test(location.pathname)) return;
 
-    const title = encodeURIComponent($(NOVEL_TITLE).text());
-    const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
+    const title = encodeURIComponent(document.querySelector(NOVEL_TITLE)?.innerHTML ?? "알 수 없음");
+    const chapter = document.querySelector(NOVEL_EP)?.textContent ?? "알 수 없음";
 
     const bookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);
     const url = location.href;
@@ -31,7 +31,7 @@ function viewer() {
 
     $(NOVEL_BOX).on("scroll", (e) => scrollTop = e.currentTarget.scrollTop);
 
-    $(window).on("beforeunload", () => {
+    window.addEventListener("beforeunload", () => {
         if (scrollTop > -1) GM_setValue("previousBookmark", {url, scrollTop, title, chapter} as PreviousBookmark);
     });
 
@@ -44,7 +44,8 @@ function viewer() {
                 GM_setValue("previousBookmark", {});
 
             if (!GM_getValue<boolean>("PreviousBookmark_AutoUse", false) && !confirm("읽던 부분으로 이동하시겠습니까?")) return;
-            $(NOVEL_BOX).animate({scrollTop: bookmark.scrollTop}, 0);
+
+            document.querySelector(NOVEL_BOX)?.scroll(0, bookmark.scrollTop);
         }, 500);
     });
 }
