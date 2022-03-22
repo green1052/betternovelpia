@@ -32,4 +32,4 @@ PC 버전 웹 이용시 오류가 발생할 수도 있습니다.
     1. [Android용 AdGuard](https://adguard.com/ko/adguard-android/overview.html) 설치
     2. 구매 후 라이센스 적용
     3. 앱에서 설정 -> 확장 프로그램 접속 후 새 확장 프로그램 클릭
-    4. 경로에 https://github.com/green1052/betternovelpiareleases/latest/download/betternovelpia.user.js 넣고 설치
+    4. 경로에 https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js 넣고 설치
