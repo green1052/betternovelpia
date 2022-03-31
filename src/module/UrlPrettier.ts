@@ -2,6 +2,7 @@ import urlRegex from "url-regex-safe";
 import $ from "jquery";
 import {NOVEL_DRAWING} from "../util/Selectors";
 import {element} from "../util/Element";
+import {commentLoaded} from "../util/CommentLoaded";
 
 export default {
     include: /^\/(novel|viewer)\//,
@@ -51,29 +52,23 @@ export default {
         warpAll(NOVEL_DRAWING);
         warpAll("#writer_comments_box");
 
-        const oldCommentLoad = unsafeWindow.get_comment_load;
+        commentLoaded(() => {
+            for (const element of $("div.comment_text")) {
+                const $element = $(element);
 
-        unsafeWindow.get_comment_load = (comment_re_no = 0, comment_ori_no = 0) => {
-            oldCommentLoad(comment_re_no, comment_ori_no);
+                const match = $element.text().match(urlRegex());
 
-            setTimeout(() => {
-                for (const element of $("div.comment_text")) {
-                    const $element = $(element);
+                if (!match) return;
 
-                    const match = $element.text().match(urlRegex());
+                for (const str of match) {
+                    if ($element.html().includes(`<a href=${str} target=_blank>${str}</a>`)) continue;
 
-                    if (!match) return;
-
-                    for (const str of match) {
-                        if ($element.html().includes(`<a href=${str} target=_blank>${str}</a>`)) continue;
-
-                        $element
-                            .html((index, html) =>
-                                html.replace(str, `<a href=${str} target=_blank>${str}</a>`)
-                            );
-                    }
+                    $element
+                        .html((index, html) =>
+                            html.replace(str, `<a href=${str} target=_blank>${str}</a>`)
+                        );
                 }
-            }, 500);
-        };
+            }
+        });
     }
 } as Module;

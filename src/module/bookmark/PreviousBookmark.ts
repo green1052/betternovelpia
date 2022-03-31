@@ -15,13 +15,13 @@ function novel() {
     if (previousBookmark.title === document.title.split("-")[2].trimStart())
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
-            .append(`<div onclick='$(".loads").show(),location="${previousBookmark.url}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${previousBookmark.chapter}</span> 이어보기</div>`);
+            .append(`<div onclick='$(".loads").show(),location="${previousBookmark.url}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${previousBookmark.chapter}</span> 이전 소설 이어보기</div>`);
 }
 
 function viewer() {
     if (!/^\/viewer\//.test(location.pathname)) return;
 
-    const title = encodeURIComponent(document.querySelector(NOVEL_TITLE)?.innerHTML ?? "알 수 없음");
+    const title = document.querySelector(NOVEL_TITLE)?.innerHTML ?? "알 수 없음";
     const chapter = document.querySelector(NOVEL_EP)?.textContent ?? "알 수 없음";
 
     const bookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);

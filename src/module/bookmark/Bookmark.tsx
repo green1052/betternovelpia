@@ -10,7 +10,7 @@ import {isPageViewer} from "../../util/IsPageViewer";
 import {appendSide} from "../../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {Header} from "../../util/ApeendHeader";
-import {novelLoad} from "../../util/NovelLoad";
+import {novelLoaded} from "../../util/NovelLoaded";
 
 function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
@@ -136,8 +136,8 @@ function Bookmark() {
                     (
                         GM_getValue<boolean>("Bookmark_Sort", false)
                             ? Object.entries(bookmarks).sort((a, b) => {
-                                const aTitle = decodeURIComponent(a[1].title);
-                                const bTitle = decodeURIComponent(b[1].title);
+                                const aTitle = a[1].title;
+                                const bTitle = b[1].title;
 
                                 return aTitle < bTitle
                                     ? -1
@@ -149,7 +149,7 @@ function Bookmark() {
                     ).map(([key, value]) =>
                         <li>
                             <div>
-                                <a href={key}>{value.chapter} - {decodeURIComponent(value.title)}</a>
+                                <a href={key}>{value.chapter} - {value.title}</a>
                                 <h5 onClick={() => deleteBookmark(key)}>X</h5>
                             </div>
                         </li>
@@ -179,7 +179,7 @@ function Bookmark() {
                     <a href={previousBookmark?.url ?? "#"}>
                         {
                             previousBookmark?.title && previousBookmark?.chapter
-                                ? `${previousBookmark?.chapter} - ${decodeURIComponent(previousBookmark?.title)}`
+                                ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
                                 : "없음"
                         }
                     </a>
@@ -206,12 +206,12 @@ function novel() {
 
     const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
 
-    const bookmark = Object.entries(bookmarks).filter(([, value]) => decodeURIComponent(value.title) === document.title.split("-")[2].trimLeft()).pop();
+    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === document.title.split("-")[2].trimLeft()).pop();
 
     if (bookmark)
         $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
             .parent()
-            .append(`<div onclick='$(".loads").show(),location="${bookmark[0]}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${bookmark[1].chapter}</span> 이어보기</div>`);
+            .append(`<div onclick='$(".loads").show(),location="${bookmark[0]}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${bookmark[1].chapter}</span> 북마크 이어보기</div>`);
 
     function addBookmark() {
         for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
@@ -242,8 +242,8 @@ function novel() {
 function Viewer() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
 
-    const chapter = $(NOVEL_EP).text() ?? "EP.알 수 없음";
-    const title = encodeURIComponent($(NOVEL_TITLE).text()) ?? "알 수 없음";
+    const chapter = document.querySelector(NOVEL_EP)?.textContent ?? "EP.알 수 없음";
+    const title = document.querySelector(NOVEL_TITLE)?.textContent ?? "알 수 없음";
 
     useLayoutEffect(() => {
         const scrollTop = bookmarks[location.href]?.scrollTop ?? 0;
@@ -251,7 +251,7 @@ function Viewer() {
         if (!scrollTop || !isFirst("bookmark"))
             return;
 
-        novelLoad(() => {
+        novelLoaded(() => {
             if (GM_getValue<boolean>("Bookmark_OneUse", false)) {
                 const bookmarks1 = {...bookmarks};
                 delete bookmarks1[location.href];

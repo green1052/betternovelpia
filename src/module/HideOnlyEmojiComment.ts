@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {commentLoaded} from "../util/CommentLoaded";
 
 export default {
     include: /^\/viewer\//,
@@ -19,42 +20,36 @@ export default {
         }
     },
     start() {
-        const oldCommentLoad = unsafeWindow.get_comment_load;
+        commentLoaded(() => {
+            for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_content > .comment_img")) {
+                const $element = $(element);
 
-        unsafeWindow.get_comment_load = (comment_re_no = 0, comment_ori_no = 0) => {
-            oldCommentLoad(comment_re_no, comment_ori_no);
+                if (
+                    $element.css("display") === "none" ||
+                    $element.parent().children(".comment_text").text().length > 0 ||
+                    $element.closest(".comment").attr("data-status") !== "1"
+                ) continue;
 
-            setTimeout(() => {
-                for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_content > .comment_img")) {
-                    const $element = $(element);
-
-                    if (
-                        $element.css("display") === "none" ||
-                        $element.parent().children(".comment_text").text().length > 0 ||
-                        $element.closest(".comment").attr("data-status") !== "1"
-                    ) continue;
-
-                    if (GM_getValue<boolean>("HideOnlyEmojiComment_Remove", false)) {
-                        $element.closest(".comment").remove();
-                        continue;
-                    }
-
-                    $element
-                        .closest(".comment")
-                        .attr("data-status", "0");
-
-                    const regDate = $element
-                        .parent()
-                        .children(".comment_regdate")
-                        .nextAll();
-
-                    regDate
-                        .parent()
-                        .append(`<span style="color: #999;">노벨티콘만 있는 댓글 입니다.</span><br>`);
-
-                    regDate.remove();
+                if (GM_getValue<boolean>("HideOnlyEmojiComment_Remove", false)) {
+                    $element.closest(".comment").remove();
+                    continue;
                 }
-            }, 500);
-        };
+
+                $element
+                    .closest(".comment")
+                    .attr("data-status", "0");
+
+                const regDate = $element
+                    .parent()
+                    .children(".comment_regdate")
+                    .nextAll();
+
+                regDate
+                    .parent()
+                    .append(`<span style="color: #999;">노벨티콘만 있는 댓글 입니다.</span><br>`);
+
+                regDate.remove();
+            }
+        });
     }
 } as Module;

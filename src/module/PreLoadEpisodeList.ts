@@ -1,4 +1,4 @@
-import {novelLoad} from "../util/NovelLoad";
+import {novelLoaded} from "../util/NovelLoaded";
 
 export default {
     include: /^\/viewer\//,
@@ -14,8 +14,11 @@ export default {
         }
     },
     start() {
-        novelLoad(() =>
-            episode_list_viewer(Number(localStorage.getItem(`novel_page_${(document.querySelector("#novel_no") as HTMLInputElement).value}`)))
-        );
+        const code = unsafeWindow.episode_list_viewer.toString().split("\n");
+        delete code[18];
+
+        const episodeListViewer = code.join("");
+
+        novelLoaded(() => eval(episodeListViewer));
     }
 } as Module;

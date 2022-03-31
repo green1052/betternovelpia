@@ -1,4 +1,4 @@
-import {novelLoad} from "../util/NovelLoad";
+import {novelLoaded} from "../util/NovelLoaded";
 
 export default {
     include: /^\/viewer\//,
@@ -14,6 +14,6 @@ export default {
         }
     },
     start() {
-        novelLoad(() => unsafeWindow.get_comment_box());
+        novelLoaded(() => unsafeWindow.get_comment_box());
     }
 } as Module;

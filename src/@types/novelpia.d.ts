@@ -25,5 +25,5 @@ declare global {
 
     function comment_load(): void;
 
-    function episode_list_viewer(page: number): void;
+    function episode_list_viewer(page?: number): void;
 }

@@ -1,5 +1,6 @@
 import {hideElement} from "../util/HideElement";
-import {novelLoad} from "../util/NovelLoad";
+import {novelLoaded} from "../util/NovelLoaded";
+import $ from "jquery";
 
 export default {
     enable: ["HideAd"],
@@ -14,19 +15,14 @@ export default {
         }
     },
     start() {
-        if (location.pathname === "/")
-            setTimeout(() => {
-                (document.querySelector("button[class*=detail-modal-24close]") as HTMLElement)?.click();
-            }, 500);
-
         if (/^\/mybook/.test(location.pathname))
             hideElement(document.querySelector(`img[src*=m_banner][alt="내서재 광고"]`)?.closest("div") as HTMLElement);
 
         if (/^\/viewer\//.test(location.pathname)) {
-            novelLoad(() => {
+            novelLoaded(() => {
                 setTimeout(() => {
-                    document.querySelector("div[class=one-event-wrapper]")?.parentElement?.remove();
                     document.querySelector(".ad_banner")?.remove();
+                    $("img[alt=광고]").closest("div").remove();
                 }, 500);
             });
         }
@@ -46,8 +42,7 @@ export default {
             document.querySelector(`div[class="plus_bg mobile_show"]`)?.parentElement?.remove();
 
         if (!/^\/viewer\//.test(location.pathname)) {
-            document.querySelector(`img[src*="won_m.gif"]`)?.remove();
-            document.querySelector(`img[alt=광고]`)?.parentElement?.parentElement?.remove();
+            $(`img[alt="글 쓰고 부자되기"]`).parent().remove();
         }
     }
 } as Module;
