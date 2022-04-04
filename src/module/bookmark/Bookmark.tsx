@@ -11,6 +11,7 @@ import {appendSide} from "../../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {Header} from "../../util/ApeendHeader";
 import {novelLoaded} from "../../util/NovelLoaded";
+import {NovelContinueBox} from "../../util/NovelContinueBox";
 
 function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
@@ -200,43 +201,43 @@ function Bookmark() {
     );
 }
 
-function novel() {
-    if (!/^\/novel\//.test(location.pathname))
-        return;
+function Novel() {
+    useEffect(() => {
+        function addBookmark() {
+            for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
+                const $element = $(element);
+
+                const url = /'\/viewer\/(\d*)'/.exec($element.attr("onclick")!)?.[1];
+
+                if (!url) continue;
+
+                if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
+
+                $element
+                    .children("b")
+                    .children(".ion-bookmark")
+                    .show();
+            }
+        }
+
+        addBookmark();
+
+        const observer = new MutationObserver(addBookmark);
+
+        observer.observe(document.querySelector(EP_List)!, {
+            childList: true
+        });
+    }, []);
 
     const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
 
-    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === document.title.split("-")[2].trimLeft()).pop();
+    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === document.title.split("-")[2].trimStart()).pop();
 
-    if (bookmark)
-        $(`div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("이어보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("첫화보기"), div:not(.s_inv)[onclick*="$('.loads').show();"]:contains("신규회차등록")`)
-            .parent()
-            .append(`<div onclick='$(".loads").show(),location="${bookmark[0]}"'style=background-color:#6143d1;color:#fff;width:100%;line-height:40px;margin-top:10px;text-align:center;cursor:pointer><span style="background-color:#7f66de;border:1px solid #fff;padding:1px 6px;border-radius:10px;font-size:11px;margin-right:3px">${bookmark[1].chapter}</span> 북마크 이어보기</div>`);
-
-    function addBookmark() {
-        for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
-            const $element = $(element);
-
-            const url = /'\/viewer\/(\d*)'/.exec($element.attr("onclick")!)?.[1];
-
-            if (!url) continue;
-
-            if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
-
-            $element
-                .children("b")
-                .children(".ion-bookmark")
-                .show();
-        }
-    }
-
-    addBookmark();
-
-    const observer = new MutationObserver(addBookmark);
-
-    observer.observe($(EP_List).get(0)!, {
-        childList: true
-    });
+    return (
+        bookmark ?
+            <NovelContinueBox url={bookmark[0]} chapter={bookmark[1].chapter} isBookmark={true}/>
+            : null
+    );
 }
 
 function Viewer() {
@@ -252,16 +253,18 @@ function Viewer() {
             return;
 
         novelLoaded(() => {
-            if (GM_getValue<boolean>("Bookmark_OneUse", false)) {
-                const bookmarks1 = {...bookmarks};
-                delete bookmarks1[location.href];
+            setTimeout(() => {
+                if (GM_getValue<boolean>("Bookmark_OneUse", false)) {
+                    const bookmarks1 = {...bookmarks};
+                    delete bookmarks1[location.href];
 
-                setBookmarks(bookmarks1);
-                GM_setValue("bookmarks", bookmarks1);
-            }
+                    setBookmarks(bookmarks1);
+                    GM_setValue("bookmarks", bookmarks1);
+                }
 
-            if (!GM_getValue<boolean>("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
-            document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
+                if (!GM_getValue<boolean>("Bookmark_AutoUse", false) && !confirm("저장해두었던 북마크로 이동하시겠습니까?")) return;
+                document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
+            }, 1000);
         });
     }, []);
 
@@ -350,7 +353,13 @@ export default {
             return;
         }
 
-        novel();
+        if (/^\/novel\//.test(location.pathname)) {
+            const tr = $("tbody:has(> .more_info) tr:last > td");
+
+            const appContainer = document.createElement("div");
+            tr.append(appContainer);
+            ReactDOM.render(<Novel/>, appContainer);
+        }
 
         if (!/^\/viewer\//.test(location.pathname)) {
             const appContainer = document.createElement("div");

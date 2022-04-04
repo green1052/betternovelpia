@@ -15,14 +15,21 @@ export default {
         }
     },
     start() {
-        if (/^\/mybook/.test(location.pathname))
-            hideElement(document.querySelector(`img[src*=m_banner][alt="내서재 광고"]`)?.closest("div") as HTMLElement);
+        if (location.pathname === "/")
+            setTimeout(() => {
+                (document.querySelector("span[class=detail-modal-72close]") as HTMLElement)?.click();
+            }, 500);
+
+        if (/^\/mybook/.test(location.pathname)) {
+            hideElement(document.querySelector(".mybook_contest_bnr"));
+            hideElement(document.querySelector(`img[src*="_m"][alt="내서재 광고"]`)?.closest("div") as HTMLElement);
+        }
 
         if (/^\/viewer\//.test(location.pathname)) {
             novelLoaded(() => {
                 setTimeout(() => {
                     document.querySelector(".ad_banner")?.remove();
-                    $("img[alt=광고]").closest("div").remove();
+                    document.querySelector("img[alt=광고]")?.closest("div")?.remove();
                 }, 500);
             });
         }
@@ -33,16 +40,17 @@ export default {
         if (/^\/comic/.test(location.pathname))
             document.querySelector(`div.comic_bnr`)?.remove();
 
-        if (/^\/freestory|plus/.test(location.pathname)) {
+        if (/^\/freestory|plus/.test(location.pathname))
             for (const element of document.querySelectorAll(`img[alt="자유연재 광고"]`))
                 element.closest("div")?.remove();
-        }
+
+        if (/^\/contest_list/.test(location.pathname))
+            hideElement(document.querySelector(`div[style*="list_top_m.jpg"]`)?.parentElement?.parentElement!);
 
         if (/^\/plus/.test(location.pathname))
             document.querySelector(`div[class="plus_bg mobile_show"]`)?.parentElement?.remove();
 
-        if (!/^\/viewer\//.test(location.pathname)) {
-            $(`img[alt="글 쓰고 부자되기"]`).parent().remove();
-        }
+        if (!/^\/viewer\//.test(location.pathname))
+            $(`img[alt="공모전 참여하기"]`).parent().remove();
     }
 } as Module;
