@@ -237,114 +237,114 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm-eabi@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-android-arm-eabi@npm:1.2.168"
+"@swc/core-android-arm-eabi@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-android-arm-eabi@npm:1.2.171"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-android-arm64@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-android-arm64@npm:1.2.168"
+"@swc/core-android-arm64@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-android-arm64@npm:1.2.171"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-darwin-arm64@npm:1.2.168"
+"@swc/core-darwin-arm64@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-darwin-arm64@npm:1.2.171"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-darwin-x64@npm:1.2.168"
+"@swc/core-darwin-x64@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-darwin-x64@npm:1.2.171"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-freebsd-x64@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-freebsd-x64@npm:1.2.168"
+"@swc/core-freebsd-x64@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-freebsd-x64@npm:1.2.171"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.168"
+"@swc/core-linux-arm-gnueabihf@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.171"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.168"
+"@swc/core-linux-arm64-gnu@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.171"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-linux-arm64-musl@npm:1.2.168"
+"@swc/core-linux-arm64-musl@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-linux-arm64-musl@npm:1.2.171"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-linux-x64-gnu@npm:1.2.168"
+"@swc/core-linux-x64-gnu@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-linux-x64-gnu@npm:1.2.171"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-linux-x64-musl@npm:1.2.168"
+"@swc/core-linux-x64-musl@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-linux-x64-musl@npm:1.2.171"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.168"
+"@swc/core-win32-arm64-msvc@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.171"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.168"
+"@swc/core-win32-ia32-msvc@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.171"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core-win32-x64-msvc@npm:1.2.168"
+"@swc/core-win32-x64-msvc@npm:1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core-win32-x64-msvc@npm:1.2.171"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.2.168":
-  version: 1.2.168
-  resolution: "@swc/core@npm:1.2.168"
+"@swc/core@npm:^1.2.171":
+  version: 1.2.171
+  resolution: "@swc/core@npm:1.2.171"
   dependencies:
-    "@swc/core-android-arm-eabi": 1.2.168
-    "@swc/core-android-arm64": 1.2.168
-    "@swc/core-darwin-arm64": 1.2.168
-    "@swc/core-darwin-x64": 1.2.168
-    "@swc/core-freebsd-x64": 1.2.168
-    "@swc/core-linux-arm-gnueabihf": 1.2.168
-    "@swc/core-linux-arm64-gnu": 1.2.168
-    "@swc/core-linux-arm64-musl": 1.2.168
-    "@swc/core-linux-x64-gnu": 1.2.168
-    "@swc/core-linux-x64-musl": 1.2.168
-    "@swc/core-win32-arm64-msvc": 1.2.168
-    "@swc/core-win32-ia32-msvc": 1.2.168
-    "@swc/core-win32-x64-msvc": 1.2.168
+    "@swc/core-android-arm-eabi": 1.2.171
+    "@swc/core-android-arm64": 1.2.171
+    "@swc/core-darwin-arm64": 1.2.171
+    "@swc/core-darwin-x64": 1.2.171
+    "@swc/core-freebsd-x64": 1.2.171
+    "@swc/core-linux-arm-gnueabihf": 1.2.171
+    "@swc/core-linux-arm64-gnu": 1.2.171
+    "@swc/core-linux-arm64-musl": 1.2.171
+    "@swc/core-linux-x64-gnu": 1.2.171
+    "@swc/core-linux-x64-musl": 1.2.171
+    "@swc/core-win32-arm64-msvc": 1.2.171
+    "@swc/core-win32-ia32-msvc": 1.2.171
+    "@swc/core-win32-x64-msvc": 1.2.171
   dependenciesMeta:
     "@swc/core-android-arm-eabi":
       optional: true
@@ -374,7 +374,7 @@ __metadata:
       optional: true
   bin:
     swcx: run_swcx.js
-  checksum: b5c9f1c848f1fc156bcee1b20de50e937716b29cdf6376c76c6dce708727a139d400ac823ec93954e874a9f544edec66e8d215fc61620cdcbde7ee7df0918ab6
+  checksum: f6b44c2a43e943560e44f52ebf568a6930ee294fc964169f18ff39ef6dade159c65378ef681e5007b79c8363bd9a59b1de247b32e75843db37e7c1825fb98150
   languageName: node
   linkType: hard
 
@@ -461,10 +461,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-cookie@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@types/js-cookie@npm:3.0.1"
-  checksum: 134abb4a3f139ae791bdef3735ab14c4c098cb564b34363cc8f0aa6210a715e5e4f25b53717b32acb18099d53221e4f13776917e65ac54b3a60ee676a943abdc
+"@types/js-cookie@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@types/js-cookie@npm:3.0.2"
+  checksum: 7ab964288dd26373e134ed0bcde4a7dbea7e6f5de1805e2d1e48eac847e89a0e7f5fdc9164c37931680ec97c6e6e5a73e3e4039e0d08527c2e21badd7bee62d1
   languageName: node
   linkType: hard
 
@@ -496,12 +496,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.1":
-  version: 18.0.1
-  resolution: "@types/react-dom@npm:18.0.1"
+"@types/react-dom@npm:^18.0.2":
+  version: 18.0.2
+  resolution: "@types/react-dom@npm:18.0.2"
   dependencies:
     "@types/react": "*"
-  checksum: 6c183e2e50240b77ed767cd968fe061ef4f2b47f84da5ec9e412a767d68c9a004d1f6ccca4295a5aa2c3ee723377e59006a2031f3767c00d8ac9e240a51bb142
+  checksum: 2b0b138d8634ccfd8a86b17cb5414b122ee0cb6f650377d772f6008761a27e4c2531c08e3cab71aaa19b6893af6a508c664aa314db3ebcff5b8179173c9c9307
   languageName: node
   linkType: hard
 
@@ -516,14 +516,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.0.5":
-  version: 18.0.5
-  resolution: "@types/react@npm:18.0.5"
+"@types/react@npm:^18.0.6":
+  version: 18.0.6
+  resolution: "@types/react@npm:18.0.6"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 70d3336d43ef25509fa89ef3278f57fdf1945fc921e69b7890a78ab9a52a55ee38e2f13aa71eb4f6032b7311e7557860ce8836c1acf3028304989571c9736a96
+  checksum: 368b40176f0dab30a611c3263bf1d9878cebede9ce8015bc5661a396787dbe41f0b667b8d6d448dea7bc8c0557bf3cb329ab2b16ad2dacb18eaa764358bd16d4
   languageName: node
   linkType: hard
 
@@ -1004,12 +1004,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "betternovelpia@workspace:."
   dependencies:
-    "@swc/core": ^1.2.168
+    "@swc/core": ^1.2.171
     "@types/file-saver": ^2.0.5
     "@types/jquery": ^3.5.14
-    "@types/js-cookie": ^3.0.1
-    "@types/react": ^18.0.5
-    "@types/react-dom": ^18.0.1
+    "@types/js-cookie": ^3.0.2
+    "@types/react": ^18.0.6
+    "@types/react-dom": ^18.0.2
     "@types/styled-components": ^5.1.25
     "@types/toastr": ^2.1.39
     "@types/url-regex-safe": ^1.0.0
@@ -1017,7 +1017,7 @@ __metadata:
     browserslist: ^4.20.2
     clean-terminal-webpack-plugin: ^3.0.0
     file-saver: ^2.0.5
-    fork-ts-checker-webpack-plugin: ^7.2.6
+    fork-ts-checker-webpack-plugin: ^7.2.7
     html-entities: ^2.3.3
     jquery: ^3.6.0
     js-cookie: ^3.0.1
@@ -1690,9 +1690,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fork-ts-checker-webpack-plugin@npm:^7.2.6":
-  version: 7.2.6
-  resolution: "fork-ts-checker-webpack-plugin@npm:7.2.6"
+"fork-ts-checker-webpack-plugin@npm:^7.2.7":
+  version: 7.2.7
+  resolution: "fork-ts-checker-webpack-plugin@npm:7.2.7"
   dependencies:
     "@babel/code-frame": ^7.16.7
     chalk: ^4.1.2
@@ -1712,7 +1712,7 @@ __metadata:
   peerDependenciesMeta:
     vue-template-compiler:
       optional: true
-  checksum: d74e8b22e3e4d5159061d93f519d7eb795bafac4b9a993b72eed952a714144d89c8a706414b231a89c69cabf29e00e1fb26d7060e3b5577c08cabb5a3d5a7697
+  checksum: 2aaac6f72c7326c0ac696fe0e630bdd2887e40d5bc8035862851b1abf4132c85808ddc967472a6846764b2b7d38c6f5408088c086188f149db759f2b233e51f5
   languageName: node
   linkType: hard
 
