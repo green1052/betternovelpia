@@ -43,7 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/toastr", "npm:2.1.39"],\
             ["@types/url-regex-safe", "npm:1.0.0"],\
             ["@types/webpack-env", "npm:1.16.4"],\
-            ["browserslist", "npm:4.20.2"],\
+            ["browserslist", "npm:4.20.3"],\
             ["clean-terminal-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:3.0.0"],\
             ["file-saver", "npm:2.0.5"],\
             ["fork-ts-checker-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.2.7"],\
@@ -1276,7 +1276,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/toastr", "npm:2.1.39"],\
             ["@types/url-regex-safe", "npm:1.0.0"],\
             ["@types/webpack-env", "npm:1.16.4"],\
-            ["browserslist", "npm:4.20.2"],\
+            ["browserslist", "npm:4.20.3"],\
             ["clean-terminal-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:3.0.0"],\
             ["file-saver", "npm:2.0.5"],\
             ["fork-ts-checker-webpack-plugin", "virtual:2eb9902b1c1ae14a5a0ad181b4b880e1fd067a24065e622582076ec7937a329df3d2c3a268376d684e7a79afbdcb1cac5ecd9e0b93cb9b9a5b5e9932cf9cf50b#npm:7.2.7"],\
@@ -1345,14 +1345,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:4.20.2", {\
-          "packageLocation": "./.yarn/cache/browserslist-npm-4.20.2-9e0a0d0265-18e09beeae.zip/node_modules/browserslist/",\
+        ["npm:4.20.3", {\
+          "packageLocation": "./.yarn/cache/browserslist-npm-4.20.3-d7ff9d00b4-1e4b719ac2.zip/node_modules/browserslist/",\
           "packageDependencies": [\
-            ["browserslist", "npm:4.20.2"],\
-            ["caniuse-lite", "npm:1.0.30001319"],\
-            ["electron-to-chromium", "npm:1.4.88"],\
+            ["browserslist", "npm:4.20.3"],\
+            ["caniuse-lite", "npm:1.0.30001332"],\
+            ["electron-to-chromium", "npm:1.4.119"],\
             ["escalade", "npm:3.1.1"],\
-            ["node-releases", "npm:2.0.2"],\
+            ["node-releases", "npm:2.0.3"],\
             ["picocolors", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
@@ -1420,10 +1420,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:1.0.30001319", {\
-          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001319-17883c730d-1c03cc4ca0.zip/node_modules/caniuse-lite/",\
+        ["npm:1.0.30001332", {\
+          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001332-48584c6396-e54182ea42.zip/node_modules/caniuse-lite/",\
           "packageDependencies": [\
-            ["caniuse-lite", "npm:1.0.30001319"]\
+            ["caniuse-lite", "npm:1.0.30001332"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -1801,10 +1801,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:1.4.88", {\
-          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.4.88-d8ff1aa713-a93d364efa.zip/node_modules/electron-to-chromium/",\
+        ["npm:1.4.119", {\
+          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.4.119-bf06b24ed9-af77e5e0e6.zip/node_modules/electron-to-chromium/",\
           "packageDependencies": [\
-            ["electron-to-chromium", "npm:1.4.88"]\
+            ["electron-to-chromium", "npm:1.4.119"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3109,10 +3109,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:2.0.2", {\
-          "packageLocation": "./.yarn/cache/node-releases-npm-2.0.2-a4dc82058a-da858bf86b.zip/node_modules/node-releases/",\
+        ["npm:2.0.3", {\
+          "packageLocation": "./.yarn/cache/node-releases-npm-2.0.3-42fb6ecea2-5e555fbbeb.zip/node_modules/node-releases/",\
           "packageDependencies": [\
-            ["node-releases", "npm:2.0.2"]\
+            ["node-releases", "npm:2.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
