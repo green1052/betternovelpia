@@ -67,12 +67,7 @@ module.exports = {
         minimize: true,
         minimizer: [
             new TerserPlugin({
-                terserOptions: {
-                    format: {
-                        comments: false
-                    }
-                },
-                extractComments: false
+                minify: TerserPlugin.swcMinify
             })
         ]
     }

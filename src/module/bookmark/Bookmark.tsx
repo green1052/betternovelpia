@@ -107,6 +107,7 @@ function Bookmark() {
     return (
         <MainDiv>
             <GlobalStyles/>
+
             {
                 !inputHide && <div style={{
                     display: "flex",
