@@ -14,11 +14,10 @@ export default {
         }
     },
     start() {
-        const code = unsafeWindow.episode_list_viewer.toString().split("\n");
-        delete code[18];
+        const code = unsafeWindow.episode_list_viewer
+            .toString()
+            .replace(/^.*animate.*$/mig, "");
 
-        const episodeListViewer = code.join("");
-
-        novelLoaded(() => eval(episodeListViewer));
+        novelLoaded(() => eval(code));
     }
 } as Module;
