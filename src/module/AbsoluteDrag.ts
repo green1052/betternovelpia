@@ -15,6 +15,6 @@ export default {
         clearInterval(playAlert);
         playAlert = undefined;
 
-        document.body.innerHTML += "<style>.no-drag{user-select:initial!important;}</style>";
+        document.body.innerHTML += "<sytle>.no-drag{-ms-user-select:initial!important;-moz-user-select:initial!important;-webkit-user-select:initial!important;-khtml-user-select:initial!important;user-select:initial!important}</sytle>";
     }
 } as Module;
