@@ -14,61 +14,37 @@ const headers = {
     description: "노벨피아를 더 좋게 바꿔줍니다!",
     "rut-at": "document-start",
     noframes: true,
-    grant: [
-        "GM_getValue",
-        "GM_setValue",
-        "GM_deleteValue",
-        "GM_listValues",
-        "GM_setClipboard",
-        "unsafeWindow"
-    ],
+    grant: ["GM_getValue", "GM_setValue", "GM_deleteValue", "GM_listValues", "GM_setClipboard", "unsafeWindow"],
     homepageURL: "https://github.com/green1052/betternovelpia",
     supportURL: "https://github.com/green1052/betternovelpia/issues"
 };
 
 module.exports = {
-    mode: "production",
-    entry: "./src/index.ts",
-    output: {
+    mode: "production", entry: "./src/index.ts", output: {
         filename: "betternovelpia.user.js"
-    },
-    performance: {
+    }, performance: {
         hints: false
-    },
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                include: /src/,
-                use: {
-                    loader: "swc-loader"
-                }
+    }, module: {
+        rules: [{
+            test: /\.tsx?$/, include: /src/, use: {
+                loader: "swc-loader"
             }
-        ]
-    },
-    resolve: {
+        }]
+    }, resolve: {
         extensions: [".js", ".ts", ".tsx"]
-    },
-    plugins: [
-        new DefinePlugin({
-            VERSION: JSON.stringify(version)
-        }),
-        new CleanTerminalPlugin({
-            beforeCompile: true
-        }),
-        new WebpackUserscript({
-            headers,
-            metajs: false,
-            pretty: false
-        }),
-        new ForkTsCheckerWebpackPlugin()
-    ],
-    optimization: {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                minify: TerserPlugin.swcMinify
-            })
-        ]
+    }, plugins: [new DefinePlugin({
+        VERSION: JSON.stringify(version)
+    }), new CleanTerminalPlugin({
+        beforeCompile: true
+    }), new WebpackUserscript({
+        headers, metajs: false, pretty: false
+    }), new ForkTsCheckerWebpackPlugin()], optimization: {
+        minimize: true, minimizer: [new TerserPlugin({
+            terserOptions: {
+                format: {
+                    comments: false
+                }
+            }, extractComments: false
+        })]
     }
 };

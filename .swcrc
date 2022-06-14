@@ -1,17 +1,10 @@
 {
-    "minify": true,
     "jsc": {
         "parser": {
             "syntax": "typescript",
             "tsx": true,
             "decorators": false,
             "dynamicImport": false
-        },
-        "minify": {
-            "compress": {
-                "unused": true
-            },
-            "mangle": true
         },
         "target": "es2022"
     },

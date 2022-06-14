@@ -31,6 +31,9 @@ export default {
             });
         }
 
+        if (!/^\/viewer\//.test(location.pathname))
+            document.querySelector(`.am-sideleft img[alt="글 쓰고 부자되기"]`)?.closest("li")?.remove();
+
         if (/^\/ssul/.test(location.pathname))
             document.querySelector(`div.story_bnr`)?.remove();
 
