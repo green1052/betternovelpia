@@ -1,7 +1,6 @@
-import {isFirst, PreviousBookmark} from "../../util/Bookmark";
+import {isFirst} from "../../util/Bookmark";
 import $ from "jquery";
 import {NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
-import toastr from "toastr";
 import {isPageViewer} from "../../util/IsPageViewer";
 import ReactDOM from "react-dom";
 import {NovelContinueBox} from "../../util/NovelContinueBox";
@@ -79,7 +78,7 @@ export default {
     },
     start() {
         if (isPageViewer()) {
-            toastr.info("페이지 방식은 지원하지 않습니다.", "이전 회차 북마크");
+            unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "이전 회차 북마크");
             return;
         }
 

@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
-import {configs} from "../index";
+import {ModulesInfo} from "../index";
 import {appendSide} from "../util/AppendSide";
 import styled, {css} from "styled-components";
 import {isDarkMode} from "../util/IsDarkMode";
 import useForceUpdate from "use-force-update";
-import toastr from "toastr";
 import {exportConfig} from "../util/ExportConfig";
 
 function Card(props: { children: React.ReactNode }) {
@@ -119,7 +118,7 @@ function Setting() {
 
         GM_setClipboard(JSON.stringify(data));
 
-        toastr.info("클립보드로 복사되었습니다.", "설정");
+        unsafeWindow.toastr.info("클립보드로 복사되었습니다.", "설정");
     }, []);
 
     const restore = useCallback(() => {
@@ -127,9 +126,9 @@ function Setting() {
             for (const [key, value] of Object.entries(JSON.parse(data)))
                 GM_setValue(key as GMValue, value);
 
-            toastr.info("복원되었습니다.", "북마크");
+            unsafeWindow.toastr.info("복원되었습니다.", "북마크");
         } else
-            toastr.info("데이터가 비어있습니다.", "북마크");
+            unsafeWindow.toastr.info("데이터가 비어있습니다.", "북마크");
 
         setInputHide(true);
         setData("");
@@ -215,7 +214,7 @@ function Setting() {
                      style={{maxWidth: "1200px", margin: "0px auto 0px auto", padding: "0px 20px"}}>
                     <div className="row mg-t-20 mg-b-20">
                         {
-                            configs.map(value =>
+                            ModulesInfo.configs.map(value =>
                                 <Card>
                                     <CardHead label={value.head}/>
                                     <CardBody>

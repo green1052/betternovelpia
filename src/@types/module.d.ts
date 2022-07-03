@@ -72,11 +72,17 @@ declare global {
         }
     }
 
+    interface ModuleInfo {
+        name: string,
+        module: Module
+    }
+
     interface Module {
         include?: RegExp;
         exclude?: RegExp;
         enable?: Config[];
         config?: Configs;
+        property?: "start" | "end";
 
         start(): void | Promise<void>;
     }

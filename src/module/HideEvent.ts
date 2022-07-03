@@ -1,6 +1,5 @@
-import {hideElement} from "../util/HideElement";
-
 export default {
+    include: /^(\/$|\/freestory)/,
     enable: ["HideEvent"],
     config: {
         head: "이벤트 숨기기",
@@ -12,18 +11,8 @@ export default {
             }
         }
     },
+    property: "start",
     start() {
-        if (location.pathname === "/") {
-            document.querySelector("div[class*=main-slide-wrapper][class*=mobile_show]")?.remove();
-            return;
-        }
-
-        if (/^\/freestory/.test(location.pathname)) {
-            document.querySelector("div.swiper-container[class*=mobile_show]")?.remove();
-            document.querySelector(`div[class=""] > div[class*="swiper-container mobile_show"]`)?.remove();
-            return;
-        }
-
-        hideElement(document.querySelector(`div[onclick*="/event/writer_sum"]`));
+        GM_addStyle(".swiper-container { display: none!important; }");
     }
 } as Module;

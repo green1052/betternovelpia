@@ -1,6 +1,3 @@
-import {hideElement} from "../util/HideElement";
-import {novelLoaded} from "../util/NovelLoaded";
-
 export default {
     enable: ["HideAd"],
     config: {
@@ -13,38 +10,35 @@ export default {
             }
         }
     },
+    property: "start",
     start() {
-        if (location.pathname === "/")
-            setTimeout(() => {
-                (document.querySelector("span[class=detail-modal-72close]") as HTMLElement)?.click();
-            }, 500);
-
         if (/^\/mybook/.test(location.pathname))
-            hideElement(document.querySelector(`img[src*="m_"][alt="내서재 광고"]`)?.closest("div") as HTMLElement);
+            GM_addStyle(`img[alt="내서재 광고"] { display: none!important; }`);
 
         if (/^\/viewer\//.test(location.pathname)) {
-            unsafeWindow.get_ad_banner = () => {
-            };
-
-            novelLoaded(() => {
-                document.querySelector("img[alt=광고]")?.closest("div")?.remove();
-            });
+            GM_addStyle(`.ad_banner { display: none!important; }`);
+            GM_addStyle(`img[alt=광고] { display: none!important; }`);
         }
 
+        if (/^\/contest_list/.test(location.pathname))
+            GM_addStyle(".swiper-container2 { display: none!important; }");
+
         if (!/^\/viewer\//.test(location.pathname))
-            document.querySelector(`.am-sideleft img[alt="글 쓰고 부자되기"]`)?.closest("li")?.remove();
+            document.querySelector(`.am-sideleft img[alt="마스터피스 공모전 참가하기"]`)?.closest("li")?.remove();
 
         if (/^\/ssul/.test(location.pathname))
-            document.querySelector(`div.story_bnr`)?.remove();
+            GM_addStyle(".story_bnr { display: none!important; }");
 
         if (/^\/comic/.test(location.pathname))
-            document.querySelector(`div.comic_bn_m`)?.remove();
+            GM_addStyle(".comic_bnr { display: none!important; }");
+
+        if (/^\/novel/.test(location.pathname))
+            GM_addStyle(".novel_banner { display: none!important; }");
 
         if (/^\/freestory|plus/.test(location.pathname))
-            for (const element of document.querySelectorAll(`img[alt="자유연재 광고"]`))
-                element.closest("div")?.remove();
+            GM_addStyle(`img[alt="자유연재 광고"] { display: none!important; }`);
 
         if (/^\/plus/.test(location.pathname))
-            document.querySelector(`div[class="plus_bg mobile_show"]`)?.parentElement?.remove();
+            GM_addStyle(".plus_bg { display: none!important; }");
     }
 } as Module;

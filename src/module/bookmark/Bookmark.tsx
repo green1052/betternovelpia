@@ -2,9 +2,8 @@ import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "
 import ReactDOM from "react-dom";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../../util/Selectors";
-import {Bookmarks, isFirst, PreviousBookmark} from "../../util/Bookmark";
+import {isFirst} from "../../util/Bookmark";
 import $ from "jquery";
-import toastr from "toastr";
 import {isDarkMode} from "../../util/IsDarkMode";
 import {isPageViewer} from "../../util/IsPageViewer";
 import {appendSide} from "../../util/AppendSide";
@@ -12,6 +11,17 @@ import {useLongPress} from "use-long-press";
 import {Header} from "../../util/ApeendHeader";
 import {novelLoaded} from "../../util/NovelLoaded";
 import {NovelContinueBox} from "../../util/NovelContinueBox";
+
+function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
+    const aTitle = a[1].title;
+    const bTitle = b[1].title;
+
+    return aTitle < bTitle
+        ? -1
+        : aTitle > bTitle
+            ? 1
+            : 0;
+}
 
 function Bookmark() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
@@ -38,6 +48,8 @@ function Bookmark() {
 
         GM_setValue("bookmarks", bookmarks1);
         setBookmarks(bookmarks1);
+
+        unsafeWindow.toastr.info(`삭제되었습니다.`, "북마크");
     }, [bookmarks]);
 
     const backup = useCallback(() => {
@@ -45,22 +57,55 @@ function Bookmark() {
 
         GM_setClipboard(JSON.stringify(bookmarks));
 
-        toastr.info("클립보드로 복사되었습니다.", "북마크");
+        unsafeWindow.toastr.info("클립보드로 복사되었습니다.", "북마크");
     }, [bookmarks]);
 
     const restore = useCallback(() => {
-        if (data) {
-            const json = JSON.parse(data);
-            GM_setValue("bookmarks", json);
-            setBookmarks(json);
-
-            toastr.info("복원되었습니다.", "북마크");
-        } else
-            toastr.info("데이터가 비어있습니다.", "북마크");
-
         setInputHide(true);
         setData("");
+
+        if (!data) {
+            unsafeWindow.toastr.info("데이터가 비어있습니다.", "북마크");
+            return;
+        }
+
+        const json = JSON.parse(data);
+        GM_setValue("bookmarks", json);
+        setBookmarks(json);
+
+        unsafeWindow.toastr.info("복원되었습니다.", "북마크");
     }, [data]);
+
+    const clean = useCallback(() => {
+        if (!Object.keys(bookmarks).length) return;
+
+        setScrollTop(bookmarkList.current?.scrollTop ?? 0);
+
+        const bookmarks1 = {...bookmarks};
+
+        const sorted: {
+            [key: string]: [string, Bookmark][]
+        } = {};
+
+        for (const [key, value] of Object.entries(bookmarks1).sort(sortBookmark)) {
+            const title = value.title;
+
+            sorted[title] ??= [];
+            sorted[title].push([key, value]);
+        }
+
+        const result: Bookmarks = {};
+
+        for (const [, value] of Object.entries(sorted)) {
+            const [url, bookmark] = value[value.length - 1];
+            result[url] = bookmark;
+        }
+
+        GM_setValue("bookmarks", result);
+        setBookmarks(result);
+
+        unsafeWindow.toastr.info("정리되었습니다.", "북마크");
+    }, []);
 
     const reset = useCallback(() => setBookmarks({}), []);
 
@@ -81,6 +126,7 @@ function Bookmark() {
 
       .bookmark div {
         display: flex;
+        margin-bottom: 10px;
       }
 
       .bookmark h5 {
@@ -107,7 +153,6 @@ function Bookmark() {
     return (
         <MainDiv>
             <GlobalStyles/>
-
             {
                 !inputHide && <div style={{
                     display: "flex",
@@ -137,16 +182,7 @@ function Bookmark() {
                 {
                     (
                         GM_getValue<boolean>("Bookmark_Sort", false)
-                            ? Object.entries(bookmarks).sort((a, b) => {
-                                const aTitle = a[1].title;
-                                const bTitle = b[1].title;
-
-                                return aTitle < bTitle
-                                    ? -1
-                                    : aTitle > bTitle
-                                        ? 1
-                                        : 0;
-                            })
+                            ? Object.entries(bookmarks).sort(sortBookmark)
                             : Object.entries(bookmarks)
                     ).map(([key, value]) =>
                         <li>
@@ -193,7 +229,8 @@ function Bookmark() {
                 bottom: "5px",
                 right: "5px"
             }}>
-                <button onDoubleClick={reset}>초기화</button>
+                <button onClick={clean}>정리</button>
+                <button onDoubleClick={reset} style={{marginLeft: "5px"}}>초기화</button>
                 <button onClick={quit} style={{marginLeft: "5px"}}>
                     닫기
                 </button>
@@ -285,7 +322,7 @@ function Viewer() {
         GM_setValue("bookmarks", bookmark1);
         setBookmarks(bookmark1);
 
-        toastr.info("저장되었습니다.", "북마크");
+        unsafeWindow.toastr.info("저장되었습니다.", "북마크");
     }, [bookmarks]);
 
     const longClick = useLongPress(() => {
@@ -301,7 +338,7 @@ function Viewer() {
         GM_setValue("bookmarks", bookmark1);
         setBookmarks(bookmark1);
 
-        toastr.info("삭제되었습니다.", "북마크");
+        unsafeWindow.toastr.info("삭제되었습니다.", "북마크");
     });
 
     const BookmarkIcon = styled.i`
@@ -350,7 +387,7 @@ export default {
     },
     start() {
         if (isPageViewer()) {
-            toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
+            unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
             return;
         }
 

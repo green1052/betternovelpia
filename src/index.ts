@@ -1,37 +1,54 @@
-import toastr from "toastr";
-
-toastr.options = {
-    escapeHtml: true,
-    closeButton: true,
-    newestOnTop: false,
-    progressBar: true
+export const ModulesInfo: {
+    modules: {
+        start: ModuleInfo[],
+        end: ModuleInfo[]
+    },
+    configs: Configs[]
+} = {
+    modules: {
+        start: [],
+        end: []
+    },
+    configs: []
 };
-
-export const configs: Configs[] = [];
 
 const context = require.context("./module/", true, /\.tsx?$/);
 
-window.addEventListener("DOMContentLoaded", () => {
-    for (const key of context.keys()) {
-        const start = performance.now();
+function start(moduleInfo: ModuleInfo) {
+    const module = moduleInfo.module;
 
-        const name = /(\w*)\.tsx?$/gi.exec(key)?.[1] ?? key;
+    const start = performance.now();
 
-        try {
-            const module: Module = context(key).default;
-
-            if (!module || typeof module.start !== "function") continue;
-
-            if (module.config) configs.push(module.config);
-
-            if ((module.include === undefined || module.include.test(location.pathname)) &&
-                (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
-                (module.enable === undefined || module.enable.every(setting => GM_getValue<boolean>(setting, false)))) {
-                module.start();
-                console.log(`${name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms`);
-            }
-        } catch (e) {
-            console.error(`${name}: ${e}`);
+    try {
+        if ((module.include === undefined || module.include.test(location.pathname)) &&
+            (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
+            (module.enable === undefined || module.enable.every(setting => GM_getValue<boolean>(setting, false)))) {
+            module.start();
+            console.log(`${moduleInfo.name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms`);
         }
+    } catch (e) {
+        console.error(`${moduleInfo.name}: ${e}`);
     }
+}
+
+for (const key of context.keys()) {
+    const name = /(\w*)\.tsx?$/gi.exec(key)?.[1] ?? key;
+
+    const module: Module = context(key).default;
+
+    if (!module || typeof module.start !== "function") continue;
+
+    ModulesInfo.modules[module.property ?? "end"].push({
+        name,
+        module
+    });
+
+    if (module.config) ModulesInfo.configs.push(module.config);
+}
+
+for (const moduleInfo of ModulesInfo.modules.start) start(moduleInfo);
+
+window.addEventListener("DOMContentLoaded", () => {
+    for (const moduleInfo of ModulesInfo.modules.end)
+        start(moduleInfo);
 });

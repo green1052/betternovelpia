@@ -11,7 +11,8 @@ export default {
             }
         }
     },
+    property: "start",
     start() {
-        document.querySelector("div[class=cover-wrapper]")?.parentElement?.remove();
+        GM_addStyle(".cover-wrapper { display: none !important; }");
     }
 } as Module;

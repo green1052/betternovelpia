@@ -1,5 +1,4 @@
 import $ from "jquery";
-import toastr from "toastr";
 import {commentLoaded} from "../util/CommentLoaded";
 
 export default {
@@ -45,13 +44,13 @@ export default {
                             success: data => {
                                 switch (data.split("|")[0]) {
                                     case "on":
-                                        toastr.info("차단되었습니다.", "댓글 유저 차단");
+                                        unsafeWindow.toastr.info("차단되었습니다.", "댓글 유저 차단");
                                         break;
                                     case "off":
-                                        toastr.info("차단이 해제되었습니다.", "댓글 유저 차단");
+                                        unsafeWindow.toastr.info("차단이 해제되었습니다.", "댓글 유저 차단");
                                         break;
                                     case "login":
-                                        toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
+                                        unsafeWindow.toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
                                         break;
                                 }
                             }

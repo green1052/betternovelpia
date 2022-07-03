@@ -2,6 +2,11 @@ export {};
 
 declare global {
     interface CustomWindow {
+        Swiper: Function;
+        toastr: {
+            info(message: string, title?: string, overrides?: ToastrOptions): JQuery;
+        };
+
         get_ad_banner(): void;
 
         up_down_btn_view(option: "on" | "off"): void;
@@ -17,6 +22,8 @@ declare global {
         get_comment_load(comment_re_no = 0, comment_ori_no = 0): void;
 
         novel_drawing(novel_d: NovelData[]): void;
+
+        episode_vote(): void;
     }
 
     const unsafeWindow: CustomWindow & Window & typeof globalThis;
@@ -31,5 +38,10 @@ declare global {
 
     function GM_listValues(): GMValue[]
 
+    function GM_addStyle(css: string): void
+
     function GM_setClipboard(data: string, type = "text/plain"): undefined
+
+    function GM_download(options: { url: string, name?: string, onload?: Function, }): void
+
 }

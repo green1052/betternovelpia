@@ -1,7 +1,6 @@
 import $ from "jquery";
 import {EP_List} from "../util/Selectors";
 import {element} from "../util/Element";
-import toastr from "toastr";
 
 export default {
     include: /^\/novel\//,
@@ -56,7 +55,7 @@ export default {
             };
 
             const recommendList = async (on: boolean) => {
-                toastr.info("진행 중...", "소설 일괄 추천/비추천");
+                unsafeWindow.toastr.info("진행 중...", "소설 일괄 추천/비추천");
 
                 for (let i = 0; i <= lastPage; i++) {
                     const $response = $(await (await fetch("/proc/episode_list", {
@@ -80,7 +79,7 @@ export default {
                     }
                 }
 
-                toastr.info("완료", "소설 일괄 추천/비추천");
+                unsafeWindow.toastr.info("완료", "소설 일괄 추천/비추천");
             };
 
             $(`ul[style=""][class=mobile_center]`)

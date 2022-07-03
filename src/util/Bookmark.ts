@@ -1,18 +1,3 @@
-export interface Bookmarks {
-    [url: string]: {
-        scrollTop: number;
-        title: string;
-        chapter: string;
-    };
-}
-
-export interface PreviousBookmark {
-    title: string;
-    chapter: string;
-    url: string;
-    scrollTop: number;
-}
-
 export function isFirst(who: "previous" | "bookmark") {
     const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
     const previousBookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);

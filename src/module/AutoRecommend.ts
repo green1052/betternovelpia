@@ -12,6 +12,6 @@ export default {
         }
     },
     start() {
-        (document.querySelector(`#btn_episode_vote[src="/img/new/viewer/btn_vote.png"]`) as HTMLElement)?.click();
+        unsafeWindow.episode_vote?.();
     }
 } as Module;

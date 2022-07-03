@@ -11,7 +11,8 @@ export default {
             }
         }
     },
+    property: "start",
     start() {
-        document.querySelector(".like_btn")?.remove();
+        GM_addStyle(".like_btn { display: none!important; }");
     }
 } as Module;

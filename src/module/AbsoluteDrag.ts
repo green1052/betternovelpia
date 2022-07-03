@@ -33,6 +33,6 @@ export default {
             document.querySelector("#novel_drawing_page")?.removeAttribute(event);
         }
 
-        document.body.innerHTML += `<style>*{user-select:initial!important;}</style>`;
+        GM_addStyle("* { user-select: initial!important; }");
     }
 } as Module;
