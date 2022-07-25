@@ -6,6 +6,8 @@ declare global {
         toastr: {
             info(message: string, title?: string, overrides?: ToastrOptions): JQuery;
         };
+        $: jQuery;
+        jQuery: jQuery;
 
         get_ad_banner(): void;
 

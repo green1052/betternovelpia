@@ -1,5 +1,3 @@
-import {NOVEL_BOX, NOVEL_DRAWING} from "../util/Selectors";
-
 export default {
     include: /^\/viewer\//,
     enable: ["AbsoluteDrag"],
@@ -17,21 +15,20 @@ export default {
         clearInterval(playAlert);
         playAlert = undefined;
 
-        $(document).unbind("keydown");
-        $(document.body).unbind(`contextmenu`);
+        for (const attr of ["ondragstart", "onselectstart", "oncontextmenu", "ondrop"]) {
+            // @ts-ignore
+            document[attr] &&= null;
+            document.body.removeAttribute(attr);
 
-        document.ondragstart = null;
-        document.onselectstart = null;
-
-        for (const event of ["oncontextmenu", "onselectstart", "ondragstart", "ondrop"]) {
-            document.body.removeAttribute(event);
-            document.querySelector("#viewer_no_drag")?.removeAttribute(event);
-            document.querySelector(NOVEL_BOX)?.removeAttribute(event);
-            document.querySelector("#novel_text")?.removeAttribute(event);
-            document.querySelector(NOVEL_DRAWING)?.removeAttribute(event);
-            document.querySelector("#novel_drawing_page_c")?.removeAttribute(event);
-            document.querySelector("#novel_drawing_page")?.removeAttribute(event);
+            for (const element of document.querySelectorAll(`*[${attr}]`))
+                element.removeAttribute(attr);
         }
+
+        for (const element of document.querySelectorAll("font[class=line]"))
+            element.removeAttribute("class");
+
+        unsafeWindow.$(document).unbind("keydown");
+        unsafeWindow.$(document.body).unbind("contextmenu");
 
         GM_addStyle("* { user-select: initial!important; }");
     }
