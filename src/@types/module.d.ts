@@ -57,10 +57,8 @@ declare global {
         "PreviousBookmark" |
         "PreviousBookmark_AutoUse" |
         "PreviousBookmark_First" |
-        "PreviousBookmark_OneUse" |
         "PrivateMode" |
         "RecommendAllNovel" |
-        "UrlPrettier" |
         "ViewNovelToCookie_LOGINKEY" |
         "ViewNovelToCookie_USERKEY" |
         "ViewNovelToCookie";

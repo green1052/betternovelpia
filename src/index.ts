@@ -43,12 +43,14 @@ for (const key of context.keys()) {
         module
     });
 
-    if (module.config) ModulesInfo.configs.push(module.config);
+    if (module.config)
+        ModulesInfo.configs.push(module.config);
 }
 
 for (const moduleInfo of ModulesInfo.modules.start) start(moduleInfo);
 
-window.addEventListener("DOMContentLoaded", () => {
-    for (const moduleInfo of ModulesInfo.modules.end)
+window.onload = () => {
+    for (const moduleInfo of ModulesInfo.modules.end) {
         start(moduleInfo);
-});
+    }
+};

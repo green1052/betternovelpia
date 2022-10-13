@@ -24,7 +24,7 @@ export default {
             GM_addStyle(".swiper-container2 { display: none!important; }");
 
         if (!/^\/viewer\//.test(location.pathname))
-            document.querySelector(`.am-sideleft img[alt="마스터피스 공모전 참가하기"]`)?.closest("li")?.remove();
+            document.querySelector(`.am-sideleft img[alt="글 쓰고 부자되기"]`)?.closest("li")?.remove();
 
         if (/^\/ssul/.test(location.pathname))
             GM_addStyle(".story_bnr { display: none!important; }");

@@ -6,7 +6,7 @@
             "decorators": false,
             "dynamicImport": false
         },
-        "target": "es2022"
+        "target": "es2015"
     },
     "env": {
         "targets": "> 0.25%, not dead"

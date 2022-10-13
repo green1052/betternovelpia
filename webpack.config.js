@@ -50,7 +50,9 @@ module.exports = {
             beforeCompile: true
         }),
         new WebpackUserscript({
-            headers, metajs: false, pretty: false
+            headers, 
+			metajs: false, 
+			pretty: false
         }),
         new ForkTsCheckerWebpackPlugin()
     ],
@@ -62,7 +64,8 @@ module.exports = {
                     format: {
                         comments: false
                     }
-                }, extractComments: false
+                },
+                extractComments: false
             })
         ]
     }

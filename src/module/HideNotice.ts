@@ -14,6 +14,8 @@ export default {
         }
     },
     start() {
+
+
         $(".notice_toggle_btn").on("click", () => $("#upNotice").show());
 
         $(".notice_table > tbody")

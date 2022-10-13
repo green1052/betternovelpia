@@ -9,6 +9,8 @@ declare global {
         $: jQuery;
         jQuery: jQuery;
 
+        getPageMark(): void;
+
         get_ad_banner(): void;
 
         up_down_btn_view(option: "on" | "off"): void;
