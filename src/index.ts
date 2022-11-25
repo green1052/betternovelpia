@@ -47,10 +47,11 @@ for (const key of context.keys()) {
         ModulesInfo.configs.push(module.config);
 }
 
-for (const moduleInfo of ModulesInfo.modules.start) start(moduleInfo);
+for (const moduleInfo of ModulesInfo.modules.start)
+    start(moduleInfo);
 
-window.onload = () => {
+window.addEventListener("load", () => {
     for (const moduleInfo of ModulesInfo.modules.end) {
         start(moduleInfo);
     }
-};
+});

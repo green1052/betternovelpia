@@ -15,14 +15,12 @@ jobs:
           node-version: 18
 
       - name: Install
-        run: yarn
+        run: yarn install --immutable --immutable-cache
 
       - name: Build
         run: yarn run build
 
       - name: Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{secrets.GITHUB_TOKEN}}"
-          prerelease: false
           files: dist/betternovelpia.user.js

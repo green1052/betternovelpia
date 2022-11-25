@@ -297,7 +297,7 @@ function Viewer() {
     let scrollTop = -1;
     let askAlert = true;
 
-    if (bookmarks && bookmarks.hasOwnProperty(location.href) && !GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark !== undefined && previousBookmark.url === location.href) {
+    if (bookmarks.hasOwnProperty(location.href) || (!GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark?.url === location.href)) {
         scrollTop = bookmarks[location.href].scrollTop;
 
         if (GM_getValue<boolean>("Bookmark_AutoUse", false))
@@ -310,25 +310,26 @@ function Viewer() {
             setBookmarks(bookmarks1);
             GM_setValue("bookmarks", bookmarks1);
         }
-    } else if (previousBookmark && previousBookmark.url === location.href) {
+    } else if (previousBookmark !== undefined && previousBookmark.url === location.href) {
         scrollTop = previousBookmark.scrollTop;
 
         if (GM_getValue<boolean>("PreviousBookmark_AutoUse", false))
             askAlert = false;
     }
 
-    if (scrollTop !== -1)
+    if (scrollTop !== -1) {
         useLayoutEffect(() => {
             novelLoaded(() => {
                 setTimeout(() => {
                     if (askAlert && !confirm("북마크로 이동하시겠습니까?")) return;
 
                     document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
-                }, 1000);
+                }, 500);
             });
         }, [askAlert, scrollTop]);
+    }
 
-    if (GM_getValue<boolean>("PreviousBookmark", false))
+    if (GM_getValue<boolean>("PreviousBookmark", false)) {
         useLayoutEffect(() => {
             unsafeWindow.getPageMark = () => {
             };
@@ -348,6 +349,7 @@ function Viewer() {
                 GM_setValue("previousBookmark", previousBookmark1);
             });
         }, [scrollTop, title, chapter]);
+    }
 
     const click = useCallback(() => {
         if (location.hash !== "")

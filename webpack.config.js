@@ -1,4 +1,3 @@
-const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const {version} = require("./package.json");
 const WebpackUserscript = require("webpack-userscript");
 const {DefinePlugin} = require("webpack");
@@ -14,7 +13,7 @@ const headers = {
     description: "노벨피아를 더 좋게 바꿔줍니다!",
     "rut-at": "document-start",
     noframes: true,
-    grant: ["GM_getValue", "GM_setValue", "GM_deleteValue", "GM_listValues", "GM_addStyle", "GM_setClipboard", "GM_download", "unsafeWindow"],
+    grant: ["GM_getValue", "GM_setValue", "GM_deleteValue", "GM_listValues", "GM_addStyle", "GM_setClipboard", "unsafeWindow"],
     homepageURL: "https://github.com/green1052/betternovelpia",
     supportURL: "https://github.com/green1052/betternovelpia/issues"
 };
@@ -46,13 +45,10 @@ module.exports = {
         new DefinePlugin({
             VERSION: JSON.stringify(version)
         }),
-        new CleanTerminalPlugin({
-            beforeCompile: true
-        }),
         new WebpackUserscript({
-            headers, 
-			metajs: false, 
-			pretty: false
+            headers,
+            metajs: false,
+            pretty: false
         }),
         new ForkTsCheckerWebpackPlugin()
     ],
@@ -60,12 +56,12 @@ module.exports = {
         minimize: true,
         minimizer: [
             new TerserPlugin({
+                minify: TerserPlugin.swcMinify,
                 terserOptions: {
                     format: {
                         comments: false
                     }
-                },
-                extractComments: false
+                }
             })
         ]
     }
