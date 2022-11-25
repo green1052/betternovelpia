@@ -10,6 +10,7 @@ export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: stri
 
     novel_data = novelData;
 
+
     setTimeout(() => {
         data_load = 1;
         novel_drawing(novel_data);
