@@ -24,3 +24,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/betternovelpia.user.js
+          generate_release_notes: true
