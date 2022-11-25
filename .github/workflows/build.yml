@@ -15,7 +15,7 @@ jobs:
           node-version: 18
 
       - name: Install
-        run: yarn install --immutable --immutable-cache
+        run: yarn
 
       - name: Build
         run: yarn run build
