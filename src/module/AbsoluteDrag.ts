@@ -12,8 +12,8 @@ export default {
         }
     },
     start() {
-        clearInterval(playAlert);
-        playAlert = undefined;
+        clearInterval(unsafeWindow.playAlert);
+        unsafeWindow.playAlert = undefined;
 
         for (const attr of ["ondragstart", "onselectstart", "oncontextmenu", "ondrop"]) {
             // @ts-ignore

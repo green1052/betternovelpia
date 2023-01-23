@@ -124,7 +124,7 @@ function Setting() {
     const restore = useCallback(() => {
         if (data) {
             for (const [key, value] of Object.entries(JSON.parse(data)))
-                GM_setValue(key as GMValue, value);
+                GM_setValue(key, value);
 
             unsafeWindow.toastr.info("복원되었습니다.", "북마크");
         } else
@@ -203,7 +203,7 @@ function Setting() {
 
             <TitleDiv>
                 <h4 style={{lineHeight: "50px"}}>
-                    BetterNovelpia - {VERSION}
+                    BetterNovelpia - {GM_info.version}
                     <i onClick={quit}
                        style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
                 </h4>

@@ -23,8 +23,8 @@ export default {
 
             scrollTop = currentScrollTop;
 
-            if (toggle_navi === 0 && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
-                navi_view();
+            if (unsafeWindow.toggle_navi === 0 && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
+                unsafeWindow.navi_view();
         });
     }
 } as Module;

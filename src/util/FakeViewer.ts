@@ -8,11 +8,11 @@ export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: stri
 
     blocked.remove();
 
-    novel_data = novelData;
+    unsafeWindow.novel_data = novelData;
 
     setTimeout(() => {
-        data_load = 1;
-        novel_drawing(novel_data);
+        unsafeWindow.data_load = 1;
+        unsafeWindow.novel_drawing(unsafeWindow.novel_data);
 
         const next = $(`img[src*="btn_next.png"]`)
             .parent()

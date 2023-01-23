@@ -1,8 +1,6 @@
 const {merge} = require("webpack-merge");
 const common = require("./webpack.common.js");
 const WebpackUserscript = require("webpack-userscript");
-const {DefinePlugin} = require("webpack");
-const {version} = require("./package.json");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = merge(common, {
@@ -11,11 +9,8 @@ module.exports = merge(common, {
         filename: "betternovelpia.user.js"
     },
     plugins: [
-        new DefinePlugin({
-            VERSION: JSON.stringify(version)
-        }),
         new WebpackUserscript({
-            headers: "./src/meta.json",
+            headers: "./src/header.json",
             metajs: false,
             pretty: false
         })

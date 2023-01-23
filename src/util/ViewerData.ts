@@ -6,9 +6,6 @@ export async function viewerData(url: string, cookie?: string): Promise<NovelDat
                 "Content-Type": "application/x-www-form-urlencoded",
                 Cookie: cookie ?? document.cookie
             },
-            // @ts-ignore
-            cookie: cookie ?? document.cookie,
-            responseType: "json",
             method: "POST",
             timeout: 5000,
             url: `/proc/viewer_data/${url}`,
@@ -16,9 +13,9 @@ export async function viewerData(url: string, cookie?: string): Promise<NovelDat
                 reject(response);
             },
             onload: (response) => {
-                console.log(response);
+                console.log(response.responseText);
 
-                const data: { c: string, s: { text: string }[] } = JSON.parse(response.responseText);
+                const data: { c: string, s: { text: string }[] } = JSON.parse(response.responseText!);
 
                 resolve(data.s.map(({text}) => {
                     return {

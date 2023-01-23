@@ -28,13 +28,13 @@ export default {
 
         if (!blocked.length) return;
 
-        const loginKey = GM_getValue<string>("ViewNovelToCookie_LOGINKEY", "");
-        const userKey = GM_getValue<string>("ViewNovelToCookie_USERKEY", "");
+        const loginKey = GM_getValue<string>("ViewNovelToCookie_LOGINKEY", "").trim();
+        const userKey = GM_getValue<string>("ViewNovelToCookie_USERKEY", "").trim();
 
         if (!loginKey || !userKey)
             return;
 
-        const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey}`);
+        const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey};`);
 
         if (!data.length) return;
 

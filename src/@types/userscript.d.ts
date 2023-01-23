@@ -1,143 +1,461 @@
-export {};
-
-declare global {
-    interface CustomWindow {
-        Swiper: Function;
-        toastr: {
-            info(message: string, title?: string, overrides?: ToastrOptions): JQuery;
-        };
-        $: jQuery;
-        jQuery: jQuery;
-
-        getPageMark(): void;
-
-        get_ad_banner(): void;
-
-        up_down_btn_view(option: "on" | "off"): void;
-
-        navi_view(): void;
-
-        alarm_btn(): void;
-
-        viewer_display(): void;
-
-        get_comment_box(): void;
-
-        get_comment_load(comment_re_no = 0, comment_ori_no = 0): void;
-
-        novel_drawing(novel_d: NovelData[]): void;
-
-        episode_vote(): void;
-    }
-
-    const unsafeWindow: CustomWindow & Window & typeof globalThis;
-
-    type GMValue = "bookmarks" | "previousBookmark" | Config;
-
-    function GM_getValue<T>(key: GMValue, defaultValue?: T): T
-
-    function GM_setValue(key: GMValue, value: any): void
-
-    function GM_deleteValue(key: GMValue): void
-
-    function GM_listValues(): GMValue[]
-
-    function GM_addStyle(css: string): void
-
-    function GM_setClipboard(text: string): void
-
-    function GM_xmlhttpRequest(details: {
-        // Fields
-
-        /**
-         * The URL to make the request to. Must be an absolute URL, beginning
-         * with the scheme. May be relative to the current page.
-         */
-        url: string;
-        /** String type of HTTP request to make (E.G. "GET", "POST") */
-        method:
-            | 'GET'
-            | 'POST'
-            | 'PUT'
-            | 'DELETE'
-            | 'PATCH'
-            | 'HEAD'
-            | 'TRACE'
-            | 'OPTIONS'
-            | 'CONNECT';
-        /**
-         * When true, the data is sent as a Blob
-         * @default false
-         */
-        binary?: boolean | undefined;
-        /**
-         * Any object (Compatibility: 1.10+). This object will also be the
-         * context property of the Response Object.
-         */
-        context?: TContext | undefined;
-        /**
-         * Data to send in the request body. Usually for POST method requests.
-         * If the data field contains form-encoded data, you usually must also
-         * set the header `'Content-Type': 'application/x-www-form-urlencoded'`
-         * in the `headers` field.
-         */
-        data?: string | undefined;
-        /** A set of headers to include in the request */
-        headers?: {
-            [header: string]: string
-        } | undefined;
-        /**
-         * A MIME type to specify with the request (e.g.
-         * "text/html; charset=ISO-8859-1")
-         */
-        overrideMimeType?: string | undefined;
-        /** User name to use for authentication purposes. */
-        user?: string | undefined;
-        /** Password to use for authentication purposes */
-        password?: string | undefined;
-        /** Decode the response as specified type. Default value is "text" */
-        responseType?: XMLHttpRequestResponseType | undefined;
-        /**
-         * When `true`, this is a synchronous request.
-         * Be careful: The entire Firefox UI will be locked and frozen until the
-         * request completes.In this mode, more data will be available in the
-         * return value.
-         */
-        synchronous?: boolean | undefined;
-        /**
-         * The number of milliseconds to wait before terminating the call. Zero
-         * (the default) means wait forever.
-         */
-        timeout?: number | undefined;
-        /**
-         * Object containing optional function callbacks to monitor the upload
-         * of data.
-         */
-        upload?: {
-            onabort?(response: Response<TContext>): void
-            onerror?(response: Response<TContext>): void
-            onload?(response: Response<TContext>): void
-            onprogress?(response: ProgressResponse<TContext>): void
-        } | undefined;
-
-        // Event handlers
-
-        /** Will be called when the request is aborted */
-        onabort?(response: Response<TContext>): void;
-
-        /** Will be called if an error occurs while processing the request */
-        onerror?(response: Response<TContext>): void;
-
-        /** Will be called when the request has completed successfully */
-        onload?(response: Response<TContext>): void;
-
-        /** Will be called when the request progress changes */
-        onprogress?(response: ProgressResponse<TContext>): void;
-
-        /** Will be called repeatedly while the request is in progress */
-        onreadystatechange?(response: Response<TContext>): void;
-
-        /** Will be called if/when the request times out */
-        ontimeout?(response: Response<TContext>): void;
-    }): void
+interface NovelData {
+    text: string,
+    size: number,
+    align: string
 }
+
+interface CustomWindow extends Window {
+    playAlert: number | undefined;
+    data_load: 0 | 1;
+    favoriDepth: number;
+    novel_data: NovelData[] | [];
+    toggle_navi: 0 | 1;
+    Swiper: Function;
+    toastr: {
+        info(message: string, title?: string, overrides?: ToastrOptions): JQuery;
+    };
+    $: jQuery;
+    jQuery: jQuery;
+
+    emoticon_open(idx: string): void
+
+    navi_view(): void;
+
+    novel_drawing(novel_d: NovelData[]): void;
+
+    comment_load(): void;
+
+    episode_list_viewer(page?: number): void;
+
+    getPageMark(): void;
+
+    get_ad_banner(): void;
+
+    up_down_btn_view(option: "on" | "off"): void;
+
+    navi_view(): void;
+
+    alarm_btn(): void;
+
+    viewer_display(): void;
+
+    get_comment_box(): void;
+
+    get_comment_load(comment_re_no = 0, comment_ori_no = 0): void;
+
+    novel_drawing(novel_d: NovelData[]): void;
+
+    episode_vote(): void;
+}
+
+declare const unsafeWindow: CustomWindow;
+
+declare type VMScriptRunAt = "document-start" | "document-body" | "document-end" | "document-idle";
+
+/** Injection mode of a script. */
+declare type VMScriptInjectInto = "auto" | "page" | "content";
+
+declare interface VMScriptGMInfoPlatform {
+    arch: "arm" | "arm64" | "x86-32" | "x86-64" | "mips" | "mips64";
+    /** `chrome`, `firefox` or whatever was returned by the API. */
+    browserName: string;
+    browserVersion: string;
+    os: "mac" | "win" | "android" | "cros" | "linux" | "openbsd" | "fuchsia";
+}
+
+/**
+ * GM_info.script and GM.info.script
+ * Non-optional string property will be an empty string "" if omitted.
+ */
+declare interface VMScriptGMInfoScriptMeta {
+    antifeature?: string[];
+    author?: string;
+    compatible?: string[];
+    connect?: string[];
+    description: string;
+    downloadURL?: string;
+    excludeMatches: string[];
+    excludes: string[];
+    /** Empty is the same as `@grant none` */
+    grant: string[];
+    /** Use homepageURL instead */
+    homepage?: string;
+    homepageURL?: string;
+    icon?: string;
+    includes: string[];
+    matches: string[];
+    name: string;
+    namespace: string;
+    noframes?: boolean;
+    require: string[];
+    resources: { name: string; url: string }[];
+    runAt: VMScriptRunAt | "";
+    supportURL?: string;
+    unwrap?: boolean;
+    updateURL?: string;
+    version: string;
+}
+
+declare interface VMScriptGMInfoObject {
+    /** Unique ID of the script. */
+    uuid: string;
+    /** The meta block of the script. */
+    scriptMetaStr: string;
+    /** Whether the script will be updated automatically. */
+    scriptWillUpdate: boolean;
+    /** The name of userscript manager, which should be the string `Violentmonkey`. */
+    scriptHandler: string;
+    /** Version of Violentmonkey. */
+    version: string;
+    /**
+     * Unlike `navigator.userAgent`, which can be overriden by other extensions/userscripts
+     * or by devtools in device-emulation mode, `GM_info.platform` is more reliable as the
+     * data is obtained in the background page of Violentmonkey using a specialized
+     * extension API (`browser.runtime.getPlatformInfo` and `getBrowserInfo`).
+     */
+    platform: VMScriptGMInfoPlatform;
+    /** Contains structured fields from the *Metadata Block*. */
+    script: VMScriptGMInfoScriptMeta;
+    /** The injection mode of current script. */
+    injectInto: VMScriptInjectInto;
+}
+
+/**
+ * An object that exposes information about the current userscript.
+ */
+declare const GM_info: VMScriptGMInfoObject;
+
+/** The original console.log */
+declare function GM_log(...args: any): void;
+
+/** Retrieves a value for current script from storage. */
+declare function GM_getValue<T>(name: string, defaultValue?: T): T;
+
+/** Sets a key / value pair for current script to storage. */
+declare function GM_setValue<T>(name: string, value: T): void;
+
+/** Deletes an existing key / value pair for current script from storage. */
+declare function GM_deleteValue(name: string): void;
+
+/** Returns an array of keys of all available values within this script. */
+declare function GM_listValues(): string[];
+
+declare type VMScriptGMValueChangeCallback<T> = (
+    /** The name of the observed variable */
+    name: string,
+    /** The old value of the observed variable (`undefined` if it was created) */
+    oldValue: T,
+    /** The new value of the observed variable (`undefined` if it was deleted) */
+    newValue: T,
+    /** `true` if modified by the userscript instance of another tab or `false` for this script instance. Can be used by scripts of different browser tabs to communicate with each other. */
+    remote: boolean
+) => void;
+
+/** Adds a change listener to the storage and returns the listener ID. */
+declare function GM_addValueChangeListener<T>(
+    name: string,
+    callback: VMScriptGMValueChangeCallback<T>
+): string;
+
+/** Removes a change listener by its ID. */
+declare function GM_removeValueChangeListener(listenerId: string): void;
+
+/** Retrieves a text resource from the *Metadata Block*. */
+declare function GM_getResourceText(
+    /** Name of a resource defined in the *Metadata Block*. */
+    name: string
+): string;
+
+/**
+ * Retrieves a `blob:` or `data:` URL of a resource from the *Metadata Block*.
+ *
+ * Note: when setting this URL as `src` or `href` of a DOM element, it may fail on some sites with a particularly strict CSP that forbids `blob:` or `data:` URLs. Such sites are rare though. The workaround in Chrome is to use `GM_addElement`, whereas in Firefox you"ll have to disable CSP either globally via `about:config` or by using an additional extension that modifies HTTP headers selectively.
+ */
+declare function GM_getResourceURL(
+    /** Name of a resource defined in the *Metadata Block*. */
+    name: string,
+    /**
+     * - If `true`, returns a `blob:` URL. It"s short and cacheable, so it"s good for reusing in multiple DOM elements.
+     * - If `false`, returns a `data:` URL. It"s long so reusing it in DOM may be less performant due to the lack of caching, but it"s particularly handy for direct synchronous decoding of the data on sites that forbid fetching `blob:` in their CSP.
+     */
+    isBlobUrl?: boolean
+): string;
+
+/**
+ * Appends and returns an element with the specified attributes.
+ *
+ * Examples:
+ *
+ * ```js
+ * // using a private function in `onload`
+ * let el = GM_addElement("script", { src: "https://...." });
+ * el.onload = () => console.log("loaded", el);
+ *
+ * // same as GM_addStyle("a { color:red }")
+ * let el = GM_addElement("style", { textContent: "a { color:red }" });
+ *
+ * // appending to an arbitrary node
+ * let el = GM_addElement(parentElement.shadowRoot, "iframe", { src: url });
+ * ```
+ */
+declare function GM_addElement(
+    /** A tag name like `script`. Any valid HTML tag can be used, but the only motivation for this API was to add `script`, `link`, `style` elements when they are disallowed by a strict `Content-Security-Policy` of the site e.g. github.com, twitter.com. */
+    tagName: string,
+    /** The keys are HTML attributes, not DOM properties, except `textContent` which sets DOM property `textContent`. The values are strings so if you want to assign a private function to `onload` you can do it after the element is created. */
+    attributes?: Record<string, string>
+): HTMLElement;
+declare function GM_addElement(
+    /**
+     * The parent node to which the new node will be appended.
+     * It can be inside ShadowDOM: `someElement.shadowRoot`.
+     * When omitted, it"ll be determined automatically:
+     *
+     * - `document.head` (`<head>`) for `script`, `link`, `style`, `meta` tags.
+     * - `document.body` (`<body>`) for other tags or when there"s no `<head>`.
+     * - `document.documentElement` (`<html>` or an XML root node) otherwise.
+     */
+    parentNode: HTMLElement,
+    /** A tag name like `script`. Any valid HTML tag can be used, but the only motivation for this API was to add `script`, `link`, `style` elements when they are disallowed by a strict `Content-Security-Policy` of the site e.g. github.com, twitter.com. */
+    tagName: string,
+    /** The keys are HTML attributes, not DOM properties, except `textContent` which sets DOM property `textContent`. The values are strings so if you want to assign a private function to `onload` you can do it after the element is created. */
+    attributes?: Record<string, string>
+): HTMLElement;
+
+/** Appends and returns a `<style>` element with the specified CSS. */
+declare function GM_addStyle(css: string): HTMLStyleElement;
+
+declare interface VMScriptGMTabControl {
+    /** Сan be assigned to a function. If provided, it will be called when the opened tab is closed. */
+    onclose?: () => void;
+    /** Whether the opened tab is closed. */
+    closed: boolean;
+    /** A function to explicitly close the opened tab. */
+    close: () => void;
+}
+
+declare interface VMScriptGMTabOptions {
+    /** Make the new tab active (i.e. open in foreground). Default as `true`. */
+    active?: boolean;
+    /**
+     * Firefox only.
+     *
+     * - not specified = reuse script"s tab container
+     * - `0` = default (main) container
+     * - `1`, `2`, etc. = internal container index
+     */
+    container?: number;
+    /** Insert the new tab next to the current tab and set its `openerTab` so when it"s closed the original tab will be focused automatically. When `false` or not specified, the usual browser behavior is to open the tab at the end of the tab list. Default as `true`. */
+    insert?: boolean;
+    /** Pin the tab (i.e. show without a title at the beginning of the tab list). Default as `false`. */
+    pinned?: boolean;
+}
+
+/** Opens URL in a new tab. */
+declare function GM_openInTab(
+    /** The URL to open in a new tab. URL relative to current page is also allowed. Note: Firefox does not support data URLs. */
+    url: string,
+    options?: VMScriptGMTabOptions
+): VMScriptGMTabControl;
+declare function GM_openInTab(
+    /** The URL to open in a new tab. URL relative to current page is also allowed. Note: Firefox does not support data URLs. */
+    url: string,
+    /** Open the tab in background. Note, this is a reverse of the first usage method so for example `true` is the same as `{ active: false }`. */
+    openInBackground?: boolean
+): VMScriptGMTabControl;
+
+/**
+ * Registers a command in Violentmonkey popup menu.
+ * If you want to add a shortcut, please see `@violentmonkey/shortcut`.
+ */
+declare function GM_registerMenuCommand(
+    /** The name to show in the popup menu. */
+    caption: string,
+    /** Callback function when the command is clicked in the menu. */
+    onClick: (event: MouseEvent | KeyboardEvent) => void
+): string;
+
+/** Unregisters a command which has been registered to Violentmonkey popup menu. */
+declare function GM_unregisterMenuCommand(
+    /** The name of command to unregister. */
+    caption: string
+): void;
+
+/**
+ * A control object returned by `GM_notification`.
+ * `control.remove()` can be used to remove the notification.
+ */
+declare interface VMScriptGMNotificationControl {
+    /** Remove the notification immediately. */
+    remove: () => Promise<void>;
+}
+
+declare interface VMScriptGMNotificationOptions {
+    /** Main text of the notification. */
+    text: string;
+    /** Title of the notification. */
+    title?: string;
+    /** URL of an image to show in the notification. */
+    image?: string;
+    /** Callback when the notification is clicked by user. */
+    onclick?: () => void;
+    /** Callback when the notification is closed, either by user or by system. */
+    ondone?: () => void;
+}
+
+/** Shows an HTML5 desktop notification. */
+declare function GM_notification(options: VMScriptGMNotificationOptions): VMScriptGMNotificationControl;
+declare function GM_notification(
+    /** Main text of the notification. */
+    text: string,
+    /** Title of the notification. */
+    title?: string,
+    /** URL of an image to show in the notification. */
+    image?: string,
+    /** Callback when the notification is clicked by user. */
+    onclick?: () => void
+): VMScriptGMNotificationControl;
+
+/** Sets data to system clipboard. */
+declare function GM_setClipboard(
+    /** The data to be copied to system clipboard. */
+    data: string,
+    /** The MIME type of data to copy. Default as `text/plain`. */
+    type?: string
+): void;
+
+/**
+ * A control object returned by `GM_xmlhttpRequest`.
+ * `control.abort()` can be used to abort the request.
+ */
+declare interface VMScriptXHRControl {
+    abort: () => void;
+}
+
+declare type VMScriptResponseType = "text" | "json" | "blob" | "arraybuffer" | "document";
+
+/**
+ * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#properties
+ * https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent#properties
+ */
+declare interface VMScriptResponseObject<T> {
+    status: number;
+    statusText: string;
+    readyState: number;
+    responseHeaders: string;
+    response: T;
+    responseText: string | null;
+    /** The final URL after redirection. */
+    finalUrl: string;
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+    /** The same `context` object you specified in `details`. */
+    context?: unknown;
+}
+
+declare interface VMScriptGMXHRDetails<T> {
+    /** URL relative to current page is also allowed. */
+    url: string;
+    /** HTTP method, default as `GET`. */
+    method?: string;
+    /** User for authentication. */
+    user?: string;
+    /** Password for authentication. */
+    password?: string;
+    /** A MIME type to specify with the request. */
+    overrideMimeType?: string;
+    /**
+     * Some special headers are also allowed:
+     *
+     * - `Cookie`
+     * - `Host`
+     * - `Origin`
+     * - `Referer`
+     * - `User-Agent`
+     */
+    headers?: Record<string, string>;
+    /**
+     * One of the following:
+     *
+     * - `text` (default value)
+     * - `json`
+     * - `blob`
+     * - `arraybuffer`
+     * - `document`
+     */
+    responseType?: VMScriptResponseType;
+    /** Time to wait for the request, none by default. */
+    timeout?: number;
+    /** Data to send with the request, usually for `POST` and `PUT` requests. */
+    data?: string | FormData | Blob;
+    /** Send the `data` string as a `blob`. This is for compatibility with Tampermonkey/Greasemonkey, where only `string` type is allowed in `data`. */
+    binary?: boolean;
+    /** Can be an object and will be assigned to context of the response object. */
+    context?: unknown;
+    /** When set to `true`, no cookie will be sent with the request and the response cookies will be ignored. The default value is `false`. */
+    anonymous?: boolean;
+    onabort?: (resp: VMScriptResponseObject<T>) => void;
+    onerror?: (resp: VMScriptResponseObject<T>) => void;
+    onload?: (resp: VMScriptResponseObject<T>) => void;
+    onloadend?: (resp: VMScriptResponseObject<T>) => void;
+    onloadstart?: (resp: VMScriptResponseObject<T>) => void;
+    onprogress?: (resp: VMScriptResponseObject<T>) => void;
+    onreadystatechange?: (resp: VMScriptResponseObject<T>) => void;
+    ontimeout?: (resp: VMScriptResponseObject<T>) => void;
+}
+
+/** Makes a request like XMLHttpRequest, with some special capabilities, not restricted by same-origin policy. */
+declare function GM_xmlhttpRequest<T>(details: VMScriptGMXHRDetails<T>): VMScriptXHRControl;
+
+declare interface VMScriptGMDownloadOptions {
+    /** The URL to download. */
+    url: string;
+    /** The filename to save as. */
+    name?: string;
+    /** The function to call when download starts successfully. */
+    onload?: () => void;
+    headers?: Record<string, string>;
+    timeout?: number;
+    onerror?: (resp: VMScriptResponseObject<Blob>) => void;
+    onprogress?: (resp: VMScriptResponseObject<Blob>) => void;
+    ontimeout?: (resp: VMScriptResponseObject<Blob>) => void;
+}
+
+/** Downloads a URL to a local file. */
+declare function GM_download(options: VMScriptGMDownloadOptions): void;
+declare function GM_download(
+    /** The URL to download. */
+    url: string,
+    /** The filename to save as. */
+    name?: string
+): void;
+
+/** Aliases for GM_ methods that are not included in Greasemonkey4 API */
+declare interface VMScriptGMObjectVMExtensions {
+    addElement: typeof GM_addElement;
+    addStyle: typeof GM_addStyle;
+    addValueChangeListener: typeof GM_addValueChangeListener;
+    download: typeof GM_download;
+    getResourceText: typeof GM_getResourceText;
+    log: typeof GM_log;
+    removeValueChangeListener: typeof GM_removeValueChangeListener;
+    unregisterMenuCommand: typeof GM_unregisterMenuCommand;
+}
+
+/** The Greasemonkey4 API, https://wiki.greasespot.net/Greasemonkey_Manual:API */
+declare interface VMScriptGMObject extends VMScriptGMObjectVMExtensions {
+    unsafeWindow: Window;
+    info: typeof GM_info;
+    getValue: <T>(name: string, defaultValue?: T) => Promise<T>;
+    setValue: <T>(name: string, value: T) => Promise<void>;
+    deleteValue: (name: string) => Promise<void>;
+    listValues: () => Promise<string[]>;
+    registerMenuCommand: typeof GM_registerMenuCommand;
+    getResourceUrl: (name: string, isBlobUrl?: boolean) => Promise<string>;
+    notification: typeof GM_notification;
+    openInTab: typeof GM_openInTab;
+    setClipboard: typeof GM_setClipboard;
+    xmlHttpRequest: typeof GM_xmlhttpRequest;
+}
+
+declare const GM: VMScriptGMObject;
