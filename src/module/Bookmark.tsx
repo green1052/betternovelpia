@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../util/Selectors";
 import $ from "jquery";
@@ -457,20 +457,26 @@ export default {
 
             const appContainer = document.createElement("div");
             tr.append(appContainer);
-            ReactDOM.render(<Novel/>, appContainer);
+
+            const root = createRoot(appContainer);
+            root.render(<Novel/>);
         }
 
         if (/^\/viewer\//.test(location.pathname)) {
             const appContainer = document.createElement("td");
             appContainer.style.width = "63px";
             $(HEADER_BAR).children().eq(6).before(appContainer);
-            ReactDOM.render(<Viewer/>, appContainer);
+
+            const root = createRoot(appContainer);
+            root.render(<Viewer/>);
         }
 
         if (!/^\/viewer\//.test(location.pathname)) {
             const appContainer = document.createElement("div");
             document.body.prepend(appContainer);
-            ReactDOM.render(<Bookmark/>, appContainer);
+
+            const root = createRoot(appContainer);
+            root.render(<Bookmark/>);
         }
     }
 } as Module;

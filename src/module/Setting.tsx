@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 import {ModulesInfo} from "../index";
 import {appendSide} from "../util/AppendSide";
 import styled, {css} from "styled-components";
@@ -255,6 +255,8 @@ export default {
     start() {
         const appContainer = document.createElement("div");
         document.body.prepend(appContainer);
-        ReactDOM.render(<Setting/>, appContainer);
+
+        const root = createRoot(appContainer);
+        root.render(<Setting/>);
     }
 } as Module;

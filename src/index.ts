@@ -51,7 +51,6 @@ for (const moduleInfo of ModulesInfo.modules.start)
     start(moduleInfo);
 
 window.addEventListener("load", () => {
-    for (const moduleInfo of ModulesInfo.modules.end) {
+    for (const moduleInfo of ModulesInfo.modules.end)
         start(moduleInfo);
-    }
 });

@@ -1,15 +1,6 @@
 import $ from "jquery";
 import {fakeViewer} from "../util/FakeViewer";
 import {viewerData} from "../util/ViewerData";
-import Cookies from "js-cookie";
-
-function resetCookie(name: string, value: string) {
-    Cookies.set(name, value, {
-        domain: ".novelpia.com",
-        path: "/",
-        expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-    });
-}
 
 export default {
     include: /^\/viewer\//,
@@ -35,8 +26,7 @@ export default {
     async start() {
         const blocked = $(".one-event-viewer-plus");
 
-        if (!blocked.length)
-            return;
+        if (!blocked.length) return;
 
         const loginKey = GM_getValue<string>("ViewNovelToCookie_LOGINKEY", "");
         const userKey = GM_getValue<string>("ViewNovelToCookie_USERKEY", "");
@@ -44,19 +34,9 @@ export default {
         if (!loginKey || !userKey)
             return;
 
-        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
-        const oldUserKey = Cookies.get("USERKEY") ?? "";
+        const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey}`);
 
-        resetCookie("LOGINKEY", loginKey);
-        resetCookie("USERKEY", userKey);
-
-        const data = await viewerData(location.pathname.substring(8), () => {
-            resetCookie("LOGINKEY", oldLoginKey);
-            resetCookie("USERKEY", oldUserKey);
-        });
-
-        if (data.length <= 0)
-            return;
+        if (!data.length) return;
 
         fakeViewer(blocked, data);
 

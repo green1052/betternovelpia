@@ -1,0 +1,21 @@
+{
+    "author": "green1052",
+    "name": "BetterNovelpia",
+    "namespace": "BetterNovelpia",
+    "match": "https://novelpia.com/*",
+    "description": "노벨피아를 더 좋게 바꿔줍니다!",
+    "rut-at": "document-start",
+    "noframes": true,
+    "grant": [
+        "GM_getValue",
+        "GM_setValue",
+        "GM_deleteValue",
+        "GM_listValues",
+        "GM_addStyle",
+        "GM_setClipboard",
+        "GM_xmlhttpRequest",
+        "unsafeWindow"
+    ],
+    "homepageURL": "https://github.com/green1052/betternovelpia",
+    "supportURL": "https://github.com/green1052/betternovelpia/issues"
+}

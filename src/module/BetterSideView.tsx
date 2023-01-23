@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
-import ReactDOM from "react-dom";
 import styled, {css} from "styled-components";
+import {createRoot} from 'react-dom/client';
 
 function BetterSideView() {
     const [hide, setHide] = useState(true);
@@ -43,6 +43,8 @@ export default {
     start() {
         const appContainer = document.createElement("div");
         document.body.prepend(appContainer);
-        ReactDOM.render(<BetterSideView/>, appContainer);
+
+        const root = createRoot(appContainer);
+        root.render(<BetterSideView/>,);
     }
 } as Module;
