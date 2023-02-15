@@ -7,7 +7,6 @@ import {isDarkMode} from "../util/IsDarkMode";
 import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
-import {Header} from "../util/ApeendHeader";
 import {novelLoaded} from "../util/NovelLoaded";
 import {NovelContinueBox} from "../util/NovelContinueBox";
 
@@ -396,11 +395,7 @@ function Viewer() {
                       : "#0000007a"};
     `;
 
-    return (
-        <Header>
-            <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>
-        </Header>
-    );
+    return <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>;
 }
 
 export default {
@@ -463,9 +458,11 @@ export default {
         }
 
         if (/^\/viewer\//.test(location.pathname)) {
-            const appContainer = document.createElement("td");
-            appContainer.style.width = "63px";
-            $(HEADER_BAR).children().eq(6).before(appContainer);
+            const appContainer = document.createElement("div");
+            appContainer.style.width = "20px";
+            appContainer.style.height = "20px";
+
+            $(`${HEADER_BAR} .menu-top-right`).children().eq(2).before(appContainer);
 
             const root = createRoot(appContainer);
             root.render(<Viewer/>);

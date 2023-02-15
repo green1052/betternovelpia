@@ -1,33 +1,34 @@
-export async function viewerData(url: string, cookie?: string): Promise<NovelData[]> {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            data: "size=14",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                Cookie: cookie ?? document.cookie
-            },
+export function fetchWithTimeout(input: RequestInfo, options: RequestInit, timeout = 5000): Promise<Response> {
+    // @ts-ignore
+    return Promise.race([
+        fetch(input, options),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("timeout")), timeout)
+        )
+    ]);
+}
+
+export async function viewerData(url: string, code?: () => void): Promise<NovelData[]> {
+    try {
+        const response: { c: string, s: { text: string }[] } = await (await fetchWithTimeout(`/proc/viewer_data/${url}`, {
             method: "POST",
-            timeout: 5000,
-            url: `/proc/viewer_data/${url}`,
-            onerror: (response) => {
-                reject(response);
+            cache: "no-cache",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            onload: (response) => {
-                console.log(response.responseText);
+            body: new URLSearchParams({
+                size: "14"
+            })
+        })).json();
 
-                const data: { c: string, s: { text: string }[] } = JSON.parse(response.responseText!);
-
-                resolve(data.s.map(({text}) => {
-                    return {
-                        text,
-                        size: 11,
-                        align: "left"
-                    };
-                }));
-            },
-            ontimeout: (response) => {
-                reject(response);
-            }
+        return response.s.map(({text}) => {
+            return {
+                text: text,
+                size: 11,
+                align: "left"
+            };
         });
-    });
+    } finally {
+        code?.();
+    }
 }

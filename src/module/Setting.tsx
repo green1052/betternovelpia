@@ -163,9 +163,9 @@ function Setting() {
       height: 50px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-              ? css`background-color: black;
+        ? css`background-color: black;
                 color: white;`
-              : css`background-color: white;`};
+        : css`background-color: white;`};
     `;
 
     const UnderDiv = styled.div`
@@ -176,9 +176,9 @@ function Setting() {
       height: 30px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-              ? css`background-color: black;
+        ? css`background-color: black;
                 color: white;`
-              : css`background-color: white;`};
+        : css`background-color: white;`};
     `;
 
     return (

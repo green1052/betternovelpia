@@ -1,6 +1,15 @@
 import $ from "jquery";
 import {fakeViewer} from "../util/FakeViewer";
 import {viewerData} from "../util/ViewerData";
+import Cookies from "js-cookie";
+
+function resetCookie(name: string, value: string) {
+    Cookies.set(name, value, {
+        domain: ".novelpia.com",
+        path: "/",
+        expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+    });
+}
 
 export default {
     include: /^\/viewer\//,
@@ -24,26 +33,29 @@ export default {
         }
     },
     async start() {
-        const blocked = $(".one-event-viewer-plus");
+        const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
 
-        if (!blocked.length) return;
+        if (!blocked.length)
+            return;
 
-        const loginKey = GM_getValue<string>("ViewNovelToCookie_LOGINKEY", "").trim();
-        const userKey = GM_getValue<string>("ViewNovelToCookie_USERKEY", "").trim();
+        const loginKey = GM_getValue("ViewNovelToCookie_LOGINKEY", "") as string;
+        const userKey = GM_getValue("ViewNovelToCookie_USERKEY", "") as string;
 
         if (!loginKey || !userKey)
             return;
 
-        const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey};`);
+        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
+        const oldUserKey = Cookies.get("USERKEY") ?? "";
 
-        if (!data.length) return;
+        resetCookie("LOGINKEY", loginKey);
+        resetCookie("USERKEY", userKey);
 
-        fakeViewer(blocked, data);
+        const data = await viewerData(location.pathname.substring(8), () => {
+            resetCookie("LOGINKEY", oldLoginKey);
+            resetCookie("USERKEY", oldUserKey);
+        });
 
-        const oldGetCommentBox = unsafeWindow.get_comment_box
-            .toString()
-            .replace("response.status == '200'", `response.status == '200' || response.errmsg.includes("PLUS")`);
-
-        unsafeWindow.get_comment_box = () => eval(`${oldGetCommentBox}get_comment_box()`);
+        if (data.length > 0)
+            fakeViewer(blocked, data);
     }
 } as Module;

@@ -69,7 +69,7 @@ export default {
         }
     },
     property: "start",
-    start() {
+    start: function () {
         const hideAdEnable = GM_getValue<boolean>("HideAd", false);
         const hideEventEnable = GM_getValue<boolean>("HideEvent", false);
         const hideRecommendEffectEnable = GM_getValue<boolean>("HideRecommendEffect", false);
@@ -124,16 +124,22 @@ export default {
         }
 
         if (infoUnfoldEnable && /^\/novel\//.test(location.pathname)) {
-            const moreInfoButton = document.querySelector("#more_info_btn") as HTMLElement;
-            const moreInfo = document.querySelector(".more_info") as HTMLElement;
+            const moreInfoButton = document.querySelector<HTMLElement>("#more_info_btn")
+            const moreInfo = document.querySelector<HTMLElement>(".more_info")
 
-            if (moreInfoButton !== null && moreInfo !== null) {
+            if (moreInfoButton && moreInfo) {
                 moreInfoButton.style.display = "none";
                 moreInfo.style.display = "initial";
             }
         }
 
         if (naviColorEnable && /^\/viewer\//.test(location.pathname)) {
+            const changeTheme = () => {
+                const color = document.querySelector<HTMLElement>("#viewer_no_drag")!.style.backgroundColor;
+                document.querySelector<HTMLElement>(HEADER_BAR)!.style.backgroundColor = color;
+                document.querySelector<HTMLElement>(FOOTER_BAR)!.style.backgroundColor = color;
+            };
+
             unsafeWindow.viewer_display =
                 new Proxy(unsafeWindow.viewer_display, {
                     apply(target, thisArg, argArray) {
@@ -141,13 +147,6 @@ export default {
                         changeTheme();
                     }
                 });
-
-            function changeTheme() {
-                const color = (document.querySelector("#viewer_no_drag") as HTMLElement).style.backgroundColor;
-
-                (document.querySelector(HEADER_BAR) as HTMLElement).style.backgroundColor = color;
-                (document.querySelector(FOOTER_BAR) as HTMLElement).style.backgroundColor = color;
-            }
 
             changeTheme();
         }

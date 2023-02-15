@@ -1,6 +1,6 @@
 export const SIDE_LEFT = ".am-sideleft ul";
 
-export const HEADER_BAR = "#header_bar tr";
+export const HEADER_BAR = "#header_bar";
 
 export const NOVEL_DRAWING = "#novel_drawing";
 
