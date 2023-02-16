@@ -1,4 +1,3 @@
-import $ from "jquery";
 import {fakeViewer} from "../util/FakeViewer";
 import {viewerData} from "../util/ViewerData";
 import Cookies from "js-cookie";
@@ -33,9 +32,9 @@ export default {
         }
     },
     async start() {
-        const blocked = $(`p:contains("플러스 멤버십이"), p:contains("열람에 회원가입/로그인이")`);
+        const blocked = document.querySelector<HTMLElement>(".one-event-viewer-plus");
 
-        if (!blocked.length)
+        if (!blocked)
             return;
 
         const loginKey = GM_getValue("ViewNovelToCookie_LOGINKEY", "") as string;
@@ -55,7 +54,15 @@ export default {
             resetCookie("USERKEY", oldUserKey);
         });
 
-        if (data.length > 0)
-            fakeViewer(blocked, data);
+        if (data.length <= 0)
+            return;
+
+        fakeViewer(blocked, data);
+
+        const oldGetCommentBox = unsafeWindow.get_comment_box
+            .toString()
+            .replace("response.status == '200'", `response.status == '200' || response.errmsg.startsWith("PLUS")`);
+
+        unsafeWindow.get_comment_box = () => eval(`${oldGetCommentBox}get_comment_box()`);
     }
 } as Module;

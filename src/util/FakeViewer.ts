@@ -1,12 +1,14 @@
 import $ from "jquery";
 import {NOVEL_DRAWING} from "./Selectors";
 
-export function fakeViewer(blocked: JQuery<HTMLElement>, novelData: { text: string, size: number, align: string }[]) {
-    blocked
+export function fakeViewer(blocked: HTMLElement, novelData: { text: string, size: number, align: string }[]) {
+    const $blocked = $(blocked);
+
+    $blocked
         .closest("#novel_text")
         .append(`<ol class="no-drag np"id=novel_drawing onclick=navi_view() style=padding:0;margin:0>`);
 
-    blocked.remove();
+    $blocked.remove();
 
     unsafeWindow.novel_data = novelData;
 

@@ -1,6 +1,6 @@
 {
     "name": "betternovelpia",
-    "version": "10.6.0",
+    "version": "10.6.1",
     "license": "UNLICENSED",
     "scripts": {
         "build": "webpack --config webpack.prod.js",
