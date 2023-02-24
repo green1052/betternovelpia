@@ -290,8 +290,8 @@ function Viewer() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
     const [previousBookmark, setPreviousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
 
-    const chapter = document.querySelector(NOVEL_EP)?.textContent ?? "EP.알 수 없음";
-    const title = document.querySelector(NOVEL_TITLE)?.textContent ?? "알 수 없음";
+    const chapter = document.querySelector(NOVEL_EP)?.textContent!.trim() ?? "EP.알 수 없음";
+    const title = document.querySelector(NOVEL_TITLE)?.textContent!.trim() ?? "알 수 없음";
 
     let scrollTop = -1;
     let askAlert = true;
@@ -448,10 +448,12 @@ export default {
         }
 
         if (/^\/novel\//.test(location.pathname)) {
-            const tr = $("tbody:has(> .more_info) tr:last > td");
+            const tr = document.querySelector("tbody:has(.more_info) > tr:last-of-type > td");
+
+            if (!tr) return;
 
             const appContainer = document.createElement("div");
-            tr.append(appContainer);
+            tr.appendChild(appContainer);
 
             const root = createRoot(appContainer);
             root.render(<Novel/>);

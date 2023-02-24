@@ -84,31 +84,17 @@ export default {
         const betterSideViewEnable = GM_getValue<boolean>("BetterSideView", false);
 
         if (hideAdEnable) {
-            if (/^\/mybook/.test(location.pathname))
-                GM_addStyle(`img[alt="내서재 광고"] { display: none!important; }`);
-
-            if (/^\/viewer\//.test(location.pathname)) {
-                GM_addStyle(".ad_banner { display: none!important; }");
-                GM_addStyle("img[alt=광고] { display: none!important; }");
-            }
+            GM_addStyle(`img[alt="내서재 광고"] { display: none!important; }`);
+            GM_addStyle(".ad_banner { display: none!important; }");
+            GM_addStyle("img[alt=광고] { display: none!important; }");
+            GM_addStyle(".story_bnr { display: none!important; }");
+            GM_addStyle(".comic_bnr { display: none!important; }");
+            GM_addStyle(".novel_banner { display: none!important; }");
+            GM_addStyle(`img[alt="자유연재 광고"] { display: none!important; }`);
+            GM_addStyle(".calc-event-wrapper { display: none!important; }");
 
             if (!/^\/viewer\//.test(location.pathname))
-                document.querySelector(`.am-sideleft img[alt="글 쓰고 부자되기"]`)?.closest("li")?.remove();
-
-            if (/^\/ssul/.test(location.pathname))
-                GM_addStyle(".story_bnr { display: none!important; }");
-
-            if (/^\/comic/.test(location.pathname))
-                GM_addStyle(".comic_bnr { display: none!important; }");
-
-            if (/^\/novel/.test(location.pathname))
-                GM_addStyle(".novel_banner { display: none!important; }");
-
-            if (/^\/freestory|plus/.test(location.pathname))
-                GM_addStyle(`img[alt="자유연재 광고"] { display: none!important; }`);
-
-            if (/^\/plus/.test(location.pathname))
-                GM_addStyle(".calc-event-wrapper { display: none!important; }");
+                document.querySelector(`.am-sideleft img[alt="노벨탐험대 모집공고"]`)?.closest("li")?.remove();
         }
 
         if (hideEventEnable && /^(\/$|\/freestory)/.test(location.pathname)) {
@@ -124,13 +110,7 @@ export default {
         }
 
         if (infoUnfoldEnable && /^\/novel\//.test(location.pathname)) {
-            const moreInfoButton = document.querySelector<HTMLElement>("#more_info_btn")
-            const moreInfo = document.querySelector<HTMLElement>(".more_info")
-
-            if (moreInfoButton && moreInfo) {
-                moreInfoButton.style.display = "none";
-                moreInfo.style.display = "initial";
-            }
+            document.querySelector<HTMLElement>("#more_info_btn div")?.click();
         }
 
         if (naviColorEnable && /^\/viewer\//.test(location.pathname)) {
@@ -152,12 +132,13 @@ export default {
         }
 
         if (hidePlusEnable && /^\/search\//.test(location.pathname)) {
-            const plusCount = $(".b_plus").map((_, element) =>
-                $(element).closest(`div[class=mobile_show]`).eq(0).remove()
-            ).length;
+            let plusCount = 0;
+            for (const element of document.querySelectorAll<HTMLElement>(".b_plus")) {
+                element.closest("div[class=mobile_show]")?.remove()
+                plusCount++;
+            }
 
-            $(`span[style="font-size: 14px;font-weight: 600;"]`)
-                .append(`<br><font style="color: #d23a3a;font-size: 12px;">(PLUS ${plusCount}개 차단)</font>`);
+            document.querySelector(`span[style="font-size: 14px;font-weight: 600;"]`)!.innerHTML += `<br><font style="color: #d23a3a;font-size: 12px;">(PLUS ${plusCount}개 차단)</font>`;
         }
 
         if (hideNoticeEnable && /^\/novel/.test(location.pathname)) {

@@ -6,9 +6,9 @@ export const NOVEL_DRAWING = "#novel_drawing";
 
 export const NOVEL_BOX = "#novel_box";
 
-export const NOVEL_TITLE = "b.cut_line_one";
+export const NOVEL_TITLE = ".menu-top-title";
 
-export const NOVEL_EP = "span.cut_line_one > span:not(.b_19)";
+export const NOVEL_EP = ".menu-top-tag";
 
 export const EP_List = "#episode_list";
 
