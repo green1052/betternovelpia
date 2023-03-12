@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {createRoot} from 'react-dom/client';
 import styled, {createGlobalStyle, css} from "styled-components";
-import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP, NOVEL_TITLE} from "../util/Selectors";
-import $ from "jquery";
+import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
+import $ from "cash-dom";
 import {isDarkMode} from "../util/IsDarkMode";
 import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";
@@ -291,12 +291,12 @@ function Viewer() {
     const [previousBookmark, setPreviousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
 
     const chapter = document.querySelector(NOVEL_EP)?.textContent!.trim() ?? "EP.알 수 없음";
-    const title = document.querySelector(NOVEL_TITLE)?.textContent!.trim() ?? "알 수 없음";
+    const title = document.title.split("-")[2].trimStart() ?? "알 수 없음";
 
     let scrollTop = -1;
     let askAlert = true;
 
-    if (bookmarks.hasOwnProperty(location.href) || (!GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark?.url === location.href)) {
+    if (bookmarks.hasOwnProperty(location.href) && (!GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark?.url !== location.href)) {
         scrollTop = bookmarks[location.href].scrollTop;
 
         if (GM_getValue<boolean>("Bookmark_AutoUse", false))
@@ -309,7 +309,7 @@ function Viewer() {
             setBookmarks(bookmarks1);
             GM_setValue("bookmarks", bookmarks1);
         }
-    } else if (previousBookmark !== undefined && previousBookmark.url === location.href) {
+    } else if (previousBookmark?.url === location.href) {
         scrollTop = previousBookmark.scrollTop;
 
         if (GM_getValue<boolean>("PreviousBookmark_AutoUse", false))
@@ -325,7 +325,7 @@ function Viewer() {
                     document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
                 }, 500);
             });
-        }, [askAlert, scrollTop]);
+        }, []);
     }
 
     if (GM_getValue<boolean>("PreviousBookmark", false)) {
@@ -347,7 +347,7 @@ function Viewer() {
                 setPreviousBookmark(previousBookmark1);
                 GM_setValue("previousBookmark", previousBookmark1);
             });
-        }, [scrollTop, title, chapter]);
+        }, []);
     }
 
     const click = useCallback(() => {

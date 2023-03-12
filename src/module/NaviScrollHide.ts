@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from "cash-dom";
 import {NOVEL_BOX} from "../util/Selectors";
 
 export default {

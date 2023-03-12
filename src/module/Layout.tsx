@@ -1,6 +1,8 @@
 import {EP_List, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 import {commentLoaded} from "../util/CommentLoaded";
-import $ from "jquery";
+import $ from "cash-dom";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
 
 export default {
     config: {
@@ -94,7 +96,7 @@ export default {
             GM_addStyle(".calc-event-wrapper { display: none!important; }");
 
             if (!/^\/viewer\//.test(location.pathname))
-                document.querySelector(`.am-sideleft img[alt="노벨탐험대 모집공고"]`)?.closest("li")?.remove();
+                $(`.am-sideleft img[alt="노벨탐험대 모집공고"]`).closest("li").remove();
         }
 
         if (hideEventEnable && /^(\/$|\/freestory)/.test(location.pathname)) {
@@ -109,15 +111,17 @@ export default {
             GM_addStyle(".cover-wrapper { display: none !important; }");
         }
 
-        if (infoUnfoldEnable && /^\/novel\//.test(location.pathname)) {
-            document.querySelector<HTMLElement>("#more_info_btn div")?.click();
-        }
+        if (infoUnfoldEnable && /^\/novel\//.test(location.pathname))
+            $("#more_info_btn div").get(0)?.click();
 
         if (naviColorEnable && /^\/viewer\//.test(location.pathname)) {
             const changeTheme = () => {
-                const color = document.querySelector<HTMLElement>("#viewer_no_drag")!.style.backgroundColor;
-                document.querySelector<HTMLElement>(HEADER_BAR)!.style.backgroundColor = color;
-                document.querySelector<HTMLElement>(FOOTER_BAR)!.style.backgroundColor = color;
+                const color = $("#viewer_no_drag").css("background-color");
+
+                if (!color) return;
+
+                $(HEADER_BAR).css("background-color", color);
+                $(FOOTER_BAR).css("background-color", color);
             };
 
             unsafeWindow.viewer_display =
@@ -133,21 +137,48 @@ export default {
 
         if (hidePlusEnable && /^\/search\//.test(location.pathname)) {
             let plusCount = 0;
-            for (const element of document.querySelectorAll<HTMLElement>(".b_plus")) {
+
+            for (const element of $(".b_plus")) {
                 element.closest("div[class=mobile_show]")?.remove()
                 plusCount++;
             }
 
-            document.querySelector(`span[style="font-size: 14px;font-weight: 600;"]`)!.innerHTML += `<br><font style="color: #d23a3a;font-size: 12px;">(PLUS ${plusCount}개 차단)</font>`;
+            const html = (
+                <>
+                    <br/>
+                    <span style={{color: "#d23a3a", fontSize: "12px"}}>
+                        (PLUS {plusCount}개 차단1)
+                    </span>
+                </>
+            );
+
+            $(`span[style="font-size: 14px;font-weight: 600;"]`).append(ReactDOMServer.renderToStaticMarkup(html));
         }
 
         if (hideNoticeEnable && /^\/novel/.test(location.pathname)) {
             $(".notice_toggle_btn").on("click", () => $("#upNotice").show());
 
+            const html = (
+                <tr className="notice_toggle_btn" id="upNotice" style={{
+                    width: "100%",
+                    textAlign: "center",
+                    fontWeight: "600",
+                    padding: "15px",
+                    backgroundColor: "#feffe5",
+                    borderBottom: "1px solid #f7f7f7",
+                    cursor: "pointer",
+                    display: "none"
+                }}>
+                    <td colSpan={3} style={{padding: "10px 0"}}>
+                        숨기기
+                        <i className="icon ion-android-arrow-up"/>
+                    </td>
+                </tr>
+            );
             $(".notice_table > tbody")
                 .append(
-                    $(`<tr class=notice_toggle_btn id=upNotice style="width:100%;text-align:center;font-weight:600;padding:15px;background-color:#feffe5;border-bottom:1px solid #f7f7f7;cursor:pointer;display:none"><td colspan=3 style="padding:10px 0">숨기기 <i class="icon ion-android-arrow-up"></i>`)
-                        .on("click", function () {
+                    $(ReactDOMServer.renderToStaticMarkup(html))
+                        .on("click", () => {
                             for (const element of $(".notice_toggle_btn").show().nextAll()) {
                                 const $element = $(element);
 
@@ -155,7 +186,7 @@ export default {
                                     $element.hide();
                             }
 
-                            $(this).hide();
+                            $("#upNotice").hide();
                         })
                 );
         }

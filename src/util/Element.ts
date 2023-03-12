@@ -1,7 +1,7 @@
 import {waitElement} from "./WaitElement";
 
 export function element(element: HTMLElement | null, code: () => void | Promise<void>, timeout: number = 5000) {
-    if (element === null)
+    if (!element)
         throw "element is null";
 
     if (element.childNodes.length > 0) {

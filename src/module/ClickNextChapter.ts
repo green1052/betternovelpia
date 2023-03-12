@@ -1,4 +1,5 @@
 import {NOVEL_BOX} from "../util/Selectors";
+import $ from "cash-dom";
 
 export default {
     include: /^\/viewer\//,
@@ -18,9 +19,9 @@ export default {
         const clickNextChapter = GM_getValue<number>("ClickNextChapter", 0);
 
         if (clickNextChapter !== 0)
-            document.querySelector(NOVEL_BOX)!.addEventListener("click", (event) => {
-                if ((<CustomEvent>event).detail === clickNextChapter)
-                    (document.querySelector(`img[src*="btn_next.png"]`) as HTMLElement)?.click();
+            $(NOVEL_BOX).on("click", (event: CustomEvent) => {
+                if (event.detail === clickNextChapter)
+                      $(".menu-next-item").get(0)?.click();
             });
     }
 } as Module;

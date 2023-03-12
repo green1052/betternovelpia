@@ -1,3 +1,5 @@
+import {novelLoaded} from "../util/NovelLoaded";
+
 export default {
     include: /^\/viewer\//,
     enable: ["AutoRecommend"],
@@ -12,6 +14,8 @@ export default {
         }
     },
     start() {
-        unsafeWindow.episode_vote?.();
+        novelLoaded(() => {
+            unsafeWindow.episode_vote?.();
+        });
     }
 } as Module;

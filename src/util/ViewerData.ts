@@ -1,25 +1,13 @@
-export function fetchWithTimeout(input: RequestInfo, options: RequestInit, timeout = 5000): Promise<Response> {
-    // @ts-ignore
-    return Promise.race([
-        fetch(input, options),
-        new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("timeout")), timeout)
-        )
-    ]);
-}
+import ky from "ky";
 
 export async function viewerData(url: string, code?: () => void): Promise<NovelData[]> {
     try {
-        const response: { c: string, s: { text: string }[] } = await (await fetchWithTimeout(`/proc/viewer_data/${url}`, {
-            method: "POST",
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({
+        const response = await ky.post(`/proc/viewer_data/${url}`, {
+            timeout: 5000,
+            searchParams: {
                 size: "14"
-            })
-        })).json();
+            }
+        }).json<{ c: string, s: { text: string }[] }>();
 
         return response.s.map(({text}) => {
             return {

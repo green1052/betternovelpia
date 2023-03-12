@@ -1,11 +1,11 @@
 import React, {useCallback} from "react";
-import $ from "jquery";
+import $ from "cash-dom";
 
 export function NovelContinueBox(props: { url: string, chapter: string, isBookmark?: boolean }) {
     const onClick = useCallback(() => {
         $(".loads").show();
         location.href = props.url;
-    }, [props]);
+    }, []);
 
     return (
         <div style={{

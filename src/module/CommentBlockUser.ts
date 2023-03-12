@@ -1,5 +1,6 @@
-import $ from "jquery";
+import $ from "cash-dom";
 import {commentLoaded} from "../util/CommentLoaded";
+import ky from "ky";
 
 export default {
     include: /^\/viewer\//,
@@ -36,12 +37,16 @@ export default {
                                     .attr("onclick")!
                             )?.[1];
 
-                        $.ajax({
-                            data: {member_no: memberNo, csrf: `${$("#csrf").val()}`},
-                            type: "POST",
-                            url: "/proc/member_block",
-                            cache: false,
-                            success: data => {
+                        const params = new URLSearchParams();
+                        params.set("member_no", memberNo!);
+                        params.set("csrf", $("#csrf").val() as string);
+
+                        ky
+                            .post("/proc/member_block", {
+                                body: params
+                            })
+                            .text()
+                            .then((data) => {
                                 switch (data.split("|")[0]) {
                                     case "on":
                                         unsafeWindow.toastr.info("차단되었습니다.", "댓글 유저 차단");
@@ -53,8 +58,7 @@ export default {
                                         unsafeWindow.toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
                                         break;
                                 }
-                            }
-                        });
+                            });
                     });
             }
         });

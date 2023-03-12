@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from "cash-dom";
 import {SIDE_LEFT} from "./Selectors";
 
 let isFirst = true;
