@@ -163,9 +163,9 @@ function Setting() {
       height: 50px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-        ? css`background-color: black;
+              ? css`background-color: black;
                 color: white;`
-        : css`background-color: white;`};
+              : css`background-color: white;`};
     `;
 
     const UnderDiv = styled.div`
@@ -176,9 +176,9 @@ function Setting() {
       height: 30px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-        ? css`background-color: black;
+              ? css`background-color: black;
                 color: white;`
-        : css`background-color: white;`};
+              : css`background-color: white;`};
     `;
 
     return (
@@ -215,18 +215,18 @@ function Setting() {
                     <div className="row mg-t-20 mg-b-20">
                         {
                             ModulesInfo.configs.map(value =>
-                                <Card>
+                                <Card key={value.head}>
                                     <CardHead label={value.head}/>
                                     <CardBody>
                                         {
                                             Object.entries(value.configs).map(([key, value2]) =>
                                                 value2.type === "text"
-                                                    ? <TextBox config={key as Config}
+                                                    ? <TextBox key={key} config={key as Config}
                                                                label={value2.label}/>
                                                     : value2.type === "checkbox"
-                                                        ? <Checkbox config={key as Config} label={value2.label}/>
+                                                        ? <Checkbox key={key} config={key as Config} label={value2.label}/>
                                                         : value2.type === "int" &&
-                                                        <NumberBox config={key as Config} label={value2.label}
+                                                        <NumberBox key={key} config={key as Config} label={value2.label}
                                                                    min={value2.min} max={value2.max}/>
                                             )
                                         }

@@ -183,7 +183,7 @@ function Bookmark() {
                             ? Object.entries(bookmarks).sort(sortBookmark)
                             : Object.entries(bookmarks)
                     ).map(([key, value]) =>
-                        <li>
+                        <li key={key}>
                             <div>
                                 <a href={key}>{value.chapter} - {value.title}</a>
                                 <h5 onClick={() => deleteBookmark(key)}>X</h5>
