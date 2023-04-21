@@ -32,7 +32,7 @@ export default {
         }
     },
     async start() {
-        const blocked = document.querySelector<HTMLElement>(".one-event-viewer-plus");
+        const blocked = document.querySelector<HTMLElement>(".s_inv:has(.pay-layer-v3)");
 
         if (!blocked)
             return;
