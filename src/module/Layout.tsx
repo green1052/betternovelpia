@@ -96,7 +96,7 @@ export default {
             GM_addStyle(".calc-event-wrapper { display: none!important; }");
 
             if (!/^\/viewer\//.test(location.pathname))
-                $(`.am-sideleft img[alt="노벨탐험대 모집공고"]`).closest("li").remove();
+                $(`.am-sideright img[alt="신작 챌린지"]`).closest("li").remove();
         }
 
         if (hideEventEnable && /^(\/$|\/freestory)/.test(location.pathname)) {

@@ -7,7 +7,7 @@ export function appendSide(icon: string, title: string, onclick: () => void | Pr
     const $Code =
         $(`<li class="new-list-style"><span style=width:20px;display:inline-block;text-align:center><i class="icon ${icon}"></i></span>${title}</li>`).on("click", onclick);
 
-    const $Logout = $(`.am-sideleft span[onclick*="/proc/logout"]`);
+    const $Logout = $(`.am-sideright span[onclick*="/proc/logout"]`);
 
     if (!$Logout.length) {
         const $SideLeft = $(SIDE_LEFT);

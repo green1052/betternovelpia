@@ -21,7 +21,7 @@ export default {
         if (clickNextChapter !== 0)
             $(NOVEL_BOX).on("click", (event: CustomEvent) => {
                 if (event.detail === clickNextChapter)
-                      $(".menu-next-item").get(0)?.click();
+                    $(".menu-next-item").get(0)?.click();
             });
     }
 } as Module;
