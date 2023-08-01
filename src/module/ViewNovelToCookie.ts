@@ -32,7 +32,7 @@ export default {
         }
     },
     async start() {
-        const blocked = document.querySelector<HTMLElement>("#payment_app");
+        const blocked = document.querySelector<HTMLElement>(".one-event-viewer-plus");
 
         if (!blocked)
             return;
