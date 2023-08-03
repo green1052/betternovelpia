@@ -25,7 +25,6 @@ declare global {
     type Config =
         "AbsoluteDrag" |
         "AutoRecommend" |
-        "BetterSideView" |
         "Bookmark" |
         "Bookmark_AutoUse" |
         "Bookmark_OneUse" |

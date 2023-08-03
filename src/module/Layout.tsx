@@ -62,11 +62,6 @@ export default {
                 label: "회차 클릭 알림 제거",
                 type: "checkbox",
                 default: false
-            },
-            BetterSideView: {
-                label: "사이드뷰 개선",
-                type: "checkbox",
-                default: false
             }
         }
     },
@@ -83,7 +78,6 @@ export default {
         const hideOnlyEmojiCommentEnable = GM_getValue<boolean>("HideOnlyEmojiComment", false);
         const hideOnlyEmojiCommentRemoveEnable = GM_getValue<boolean>("HideOnlyEmojiComment_Remove", false);
         const disableNovelAlertEnable = GM_getValue<boolean>("DisableNovelAlert", false);
-        const betterSideViewEnable = GM_getValue<boolean>("BetterSideView", false);
 
         if (hideAdEnable) {
             GM_addStyle(`img[alt="내서재 광고"] { display: none!important; }`);
@@ -147,7 +141,7 @@ export default {
                 <>
                     <br/>
                     <span style={{color: "#d23a3a", fontSize: "12px"}}>
-                        (PLUS {plusCount}개 차단1)
+                        (PLUS {plusCount}개 차단)
                     </span>
                 </>
             );
@@ -265,29 +259,6 @@ export default {
                         childList: true
                     });
                 }, 1000);
-            });
-        }
-
-        if (betterSideViewEnable && !/^\/viewer\//.test(location.pathname)) {
-            window.addEventListener("load", () => {
-                const div = document.createElement("div");
-                div.style.display = "none";
-                div.style.position = "fixed";
-                div.style.width = "100vw";
-                div.style.height = "100vh";
-                div.style.zIndex = "999";
-                div.onclick = () => {
-                    document.body.classList.remove("show-left");
-                    div.style.display = "none";
-                };
-
-                document.body.prepend(div);
-
-                document
-                    .querySelector("span#naviconLeftMobile")!
-                    .addEventListener("click", () =>
-                        div.style.display = document.body.classList.contains("show-left") ? "initial" : "none"
-                    );
             });
         }
     }

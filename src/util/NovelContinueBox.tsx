@@ -16,7 +16,8 @@ export function NovelContinueBox(props: { url: string, chapter: string, isBookma
                 width: "100%",
                 height: "50px",
                 textAlign: "center",
-                borderRadius: "25px"
+                borderRadius: "25px",
+                marginTop: "5px"
             }}
             onClick={onClick}
         >
@@ -27,7 +28,7 @@ export function NovelContinueBox(props: { url: string, chapter: string, isBookma
                 borderRadius: "10px",
                 fontSize: "11px",
                 marginRight: "3px"
-            }}>EP.15
+            }}>
                 {props.chapter}
             </span>
             {props.isBookmark === true ? "북마크" : "이전 소설"} 이어보기

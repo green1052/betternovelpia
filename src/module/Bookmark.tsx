@@ -175,7 +175,7 @@ function Bookmark() {
                     height: "85vh",
                     overflow: "auto",
                     fontSize: "15px",
-                    marginLeft: "-10px"
+                    marginLeft: "-30px"
                 }}>
                 {
                     (
@@ -290,7 +290,7 @@ function Viewer() {
     const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
     const [previousBookmark, setPreviousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
 
-    const chapter = document.querySelector(NOVEL_EP)?.textContent!.trim() ?? "EP.알 수 없음";
+    const chapter = $(NOVEL_EP).text().trim() ?? "EP.알 수 없음";
     const title = document.title.split("-")[2].trimStart() ?? "알 수 없음";
 
     let scrollTop = -1;
