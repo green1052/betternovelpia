@@ -80,6 +80,12 @@ export default {
         const disableNovelAlertEnable = GM_getValue<boolean>("DisableNovelAlert", false);
 
         if (hideAdEnable) {
+            GM_addStyle("img[alt=우최공] { display: none!important; }");
+            GM_addStyle(`img[src$="bnr_subtop_contest2023_m_3.jpg"] { display: none!important; }`);
+
+            GM_addStyle(`.main-slide-wrapper { display: none!important; }`);
+            GM_addStyle(".swiper-container { display: none!important; }");
+
             GM_addStyle(`img[alt="내서재 광고"] { display: none!important; }`);
             GM_addStyle(".ad_banner { display: none!important; }");
             GM_addStyle("img[alt=광고] { display: none!important; }");
@@ -88,13 +94,14 @@ export default {
             GM_addStyle(".novel_banner { display: none!important; }");
             GM_addStyle(`img[alt="자유연재 광고"] { display: none!important; }`);
             GM_addStyle(".calc-event-wrapper { display: none!important; }");
-
-            if (!/^\/viewer\//.test(location.pathname))
-                $(`.am-sideright img[alt="신작 챌린지"]`).closest("li").remove();
         }
 
-        if (hideEventEnable && /^(\/$|\/freestory)/.test(location.pathname)) {
-            GM_addStyle(".swiper-container { display: none!important; }");
+        // if (hideEventEnable && /^\/freestory$/.test(location.pathname)) {
+        //     GM_addStyle(".swiper-container { display: none!important; }");
+        // }
+
+        if (hideEventEnable && /^\/contest_list$/.test(location.pathname)) {
+            GM_addStyle(".swiper-container2 { display: none!important; }");
         }
 
         if (hideRecommendEffectEnable && /^\/viewer\//.test(location.pathname)) {
@@ -106,7 +113,7 @@ export default {
         }
 
         if (infoUnfoldEnable && /^\/novel\//.test(location.pathname))
-            $("#more_info_btn div").get(0)?.click();
+            $(".more-synopsis").get(0)?.click();
 
         if (naviColorEnable && /^\/viewer\//.test(location.pathname)) {
             const changeTheme = () => {

@@ -448,12 +448,12 @@ export default {
         }
 
         if (/^\/novel\//.test(location.pathname)) {
-            const tr = document.querySelector("tbody:has(.more_info) > tr:last-of-type > td");
+            const tr = $("div:not(.mobile_hidden) > .info-graybox")
 
             if (!tr) return;
 
             const appContainer = document.createElement("div");
-            tr.appendChild(appContainer);
+            tr.after(appContainer);
 
             const root = createRoot(appContainer);
             root.render(<Novel/>);

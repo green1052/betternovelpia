@@ -1,5 +1,4 @@
 {
-    "minify": true,
     "jsc": {
         "parser": {
             "syntax": "typescript",
@@ -8,8 +7,5 @@
             "dynamicImport": false
         },
         "target": "es2022"
-    },
-    "env": {
-        "targets": "defaults"
     }
 }
