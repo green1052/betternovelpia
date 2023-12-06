@@ -29,6 +29,12 @@ interface CustomWindow extends Window {
 
     getPageMark(): void;
 
+    makePageMark(): void;
+
+    updateMark(): void;
+
+    updateMarkEpis(): void;
+
     get_ad_banner(): void;
 
     up_down_btn_view(option: "on" | "off"): void;
@@ -402,6 +408,7 @@ declare interface VMScriptGMXHRDetails<T> {
     onprogress?: (resp: VMScriptResponseObject<T>) => void;
     onreadystatechange?: (resp: VMScriptResponseObject<T>) => void;
     ontimeout?: (resp: VMScriptResponseObject<T>) => void;
+    cookie?: string;
 }
 
 /** Makes a request like XMLHttpRequest, with some special capabilities, not restricted by same-origin policy. */

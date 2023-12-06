@@ -22,11 +22,7 @@ export default {
         const PreLoadEpisodeListEnable = GM_getValue<boolean>("PreLoadEpisodeList", false);
 
         if (PreLoadCommentEnable) {
-            const code = unsafeWindow.episode_list_viewer
-                .toString()
-                .replace(/^.*animate.*$/mig, "");
-
-            novelLoaded(() => eval(code));
+            novelLoaded(() => unsafeWindow.episode_list_viewer());
         }
 
         if (PreLoadEpisodeListEnable) {

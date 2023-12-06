@@ -316,8 +316,16 @@ function Viewer() {
             askAlert = false;
     }
 
-    if (scrollTop !== -1) {
-        useLayoutEffect(() => {
+    useLayoutEffect(() => {
+        const noop = () => {
+        };
+
+        unsafeWindow.getPageMark = noop;
+        unsafeWindow.makePageMark = noop;
+        unsafeWindow.updateMark = noop;
+        unsafeWindow.updateMarkEpis = noop;
+
+        if (scrollTop !== -1) {
             novelLoaded(() => {
                 setTimeout(() => {
                     if (askAlert && !confirm("북마크로 이동하시겠습니까?")) return;
@@ -325,16 +333,11 @@ function Viewer() {
                     document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
                 }, 500);
             });
-        }, []);
-    }
+        }
 
-    if (GM_getValue<boolean>("PreviousBookmark", false)) {
-        useLayoutEffect(() => {
-            unsafeWindow.getPageMark = () => {
-            };
-
+        if (GM_getValue<boolean>("PreviousBookmark", false)) {
             const url = location.href;
-            let scrollTop = -1;
+            scrollTop = -1;
 
             $(NOVEL_BOX).on("scroll", (e) => scrollTop = e.currentTarget.scrollTop);
 
@@ -347,8 +350,9 @@ function Viewer() {
                 setPreviousBookmark(previousBookmark1);
                 GM_setValue("previousBookmark", previousBookmark1);
             });
-        }, []);
-    }
+
+        }
+    }, []);
 
     const click = useCallback(() => {
         if (location.hash !== "")
