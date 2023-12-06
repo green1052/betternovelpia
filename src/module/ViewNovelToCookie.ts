@@ -43,18 +43,18 @@ export default {
         if (!loginKey || !userKey)
             return;
 
-        // const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
-        // const oldUserKey = Cookies.get("USERKEY") ?? "";
-        //
-        // resetCookie("LOGINKEY", loginKey);
-        // resetCookie("USERKEY", userKey);
+        const oldLoginKey = Cookies.get("LOGINKEY") ?? "";
+        const oldUserKey = Cookies.get("USERKEY") ?? "";
 
-        // const data = await viewerData(location.pathname.substring(8), () => {
-        //     resetCookie("LOGINKEY", oldLoginKey);
-        //     resetCookie("USERKEY", oldUserKey);
-        // });
+        resetCookie("LOGINKEY", loginKey);
+        resetCookie("USERKEY", userKey);
 
-        const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey};`);
+        const data = await viewerData(location.pathname.substring(8), () => {
+            resetCookie("LOGINKEY", oldLoginKey);
+            resetCookie("USERKEY", oldUserKey);
+        });
+
+        // const data = await viewerData(location.pathname.substring(8), `LOGINKEY=${loginKey}; USERKEY=${userKey};`);
 
         if (data.length <= 0)
             return;
