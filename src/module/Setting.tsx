@@ -163,9 +163,9 @@ function Setting() {
       height: 50px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-              ? css`background-color: black;
+        ? css`background-color: black;
                 color: white;`
-              : css`background-color: white;`};
+        : css`background-color: white;`};
     `;
 
     const UnderDiv = styled.div`
@@ -176,9 +176,9 @@ function Setting() {
       height: 30px;
       box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
       ${isDarkMode()
-              ? css`background-color: black;
+        ? css`background-color: black;
                 color: white;`
-              : css`background-color: white;`};
+        : css`background-color: white;`};
     `;
 
     return (
@@ -203,7 +203,7 @@ function Setting() {
 
             <TitleDiv>
                 <h4 style={{lineHeight: "50px"}}>
-                    BetterNovelpia - {GM_info.version}
+                    BetterNovelpia - {GM_info.script.version}
                     <i onClick={quit}
                        style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
                 </h4>

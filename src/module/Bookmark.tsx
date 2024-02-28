@@ -110,42 +110,42 @@ function Bookmark() {
     const quit = useCallback(() => setHide(true), []);
 
     const GlobalStyles = createGlobalStyle`
-      .no-overflow {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-      }
+        .no-overflow {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-      .no-overflow a {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-      }
+        .no-overflow a {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-      .bookmark div {
-        display: flex;
-        margin-bottom: 10px;
-      }
+        .bookmark div {
+            display: flex;
+            margin-bottom: 10px;
+        }
 
-      .bookmark h5 {
-        color: red;
-        margin-left: 5px;
-        margin-right: 5px;
-      }
+        .bookmark h5 {
+            color: red;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
     `;
 
     const MainDiv = styled.div`
-      overflow: auto;
-      bottom: 0;
-      position: fixed;
-      z-index: 99999;
-      width: 100vw;
-      height: 100vh;
-      ${hide && css`display: none;`};
-      ${isDarkMode()
-              ? css`background-color: #000;
-                color: white;`
-              : css`background-color: white;`};
+        overflow: auto;
+        bottom: 0;
+        position: fixed;
+        z-index: 99999;
+        width: 100vw;
+        height: 100vh;
+        ${hide && css`display: none;`};
+        ${isDarkMode()
+                ? css`background-color: #000;
+                    color: white;`
+                : css`background-color: white;`};
     `;
 
     return (
@@ -320,15 +320,19 @@ function Viewer() {
         const noop = () => {
         };
 
+        unsafeWindow.bookmark = noop;
         unsafeWindow.getPageMark = noop;
         unsafeWindow.makePageMark = noop;
         unsafeWindow.updateMark = noop;
         unsafeWindow.updateMarkEpis = noop;
+        unsafeWindow.check_start_position = noop;
 
         if (scrollTop !== -1) {
             novelLoaded(() => {
                 setTimeout(() => {
-                    if (askAlert && !confirm("북마크로 이동하시겠습니까?")) return;
+                    const a = !confirm("북마크로 이동하시겠습니까?");
+
+                    if (askAlert && a) return;
 
                     document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
                 }, 500);
@@ -337,12 +341,11 @@ function Viewer() {
 
         if (GM_getValue<boolean>("PreviousBookmark", false)) {
             const url = location.href;
-            scrollTop = -1;
-
-            $(NOVEL_BOX).on("scroll", (e) => scrollTop = e.currentTarget.scrollTop);
 
             window.addEventListener("beforeunload", () => {
-                if (scrollTop <= -1)
+                scrollTop = document.querySelector(NOVEL_BOX)?.scrollTop ?? -1;
+
+                if (scrollTop === -1)
                     return;
 
                 const previousBookmark1 = {url, scrollTop, title, chapter};
@@ -350,7 +353,6 @@ function Viewer() {
                 setPreviousBookmark(previousBookmark1);
                 GM_setValue("previousBookmark", previousBookmark1);
             });
-
         }
     }, []);
 
@@ -390,13 +392,13 @@ function Viewer() {
     });
 
     const BookmarkIcon = styled.i`
-      color: ${bookmarks.hasOwnProperty(location.href)
-              ? isDarkMode()
-                      ? "rgb(117, 242, 70)"
-                      : "rgb(160, 73, 180)"
-              : isDarkMode()
-                      ? "#ffffff7a"
-                      : "#0000007a"};
+        color: ${bookmarks.hasOwnProperty(location.href)
+                ? isDarkMode()
+                        ? "rgb(117, 242, 70)"
+                        : "rgb(160, 73, 180)"
+                : isDarkMode()
+                        ? "#ffffff7a"
+                        : "#0000007a"};
     `;
 
     return <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>;

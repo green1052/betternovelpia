@@ -27,6 +27,10 @@ interface CustomWindow extends Window {
 
     episode_list_viewer(page?: number): void;
 
+    bookmark(): void;
+
+    check_start_position(): void;
+
     getPageMark(): void;
 
     makePageMark(): void;
