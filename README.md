@@ -16,6 +16,13 @@
 - 레이아웃 개선
 - 그 외 여러가지 기능
 
+<details>
+    <summary>참고 사진</summary>
+    <img src="https://github.com/green1052/betternovelpia/assets/34261355/b5d672fb-f8ef-44d8-b096-c331a60448e4" />
+    <img src="https://github.com/green1052/betternovelpia/assets/34261355/c7625fe8-3158-4a73-b7c1-3cd589d74fc2" />
+    <img src="https://github.com/green1052/betternovelpia/assets/34261355/0b7bb9d7-d8f8-4c48-b4f2-bc37d0f0a071" />
+</details>
+
 ## 설치
 
 ### Violentmonkey
