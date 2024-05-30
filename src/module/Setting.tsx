@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 import {ModulesInfo} from "../index";
 import {appendSide} from "../util/AppendSide";
 import styled, {css} from "styled-components";

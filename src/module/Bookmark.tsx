@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 import styled, {createGlobalStyle, css} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
 import $ from "cash-dom";
@@ -143,9 +143,9 @@ function Bookmark() {
         height: 100vh;
         ${hide && css`display: none;`};
         ${isDarkMode()
-                ? css`background-color: #000;
+        ? css`background-color: #000;
                     color: white;`
-                : css`background-color: white;`};
+        : css`background-color: white;`};
     `;
 
     return (
@@ -393,12 +393,12 @@ function Viewer() {
 
     const BookmarkIcon = styled.i`
         color: ${bookmarks.hasOwnProperty(location.href)
-                ? isDarkMode()
-                        ? "rgb(117, 242, 70)"
-                        : "rgb(160, 73, 180)"
-                : isDarkMode()
-                        ? "#ffffff7a"
-                        : "#0000007a"};
+        ? isDarkMode()
+            ? "rgb(117, 242, 70)"
+            : "rgb(160, 73, 180)"
+        : isDarkMode()
+            ? "#ffffff7a"
+            : "#0000007a"};
     `;
 
     return <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>;
@@ -454,7 +454,7 @@ export default {
         }
 
         if (/^\/novel\//.test(location.pathname)) {
-            const tr = $("div:not(.mobile_hidden) > .info-graybox")
+            const tr = $("div:not(.mobile_hidden) > .info-graybox");
 
             if (!tr) return;
 

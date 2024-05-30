@@ -140,7 +140,7 @@ export default {
             let plusCount = 0;
 
             for (const element of $(".b_plus")) {
-                element.closest("div[class=mobile_show]")?.remove()
+                element.closest("div[class=mobile_show]")?.remove();
                 plusCount++;
             }
 

@@ -17,7 +17,7 @@ interface CustomWindow extends Window {
     $: jQuery;
     jQuery: jQuery;
 
-    emoticon_open(idx: string): void
+    emoticon_open(idx: string): void;
 
     navi_view(): void;
 
