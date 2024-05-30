@@ -17,5 +17,8 @@
         "unsafeWindow"
     ],
     "homepageURL": "https://github.com/green1052/betternovelpia",
-    "supportURL": "https://github.com/green1052/betternovelpia/issues"
+    "supportURL": "https://github.com/green1052/betternovelpia/issues",
+    "downloadURL": "https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js",
+    "updateURL": "https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.meta.js"
+
 }
