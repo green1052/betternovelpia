@@ -15,7 +15,7 @@
 ### Violentmonkey
 
 1. [Violentmonkey](https://violentmonkey.github.io) 설치
-2. [여기](https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js)를 눌러
+2. [여기](https://github.com/green1052/betternovelpia/releases/latest/download/betternovelpia.user.js)를 눌러 유저스크립트 설치
 
 ### 노벨피아 앱
 
