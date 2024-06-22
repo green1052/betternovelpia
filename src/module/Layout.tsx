@@ -94,6 +94,9 @@ export default {
             GM_addStyle(".novel_banner { display: none!important; }");
             GM_addStyle(`img[alt="자유연재 광고"] { display: none!important; }`);
             GM_addStyle(".calc-event-wrapper { display: none!important; }");
+
+            GM_addStyle("#sub_sale_modal_v2 { display: none!important; }");
+            GM_addStyle(".comic-banner-wrap { display: none!important; }");
         }
 
         // if (hideEventEnable && /^\/freestory$/.test(location.pathname)) {
