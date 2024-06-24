@@ -34,14 +34,14 @@
 
 #### 루팅
 
-[LSPosed](https://github.com/LSPosed/LSPosed)
-[ChromeXt](https://github.com/JingMatrix/ChromeXt)
+1. [LSPosed](https://github.com/LSPosed/LSPosed) [ChromeXt](https://github.com/JingMatrix/ChromeXt) 사용
 
-또는 [Android용 AdGuard](https://adguard.com/ko/adguard-android/overview.html) 사용
+2. [Android용 AdGuard](https://adguard.com/ko/adguard-android/overview.html) 사용
 
 #### 순정
 
-[LSPatch](https://github.com/LSPosed/LSPatch)
-[ChromeXt](https://github.com/JingMatrix/ChromeXt)
+1. [LSPatch](https://github.com/LSPosed/LSPatch) [ChromeXt](https://github.com/JingMatrix/ChromeXt) 사용
 
-또는 [Android용 AdGuard](https://adguard.com/ko/adguard-android/overview.html) 사용
+2. [Android용 AdGuard](https://adguard.com/ko/adguard-android/overview.html) 사용
+
+3. [패치된 APK 사용](https://github.com/green1052/LSPatch-Generator/releases)
