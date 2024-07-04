@@ -2,7 +2,7 @@ name: Build And Release
 on:
   push:
     tags:
-      - '*.*.*'
+      - "*.*.*"
 jobs:
   build:
     name: Build
