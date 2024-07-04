@@ -1,10 +1,8 @@
 name: Build And Release
-
-on:
+'on':
   push:
     tags:
-      - "*.*.*"
-
+      - '*.*.*'
 jobs:
   build:
     name: Build
@@ -12,23 +10,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v2
         with:
           version: latest
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: latest
           cache: pnpm
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Build
         run: pnpm run build
-
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
