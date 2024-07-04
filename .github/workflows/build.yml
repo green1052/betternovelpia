@@ -1,5 +1,5 @@
 name: Build And Release
-'on':
+on:
   push:
     tags:
       - '*.*.*'
