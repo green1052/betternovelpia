@@ -1,30 +1,17 @@
 import $ from "cash-dom";
 import {SIDE_LEFT} from "./Selectors";
+import {Cash} from "cash-dom/dist/cash";
 
 let isFirst = true;
+let $SideMenu: Cash;
 
-export function appendSide(icon: string, title: string, onclick: () => void | Promise<void>) {
-    const $Code =
-        $(`<li class="new-list-style"><span style=width:20px;display:inline-block;text-align:center><i class="icon ${icon}"></i></span>${title}</li>`).on("click", onclick);
-
-    const $Logout = $(`.am-sideright span[onclick*="/proc/logout"]`);
-
-    if (!$Logout.length) {
-        const $SideLeft = $(SIDE_LEFT);
-
-        if (isFirst) {
-            isFirst = false;
-            $SideLeft.append(`<hr class="category-line">`);
-        }
-
-        $SideLeft.append($Code);
-        return;
-    }
+export function appendSide(title: string, onclick: () => void | Promise<void>) {
+    const $Code = $(`<p>${title}</p>`).on("click", onclick);
 
     if (isFirst) {
         isFirst = false;
-        $(`<hr class="category-line">`).insertBefore($Logout.parent());
+        $SideMenu = $("<div class=sidemenu-service><p class=sidemenu-link-title>BetterNovelpia<div class=sidemenu-link-grid></div></div>").insertAfter(SIDE_LEFT);
     }
 
-    $Code.insertBefore($Logout.parent());
+    $SideMenu.find(".sidemenu-link-grid").append($Code);
 }

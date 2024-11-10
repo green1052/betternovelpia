@@ -1,4 +1,4 @@
-export const SIDE_LEFT = ".am-sideleft ul";
+export const SIDE_LEFT = "#m-sidemenu .sidemenu-support";
 
 export const HEADER_BAR = "#header_bar";
 

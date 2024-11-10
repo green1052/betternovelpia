@@ -36,7 +36,7 @@ function Bookmark() {
             bookmarkList.current?.scroll(0, scrollTop);
     }, [scrollTop]);
 
-    useEffect(() => appendSide("ion-bookmark", "북마크", () => setHide(false)), []);
+    useEffect(() => appendSide("북마크", () => setHide(false)), []);
 
     const deleteBookmark = useCallback((url: string) => {
         setScrollTop(bookmarkList.current?.scrollTop ?? 0);

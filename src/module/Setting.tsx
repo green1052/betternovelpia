@@ -141,7 +141,7 @@ function Setting() {
         forceUpdate();
     }, []);
 
-    useEffect(() => appendSide("ion-ios-gear", "설정", () => setHide(false)), []);
+    useEffect(() => appendSide("설정", () => setHide(false)), []);
 
     const MainDiv = styled.div`
       overflow: auto;

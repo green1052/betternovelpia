@@ -14,7 +14,7 @@ export default {
         }
     },
     start() {
-        appendSide("ion-settings", "eval", () => {
+        appendSide("eval", () => {
             const code = prompt("code: ");
 
             if (!code)

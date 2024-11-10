@@ -1,6 +1,6 @@
 {
     "name": "betternovelpia",
-    "version": "10.7.4",
+    "version": "10.7.5",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "build": "webpack --config webpack.prod.js",
