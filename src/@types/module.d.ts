@@ -60,7 +60,8 @@ declare global {
         "RecommendAllNovel" |
         "ViewNovelToCookie_LOGINKEY" |
         "ViewNovelToCookie_USERKEY" |
-        "ViewNovelToCookie";
+        "ViewNovelToCookie" | 
+        "AllowDrag";
 
     interface Configs {
         head: string,

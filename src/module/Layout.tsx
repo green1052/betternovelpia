@@ -97,6 +97,7 @@ export default {
 
             GM_addStyle("#sub_sale_modal_v2 { display: none!important; }");
             GM_addStyle(".comic-banner-wrap { display: none!important; }");
+            GM_addStyle(".bottom_banner_wrapper { display: none!important; }");
         }
 
         // if (hideEventEnable && /^\/freestory$/.test(location.pathname)) {
