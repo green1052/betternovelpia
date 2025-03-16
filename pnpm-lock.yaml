@@ -66,8 +66,8 @@ importers:
         specifier: ^1.0.11
         version: 1.0.11(react@19.0.0)
       use-long-press:
-        specifier: ^3.2.0
-        version: 3.2.0(react@19.0.0)
+        specifier: ^3.3.0
+        version: 3.3.0(react@19.0.0)
       webpack:
         specifier: ^5.98.0
         version: 5.98.0(@swc/core@1.11.9)(webpack-cli@6.0.1)
@@ -1442,8 +1442,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-long-press@3.2.0:
-    resolution: {integrity: sha512-uq5o2qFR1VRjHn8Of7Fl344/AGvgk7C5Mcb4aSb1ZRVp6PkgdXJJLdRrlSTJQVkkQcDuqFbFc3mDX4COg7mRTA==}
+  use-long-press@3.3.0:
+    resolution: {integrity: sha512-Yedz46ILxsb1BTS6kUzpV/wyEZPUlJDq+8Oat0LP1eOZQHbS887baJHJbIGENqCo8wTKNxmoTHLdY8lU/e+wvw==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -2906,7 +2906,7 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  use-long-press@3.2.0(react@19.0.0):
+  use-long-press@3.3.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
