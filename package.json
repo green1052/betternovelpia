@@ -14,7 +14,7 @@
         "@types/styled-components": "^5.1.34",
         "@types/webpack-env": "^1.18.8",
         "cash-dom": "^8.1.5",
-        "html-entities": "^2.5.2",
+        "html-entities": "^2.5.3",
         "js-cookie": "^3.0.5",
         "ky": "^1.7.5",
         "react": "^19.0.0",
