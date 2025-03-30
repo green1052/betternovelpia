@@ -30,8 +30,8 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5
       html-entities:
-        specifier: ^2.5.5
-        version: 2.5.5
+        specifier: ^2.5.6
+        version: 2.5.6
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -790,8 +790,8 @@ packages:
   hpack.js@2.1.6:
     resolution: {integrity: sha512-zJxVehUdMGIKsRaNt7apO2Gqp0BdqW5yaiGHXXmbpvxgBYVZnAql+BJb4RO5ad2MgpbZKn5G6nMnegrH1FcNYQ==}
 
-  html-entities@2.5.5:
-    resolution: {integrity: sha512-24CG9o869vSa86BGCf7x65slrAztzFTU5VBQzEIwqjhKuB4zCC7xlH/7NCcZ1EN5MdmGx9lUqugfutuT6J+jKQ==}
+  html-entities@2.5.6:
+    resolution: {integrity: sha512-he75h7h3poG52iRupbVtjupeGz24QgHOYK/cbJpj3TSLsHbnmG3DyPg94V2DC7w0O6f76xnYMS09J5UkbMkARQ==}
 
   http-deceiver@1.2.7:
     resolution: {integrity: sha512-LmpOGxTfbpgtGVxJrj5k7asXHCgNZp5nLfp+hWc8QQRqtb7fUy6kRY3BO1h9ddF6yIPYUARgxGOwB42DnxIaNw==}
@@ -2280,7 +2280,7 @@ snapshots:
       readable-stream: 2.3.8
       wbuf: 1.7.3
 
-  html-entities@2.5.5: {}
+  html-entities@2.5.6: {}
 
   http-deceiver@1.2.7: {}
 
