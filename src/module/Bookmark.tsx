@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {createRoot} from "react-dom/client";
-import styled, {createGlobalStyle, css} from "styled-components";
+import styled, {createGlobalStyle, keyframes} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
 import $ from "cash-dom";
 import {isDarkMode} from "../util/IsDarkMode";
@@ -9,6 +9,19 @@ import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {novelLoaded} from "../util/NovelLoaded";
 import {NovelContinueBox} from "../util/NovelContinueBox";
+
+interface Bookmark {
+    scrollTop: number;
+    title: string;
+    chapter: string;
+    url?: string;
+}
+
+interface StyledProps {
+    hide?: boolean;
+    active?: boolean;
+    variant?: "danger" | "primary" | "secondary" | "outline";
+}
 
 function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
     const aTitle = a[1].title;
@@ -21,25 +34,476 @@ function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
             : 0;
 }
 
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
+const slideUp = keyframes`
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+`;
+
+const GlobalStyles = createGlobalStyle`
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .no-overflow {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .no-overflow a {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .bookmark-container {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+`;
+
+const MainDiv = styled.div<StyledProps>`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background-color: ${() => isDarkMode() ? "#121212" : "#f0f0f0"};
+    color: ${() => isDarkMode() ? "#ffffff" : "#121212"};
+    display: ${props => props.hide ? "none" : "flex"};
+    flex-direction: column;
+    animation: ${fadeIn} 0.3s ease;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+`;
+
+const AppBar = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 5;
+`;
+
+const AppTitle = styled.h1`
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+`;
+
+const BookmarkIcon = styled.i`
+    margin-right: 8px;
+    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+`;
+
+const CloseButton = styled.button`
+    background: none;
+    border: none;
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    font-size: 24px;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: -8px;
+
+    &:active {
+        background-color: ${() => isDarkMode() ? "#333333" : "#eeeeee"};
+    }
+`;
+
+const ContentArea = styled.div`
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+`;
+
+const BookmarkCard = styled.div`
+    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
+    margin: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: ${slideUp} 0.3s ease;
+`;
+
+const BookmarkHeader = styled.div`
+    background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
+    padding: 12px 16px;
+    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const BookmarkTitle = styled.h2`
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    display: flex;
+    align-items: center;
+`;
+
+const BookmarkCount = styled.span`
+    font-size: 14px;
+    font-weight: normal;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#666666"};
+    margin-left: 8px;
+`;
+
+const BookmarkList = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+`;
+
+const BookmarkItem = styled.li<StyledProps>`
+    padding: 16px;
+    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+    position: relative;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:active {
+        background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
+    }
+`;
+
+const BookmarkItemContent = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const BookmarkChapter = styled.div`
+    font-size: 14px;
+    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+    margin-bottom: 4px;
+    font-weight: 500;
+`;
+
+const BookmarkLink = styled.a`
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+
+    &:active {
+        color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+    }
+`;
+
+const BookmarkActions = styled.div`
+    display: flex;
+    margin-top: 8px;
+    justify-content: flex-end;
+`;
+
+const DeleteButton = styled.button`
+    background-color: ${() => isDarkMode() ? "#333333" : "#f2f2f2"};
+    border: none;
+    color: ${() => isDarkMode() ? "#FF3B30" : "#FF3B30"};
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+        opacity: 0.8;
+    }
+`;
+
+const DeleteButtonIcon = styled.i`
+    margin-right: 6px;
+`;
+
+const EmptyState = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+`;
+
+const EmptyIcon = styled.i`
+    font-size: 48px;
+    color: ${() => isDarkMode() ? "#555555" : "#cccccc"};
+    margin-bottom: 16px;
+`;
+
+const EmptyText = styled.p`
+    font-size: 16px;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#999999"};
+    margin: 0 0 8px 0;
+`;
+
+const ActionBar = styled.div`
+    display: flex;
+    padding: 12px;
+    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 5;
+`;
+
+const ActionButton = styled.button<StyledProps>`
+    background-color: ${props => {
+        if (props.variant === "primary") return "#007AFF";
+        if (props.variant === "danger") return "#FF3B30";
+        if (props.variant === "outline") return "transparent";
+        return isDarkMode() ? "#333333" : "#f2f2f2";
+    }};
+    color: ${props => {
+        if (props.variant === "primary" || props.variant === "danger") return "#ffffff";
+        if (props.variant === "outline") return isDarkMode() ? "#007AFF" : "#007AFF";
+        return isDarkMode() ? "#ffffff" : "#333333";
+    }};
+    border: ${props => props.variant === "outline" ?
+            `1px solid ${isDarkMode() ? "#007AFF" : "#007AFF"}` : "none"};
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 15px;    
+    font-weight: 500;
+    flex: 1;
+    margin: 0 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+        opacity: 0.8;
+    }
+`;
+
+const ActionButtonIcon = styled.i`
+    margin-right: 6px;
+`;
+
+const Modal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: ${fadeIn} 0.3s ease;
+    padding: 20px;
+`;
+
+const ModalContent = styled.div`
+    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: ${slideUp} 0.3s ease;
+`;
+
+const ModalHeader = styled.div`
+    padding: 16px;
+    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+`;
+
+const ModalTitle = styled.h3`
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+`;
+
+const ModalBody = styled.div`
+    padding: 16px;
+`;
+
+const ModalInput = styled.textarea`
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid ${() => isDarkMode() ? "#444444" : "#dddddd"};
+    background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    font-size: 14px;
+    resize: none;
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &:focus {
+        outline: none;
+        border-color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+    }
+`;
+
+const ModalFooter = styled.div`
+    display: flex;
+    padding: 12px 16px;
+    border-top: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+`;
+
+const ModalButton = styled.button<StyledProps>`
+    background-color: ${props => {
+        if (props.variant === "primary") return "#007AFF";
+        if (props.variant === "danger") return "#FF3B30";
+        if (props.variant === "outline") return "transparent";
+        return isDarkMode() ? "#333333" : "#f2f2f2";
+    }};
+    color: ${props => {
+        if (props.variant === "primary" || props.variant === "danger") return "#ffffff";
+        if (props.variant === "outline") return isDarkMode() ? "#007AFF" : "#007AFF";
+        return isDarkMode() ? "#ffffff" : "#333333";
+    }};
+    border: ${props => props.variant === "outline" ?
+            `1px solid ${isDarkMode() ? "#007AFF" : "#007AFF"}` : "none"};
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    flex: 1;
+    margin: 0 4px;
+    cursor: pointer;
+
+    &:active {
+        opacity: 0.8;
+    }
+`;
+
+const PreviousBookmarkToast = styled.div`
+    position: fixed;
+    bottom: 76px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: calc(100% - 24px);
+    max-width: 320px;
+    z-index: 100;
+    animation: ${slideUp} 0.3s ease;
+    border: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+`;
+
+const PreviousBookmarkContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const PreviousBookmarkIcon = styled.i`
+    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+    font-size: 18px;
+    margin-right: 12px;
+`;
+
+const PreviousBookmarkInfo = styled.div`
+    flex: 1;
+    overflow: hidden;
+`;
+
+const PreviousBookmarkLabel = styled.div`
+    font-size: 12px;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#999999"};
+    margin-bottom: 4px;
+`;
+
+const PreviousBookmarkLink = styled.a`
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+
+    &:active {
+        color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
+    }
+`;
+
+const ViewerBookmarkIcon = styled.i<StyledProps>`
+    color: ${props => props.active
+            ? "#007AFF"
+            : isDarkMode() ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:active {
+        transform: scale(0.9);
+    }
+`;
+
 function Bookmark() {
-    const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
-    const [previousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
+    const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
+    const [previousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
     const [hide, setHide] = useState(true);
-    const [inputHide, setInputHide] = useState(true);
+    const [showModal, setShowModal] = useState(false);
     const [data, setData] = useState("");
     const [scrollTop, setScrollTop] = useState(0);
 
-    const bookmarkList = useRef<HTMLOListElement>(null);
+    const bookmarkList = useRef<HTMLUListElement | null>(null);
 
     useLayoutEffect(() => {
-        if (scrollTop > 0)
-            bookmarkList.current?.scroll(0, scrollTop);
+        if (scrollTop > 0 && bookmarkList.current)
+            bookmarkList.current.scroll(0, scrollTop);
     }, [scrollTop]);
 
     useEffect(() => appendSide("북마크", () => setHide(false)), []);
 
     const deleteBookmark = useCallback((url: string) => {
-        setScrollTop(bookmarkList.current?.scrollTop ?? 0);
+        if (bookmarkList.current)
+            setScrollTop(bookmarkList.current.scrollTop ?? 0);
 
         const bookmarks1 = {...bookmarks};
         delete bookmarks1[url];
@@ -59,31 +523,34 @@ function Bookmark() {
     }, [bookmarks]);
 
     const restore = useCallback(() => {
-        setInputHide(true);
-        setData("");
-
         if (!data) {
             unsafeWindow.toastr.info("데이터가 비어있습니다.", "북마크");
+            setShowModal(false);
             return;
         }
 
-        const json = JSON.parse(data);
-        GM_setValue("bookmarks", json);
-        setBookmarks(json);
+        try {
+            const json = JSON.parse(data);
+            GM_setValue("bookmarks", json);
+            setBookmarks(json);
+            unsafeWindow.toastr.info("복원되었습니다.", "북마크");
+        } catch (e) {
+            unsafeWindow.toastr.info("잘못된 데이터 형식입니다.", "북마크");
+        }
 
-        unsafeWindow.toastr.info("복원되었습니다.", "북마크");
+        setShowModal(false);
+        setData("");
     }, [data]);
 
     const clean = useCallback(() => {
         if (!Object.keys(bookmarks).length) return;
 
-        setScrollTop(bookmarkList.current?.scrollTop ?? 0);
+        if (bookmarkList.current)
+            setScrollTop(bookmarkList.current.scrollTop ?? 0);
 
         const bookmarks1 = {...bookmarks};
 
-        const sorted: {
-            [key: string]: [string, Bookmark][]
-        } = {};
+        const sorted: Record<string, [string, Bookmark][]> = {};
 
         for (const [key, value] of Object.entries(bookmarks1).sort(sortBookmark)) {
             const title = value.title;
@@ -92,7 +559,7 @@ function Bookmark() {
             sorted[title].push([key, value]);
         }
 
-        const result: Bookmarks = {};
+        const result: Record<string, Bookmark> = {};
 
         for (const [, value] of Object.entries(sorted)) {
             const [url, bookmark] = value[value.length - 1];
@@ -103,136 +570,140 @@ function Bookmark() {
         setBookmarks(result);
 
         unsafeWindow.toastr.info("정리되었습니다.", "북마크");
-    }, []);
+    }, [bookmarks]);
 
-    const reset = useCallback(() => setBookmarks({}), []);
+    const reset = useCallback(() => {
+        if (confirm("정말로 모든 북마크를 삭제하시겠습니까?")) {
+            GM_setValue("bookmarks", {});
+            setBookmarks({});
+            unsafeWindow.toastr.info("모든 북마크가 삭제되었습니다.", "북마크");
+        }
+    }, []);
 
     const quit = useCallback(() => setHide(true), []);
 
-    const GlobalStyles = createGlobalStyle`
-        .no-overflow {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .no-overflow a {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .bookmark div {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .bookmark h5 {
-            color: red;
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-    `;
-
-    const MainDiv = styled.div`
-        overflow: auto;
-        bottom: 0;
-        position: fixed;
-        z-index: 99999;
-        width: 100vw;
-        height: 100vh;
-        ${hide && css`display: none;`};
-        ${isDarkMode()
-                ? css`background-color: #000;
-                    color: white;`
-                : css`background-color: white;`};
-    `;
+    const bookmarkCount = Object.entries(bookmarks).length;
 
     return (
-        <MainDiv>
+        <MainDiv hide={hide} className="bookmark-container">
             <GlobalStyles/>
-            {
-                !inputHide && <div style={{
-                    display: "flex",
-                    position: "fixed",
-                    left: "50%",
-                    top: "50%",
-                    transform: "translate(-50%, -50%)"
-                }}>
-                    <input autoFocus onChange={(e) => setData(e.target.value)}
-                           value={data}
-                           type="text"
-                           placeholder="데이터를 입력해주세요"/>
-                    <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
-                    <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
-                </div>
-            }
 
-            <h2 style={{marginTop: "5px", textAlign: "center"}}>북마크 관리</h2>
+            {showModal && (
+                <Modal>
+                    <ModalContent>
+                        <ModalHeader>
+                            <ModalTitle>북마크 복원</ModalTitle>
+                        </ModalHeader>
+                        <ModalBody>
+                            <ModalInput
+                                placeholder="백업된 북마크 데이터를 붙여넣으세요"
+                                value={data}
+                                onChange={(e) => setData(e.target.value)}
+                                autoFocus
+                            />
+                        </ModalBody>
+                        <ModalFooter>
+                            <ModalButton
+                                variant="outline"
+                                onClick={() => {
+                                    setShowModal(false);
+                                    setData("");
+                                }}
+                            >
+                                취소
+                            </ModalButton>
+                            <ModalButton variant="primary" onClick={restore}>
+                                복원
+                            </ModalButton>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            )}
 
-            <ol ref={bookmarkList} className="no-overflow bookmark"
-                style={{
-                    height: "85vh",
-                    overflow: "auto",
-                    fontSize: "15px",
-                    marginLeft: "-30px"
-                }}>
-                {
-                    (
-                        GM_getValue<boolean>("Bookmark_Sort", false)
-                            ? Object.entries(bookmarks).sort(sortBookmark)
-                            : Object.entries(bookmarks)
-                    ).map(([key, value]) =>
-                        <li key={key}>
-                            <div>
-                                <a href={key}>{value.chapter} - {value.title}</a>
-                                <h5 onClick={() => deleteBookmark(key)}>X</h5>
-                            </div>
-                        </li>
-                    )
-                }
-            </ol>
+            <AppBar>
+                <AppTitle>
+                    <BookmarkIcon className="icon ion-bookmark"/>
+                    북마크
+                </AppTitle>
+                <CloseButton onClick={quit}>
+                    <i className="icon ion-close-round"/>
+                </CloseButton>
+            </AppBar>
 
-            <div style={{
-                display: "flex",
-                position: "fixed",
-                bottom: "35px",
-                right: "5px"
-            }}>
-                <h5 onClick={backup}>백업</h5>
-                <h5 onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</h5>
-            </div>
+            <ContentArea>
+                <BookmarkCard>
+                    <BookmarkHeader>
+                        <BookmarkTitle>
+                            북마크 목록
+                            {bookmarkCount > 0 && <BookmarkCount>({bookmarkCount})</BookmarkCount>}
+                        </BookmarkTitle>
+                    </BookmarkHeader>
 
-            <div style={{
-                display: "flex",
-                position: "fixed",
-                bottom: "5px",
-                left: "5px"
-            }}>
-                <h5 className="no-overflow" style={{fontSize: ".83em", width: "20vh"}}>
-                    이전 소설:
-                    &nbsp;
-                    <a href={previousBookmark?.url ?? "#"}>
-                        {
-                            previousBookmark?.title && previousBookmark?.chapter
-                                ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
-                                : "없음"
-                        }
-                    </a>
-                </h5>
-            </div>
+                    {bookmarkCount === 0 ? (
+                        <EmptyState>
+                            <EmptyIcon className="icon ion-bookmark"/>
+                            <EmptyText>저장된 북마크가 없습니다</EmptyText>
+                        </EmptyState>
+                    ) : (
+                        <BookmarkList ref={bookmarkList}>
+                            {(GM_getValue("Bookmark_Sort", false)
+                                    ? Object.entries(bookmarks).sort(sortBookmark)
+                                    : Object.entries(bookmarks)
+                            ).map(([key, value]) => (
+                                <BookmarkItem key={key}>
+                                    <BookmarkItemContent>
+                                        <BookmarkChapter>{value.chapter}</BookmarkChapter>
+                                        <BookmarkLink href={key}>
+                                            {value.title}
+                                        </BookmarkLink>
+                                        <BookmarkActions>
+                                            <DeleteButton onClick={() => deleteBookmark(key)}>
+                                                <DeleteButtonIcon className="icon ion-ios-trash-outline"/>
+                                            </DeleteButton>
+                                        </BookmarkActions>
+                                    </BookmarkItemContent>
+                                </BookmarkItem>
+                            ))}
+                        </BookmarkList>
+                    )}
+                </BookmarkCard>
+            </ContentArea>
 
-            <div style={{
-                position: "fixed",
-                bottom: "5px",
-                right: "5px"
-            }}>
-                <button onClick={clean}>정리</button>
-                <button onDoubleClick={reset} style={{marginLeft: "5px"}}>초기화</button>
-                <button onClick={quit} style={{marginLeft: "5px"}}>
-                    닫기
-                </button>
-            </div>
+            <ActionBar>
+                <ActionButton variant="secondary" onClick={backup}>
+                    <ActionButtonIcon className="icon ion-ios-cloud-upload"/>
+                    백업
+                </ActionButton>
+                <ActionButton variant="secondary" onClick={() => setShowModal(true)}>
+                    <ActionButtonIcon className="icon ion-ios-cloud-download"/>
+                    복원
+                </ActionButton>
+                <ActionButton variant="secondary" onClick={clean}>
+                    <ActionButtonIcon className="icon ion-ios-compose"/>
+                    정리
+                </ActionButton>
+                <ActionButton variant="danger" onClick={reset}>
+                    <ActionButtonIcon className="icon ion-ios-trash"/>
+                    초기화
+                </ActionButton>
+            </ActionBar>
+
+            {previousBookmark && (
+                <PreviousBookmarkToast>
+                    <PreviousBookmarkContent>
+                        <PreviousBookmarkIcon className="icon ion-ios-arrow-back"/>
+                        <PreviousBookmarkInfo>
+                            <PreviousBookmarkLabel>이전 소설</PreviousBookmarkLabel>
+                            <PreviousBookmarkLink href={previousBookmark?.url ?? "#"}>
+                                {previousBookmark?.title && previousBookmark?.chapter
+                                    ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
+                                    : "없음"
+                                }
+                            </PreviousBookmarkLink>
+                        </PreviousBookmarkInfo>
+                    </PreviousBookmarkContent>
+                </PreviousBookmarkToast>
+            )}
         </MainDiv>
     );
 }
@@ -265,10 +736,10 @@ function Novel() {
         });
     }, []);
 
-    const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
+    const bookmarks = GM_getValue("bookmarks", {});
 
     const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === document.title.split("-")[2].trimStart()).pop();
-    const previousBookmark = GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined);
+    const previousBookmark = GM_getValue("previousBookmark", undefined);
 
     return (
         <>
@@ -287,8 +758,8 @@ function Novel() {
 }
 
 function Viewer() {
-    const [bookmarks, setBookmarks] = useState((GM_getValue<Bookmarks>("bookmarks", {})));
-    const [previousBookmark, setPreviousBookmark] = useState((GM_getValue<PreviousBookmark | undefined>("previousBookmark", undefined)));
+    const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
+    const [previousBookmark, setPreviousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
 
     const chapter = $(NOVEL_EP).text().trim() ?? "EP.알 수 없음";
     const title = document.title.split("-")[2].trimStart() ?? "알 수 없음";
@@ -296,13 +767,13 @@ function Viewer() {
     let scrollTop = -1;
     let askAlert = true;
 
-    if (bookmarks.hasOwnProperty(location.href) && (!GM_getValue<boolean>("PreviousBookmark_First", false) && previousBookmark?.url !== location.href)) {
+    if (bookmarks.hasOwnProperty(location.href) && (!GM_getValue("PreviousBookmark_First", false) && previousBookmark?.url !== location.href)) {
         scrollTop = bookmarks[location.href].scrollTop;
 
-        if (GM_getValue<boolean>("Bookmark_AutoUse", false))
+        if (GM_getValue("Bookmark_AutoUse", false))
             askAlert = false;
 
-        if (GM_getValue<boolean>("Bookmark_OneUse", false)) {
+        if (GM_getValue("Bookmark_OneUse", false)) {
             const bookmarks1 = {...bookmarks};
             delete bookmarks1[location.href];
 
@@ -312,7 +783,7 @@ function Viewer() {
     } else if (previousBookmark?.url === location.href) {
         scrollTop = previousBookmark.scrollTop;
 
-        if (GM_getValue<boolean>("PreviousBookmark_AutoUse", false))
+        if (GM_getValue("PreviousBookmark_AutoUse", false))
             askAlert = false;
     }
 
@@ -339,7 +810,7 @@ function Viewer() {
             });
         }
 
-        if (GM_getValue<boolean>("PreviousBookmark", false)) {
+        if (GM_getValue("PreviousBookmark", false)) {
             const url = location.href;
 
             window.addEventListener("beforeunload", () => {
@@ -391,17 +862,16 @@ function Viewer() {
         unsafeWindow.toastr.info("삭제되었습니다.", "북마크");
     });
 
-    const BookmarkIcon = styled.i`
-        color: ${bookmarks.hasOwnProperty(location.href)
-                ? isDarkMode()
-                        ? "rgb(117, 242, 70)"
-                        : "rgb(160, 73, 180)"
-                : isDarkMode()
-                        ? "#ffffff7a"
-                        : "#0000007a"};
-    `;
+    const isActive = bookmarks.hasOwnProperty(location.href);
 
-    return <BookmarkIcon className="icon ion-bookmark" onClick={click} {...longClick}/>;
+    return (
+        <ViewerBookmarkIcon
+            className="icon ion-bookmark"
+            onClick={click}
+            active={isActive}
+            {...longClick}
+        />
+    );
 }
 
 export default {
@@ -446,7 +916,7 @@ export default {
         }
     },
     start() {
-        if (!GM_getValue<boolean>("Bookmark", false) && !GM_getValue<boolean>("PreviousBookmark", false)) return;
+        if (!GM_getValue("Bookmark", false) && !GM_getValue("PreviousBookmark", false)) return;
 
         if (isPageViewer()) {
             unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
@@ -484,4 +954,4 @@ export default {
             root.render(<Bookmark/>);
         }
     }
-} as Module;
+};

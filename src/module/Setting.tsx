@@ -2,111 +2,432 @@ import React, {useCallback, useEffect, useState} from "react";
 import {createRoot} from "react-dom/client";
 import {ModulesInfo} from "../index";
 import {appendSide} from "../util/AppendSide";
-import styled, {css} from "styled-components";
+import styled, {createGlobalStyle, keyframes} from "styled-components";
 import {isDarkMode} from "../util/IsDarkMode";
 import useForceUpdate from "use-force-update";
 import {exportConfig} from "../util/ExportConfig";
 
-function Card(props: { children: React.ReactNode }) {
-    return (
-        <div className="col-lg-4">
-            <hr/>
-            <div className="card rounded-10 mg-b-10" style={{boxShadow: "0px 0px 5px 0px rgb(0 0 0 / 20%)"}}>
-                {props.children}
-            </div>
-        </div>
-    );
+type Config = string;
+type ConfigData = {
+    label: string;
+    type: string;
+    default?: boolean;
+    min?: number;
+    max?: number;
+};
+
+interface ModuleConfig {
+    head: string;
+    configs: Record<string, ConfigData>;
 }
 
-function CardHead(props: { label: string }) {
-    return (
-        <div className="card-header card-header-default bg-dark"
-             style={{borderRadius: "10px 10px 0px 0px", height: "45px"}}>
-            <span style={{color: "rgb(238, 238, 238)", fontSize: "14px"}}>
-                <i className="icon ion-ios-gear"/>
-                &nbsp;
-                {props.label}
-            </span>
-        </div>
-    );
-}
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
 
-function CardBody(props: { children: React.ReactNode }) {
-    return (
-        <div className="card-body" style={{padding: "20px"}}>
-            {props.children}
-        </div>
-    );
-}
+const slideUp = keyframes`
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+`;
 
-function Checkbox(props: { config: Config, label: string }) {
-    const [checked, setChecked] = useState(GM_getValue<boolean>(props.config, false));
+const GlobalStyle = createGlobalStyle`
+    body {
+        margin: 0;
+        padding: 0;
+    }
+`;
+
+const AppContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: ${() => isDarkMode() ? "#121212" : "#f0f0f0"};
+    color: ${() => isDarkMode() ? "#ffffff" : "#121212"};
+    display: ${(props: { hide: boolean }) => props.hide ? "none" : "flex"};
+    flex-direction: column;
+    animation: ${fadeIn} 0.3s ease;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+`;
+
+const AppBar = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const AppTitle = styled.h1`
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+`;
+
+const VersionBadge = styled.span`
+    background-color: ${() => isDarkMode() ? "#333333" : "#f2f2f2"};
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#666666"};
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-weight: 400;
+`;
+
+const CloseButton = styled.button`
+    background: none;
+    border: none;
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    font-size: 24px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    &:active {
+        background-color: ${() => isDarkMode() ? "#333333" : "#eeeeee"};
+    }
+`;
+
+const ContentArea = styled.div`
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+`;
+
+const ModuleCard = styled.div`
+    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const ModuleHeader = styled.div`
+    background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
+    padding: 12px 16px;
+    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
+`;
+
+const ModuleTitle = styled.h2`
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    display: flex;
+    align-items: center;
+`;
+
+const ModuleIcon = styled.i`
+    margin-right: 8px;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#666666"};
+`;
+
+const ModuleBody = styled.div`
+    padding: 16px;
+`;
+
+const SettingItem = styled.div`
+    margin-bottom: 16px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+`;
+
+const SettingRow = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+`;
+
+const SettingLabel = styled.label`
+    font-size: 14px;
+    flex: 1;
+    margin-right: 16px;
+`;
+
+const ToggleSwitch = styled.div`
+    position: relative;
+    width: 50px;
+    height: 28px;
+`;
+
+const ToggleInput = styled.input`
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+
+    &:checked + span {
+        background-color: #4CD964;
+    }
+
+    &:checked + span:before {
+        transform: translateX(22px);
+    }
+`;
+
+const ToggleSlider = styled.span`
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: ${() => isDarkMode() ? "#555555" : "#cccccc"};
+    transition: 0.3s;
+    border-radius: 34px;
+
+    &:before {
+        position: absolute;
+        content: "";
+        height: 24px;
+        width: 24px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+`;
+
+const InputField = styled.input`
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid ${() => isDarkMode() ? "#444444" : "#dddddd"};
+    background-color: ${() => isDarkMode() ? "#333333" : "#ffffff"};
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    font-size: 14px;
+
+    &:focus {
+        outline: none;
+        border-color: #007AFF;
+    }
+`;
+
+const InputLabel = styled.label`
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#666666"};
+`;
+
+const BottomBar = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const ActionButton = styled.button<{ variant?: "primary" | "danger" | "secondary" }>`
+    background-color: ${props => {
+        if (props.variant === "primary") return "#007AFF";
+        if (props.variant === "danger") return "#FF3B30";
+        return props.variant === "secondary" ?
+                (isDarkMode() ? "#3a3a3a" : "#f2f2f2") :
+                "transparent";
+    }};
+    color: ${props => {
+        if (props.variant === "primary" || props.variant === "danger") return "#ffffff";
+        return isDarkMode() ? "#ffffff" : "#333333";
+    }};
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+
+    &:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+`;
+
+const ButtonIcon = styled.i`
+    margin-right: 8px;
+`;
+
+const Modal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 10000;
+    animation: ${fadeIn} 0.3s ease;
+`;
+
+const ModalContent = styled.div`
+    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 20px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+    animation: ${slideUp} 0.3s ease;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ModalTitle = styled.h3`
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+`;
+
+const ModalInput = styled.textarea`
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid ${() => isDarkMode() ? "#444444" : "#dddddd"};
+    background-color: ${() => isDarkMode() ? "#333333" : "#ffffff"};
+    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 16px;
+
+    &:focus {
+        outline: none;
+        border-color: #007AFF;
+    }
+`;
+
+const ModalActions = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+`;
+
+const EmptyMessage = styled.div`
+    text-align: center;
+    padding: 32px 0;
+    color: ${() => isDarkMode() ? "#bbbbbb" : "#999999"};
+    font-size: 14px;
+`;
+
+const ButtonsGroup = styled.div`
+    display: flex;
+    gap: 8px;
+`;
+
+function Checkbox({config, label}: { config: Config, label: string }) {
+    const [checked, setChecked] = useState(GM_getValue<boolean>(config, false));
 
     const change = useCallback(() => {
-        setChecked(!checked);
-        GM_setValue(props.config, !checked);
-    }, [checked]);
+        const newValue = !checked;
+        setChecked(newValue);
+        GM_setValue(config, newValue);
+    }, [checked, config]);
 
     return (
-        <>
-            <div onClick={change} className="ui-switcher" aria-checked={checked}/>
-            {props.label}
-            <br/>
-            <br/>
-        </>
+        <SettingRow>
+            <SettingLabel>{label}</SettingLabel>
+            <ToggleSwitch onClick={change}>
+                <ToggleInput type="checkbox" checked={checked} readOnly/>
+                <ToggleSlider/>
+            </ToggleSwitch>
+        </SettingRow>
     );
 }
 
-function TextBox(props: { config: Config, label: string }) {
-    const [value, setValue] = useState(GM_getValue<string>(props.config, ""));
+function TextBox({config, label}: { config: Config, label: string }) {
+    const [value, setValue] = useState(GM_getValue<string>(config, ""));
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        GM_setValue(props.config, e.target.value);
-        setValue(e.target.value);
-    }, []);
+        const newValue = e.target.value;
+        GM_setValue(config, newValue);
+        setValue(newValue);
+    }, [config]);
 
     return (
-        <div className="form-group">
-            <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
-            <input onChange={change} className="form-control" type="text" value={value}/>
-            <br/>
-            <br/>
-        </div>
+        <SettingItem>
+            <InputLabel>{label}</InputLabel>
+            <InputField type="text" value={value} onChange={change}/>
+        </SettingItem>
     );
 }
 
-function NumberBox(props: { config: Config, label: string, min: number, max: number }) {
-    const [value, setValue] = useState(GM_getValue<number>(props.config, 0));
+function NumberBox({config, label, min, max}: { config: Config, label: string, min: number, max: number }) {
+    const [value, setValue] = useState(GM_getValue<number>(config, 0));
 
     const change = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const changeValue = e.target.value;
+        const newValue = e.target.value;
 
-        if (!changeValue) return;
+        if (!newValue) return;
 
-        const convert = Number(changeValue);
+        const numValue = Number(newValue);
+        if (isNaN(numValue) || min > numValue || max < numValue) return;
 
-        if (isNaN(convert) || props.min > convert || props.max < convert) return;
-
-        GM_setValue(props.config, convert);
-        setValue(convert);
-    }, []);
+        GM_setValue(config, numValue);
+        setValue(numValue);
+    }, [config, min, max]);
 
     return (
-        <div className="form-group">
-            <label className="form-control-label" style={{fontSize: "12px"}}>{props.label}:</label>
-            <input onChange={change} className="form-control" type="number" value={value} min={props.min}
-                   max={props.max}/>
-            <br/>
-            <br/>
-        </div>
+        <SettingItem>
+            <InputLabel>{label}</InputLabel>
+            <InputField
+                type="number"
+                value={value}
+                onChange={change}
+                min={min}
+                max={max}
+            />
+        </SettingItem>
     );
 }
 
 function Setting() {
     const [hide, setHide] = useState(true);
-    const [inputHide, setInputHide] = useState(true);
-    const [data, setData] = useState("");
-
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState("");
     const forceUpdate = useForceUpdate();
 
     const quit = useCallback(() => location.reload(), []);
@@ -114,139 +435,144 @@ function Setting() {
     const backup = useCallback(() => {
         const data = exportConfig();
 
-        if (!Object.keys(data).length) return;
+        if (!Object.keys(data).length) {
+            unsafeWindow.toastr.info("백업할 설정이 없습니다.", "설정");
+            return;
+        }
 
-        GM_setClipboard(JSON.stringify(data));
-
-        unsafeWindow.toastr.info("클립보드로 복사되었습니다.", "설정");
+        GM_setClipboard(JSON.stringify(data, null, 2));
+        unsafeWindow.toastr.info("설정이 클립보드에 복사되었습니다.", "설정");
     }, []);
 
     const restore = useCallback(() => {
-        if (data) {
-            for (const [key, value] of Object.entries(JSON.parse(data)))
+        if (!modalData.trim()) {
+            unsafeWindow.toastr.info("데이터가 비어있습니다.", "설정");
+            setShowModal(false);
+            return;
+        }
+
+        try {
+            const config = JSON.parse(modalData);
+            for (const [key, value] of Object.entries(config)) {
                 GM_setValue(key, value);
+            }
+            forceUpdate();
+            unsafeWindow.toastr.info("설정이 복원되었습니다.", "설정");
+        } catch (e) {
+            unsafeWindow.toastr.info("잘못된 데이터 형식입니다.", "설정");
+        }
 
-            unsafeWindow.toastr.info("복원되었습니다.", "북마크");
-        } else
-            unsafeWindow.toastr.info("데이터가 비어있습니다.", "북마크");
-
-        setInputHide(true);
-        setData("");
-    }, [data]);
+        setShowModal(false);
+        setModalData("");
+    }, [modalData]);
 
     const reset = useCallback(() => {
-        for (const config of GM_listValues())
-            GM_deleteValue(config);
-
-        forceUpdate();
+        if (confirm("모든 설정을 초기화하시겠습니까?")) {
+            for (const config of GM_listValues()) {
+                GM_deleteValue(config);
+            }
+            forceUpdate();
+            unsafeWindow.toastr.info("모든 설정이 초기화되었습니다.", "설정");
+        }
     }, []);
 
     useEffect(() => appendSide("설정", () => setHide(false)), []);
 
-    const MainDiv = styled.div`
-      overflow: auto;
-      bottom: 0;
-      position: fixed;
-      z-index: 99999;
-      width: 100vw;
-      height: 100vh;
-      background-color: ${isDarkMode() ? "black" : "white"};
-      ${hide && css`display: none;`};
-    `;
-
-    const TitleDiv = styled.div`
-      position: sticky;
-      top: 0;
-      z-index: 999999;
-      text-align: center;
-      width: 100vw;
-      height: 50px;
-      box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
-      ${isDarkMode()
-        ? css`background-color: black;
-                color: white;`
-        : css`background-color: white;`};
-    `;
-
-    const UnderDiv = styled.div`
-      position: sticky;
-      bottom: 0;
-      z-index: 999999;
-      width: 100vw;
-      height: 30px;
-      box-shadow: rgb(0 0 0 / 16%) 0 1px 4px 0;
-      ${isDarkMode()
-        ? css`background-color: black;
-                color: white;`
-        : css`background-color: white;`};
-    `;
-
     return (
-        <MainDiv>
-            {
-                !inputHide && <div style={{
-                    display: "flex",
-                    position: "fixed",
-                    left: "50%",
-                    top: "50%",
-                    transform: "translate(-50%, -50%)",
-                    zIndex: 999999
-                }}>
-                    <input autoFocus onChange={(e) => setData(e.target.value)}
-                           value={data}
-                           type="text"
-                           placeholder="데이터를 입력해주세요"/>
-                    <button onClick={restore} style={{marginLeft: "5px"}}>적용</button>
-                    <button onClick={() => setInputHide(true)} style={{marginLeft: "5px"}}>취소</button>
-                </div>
-            }
+        <AppContainer hide={hide}>
+            <GlobalStyle/>
 
-            <TitleDiv>
-                <h4 style={{lineHeight: "50px"}}>
-                    BetterNovelpia - {GM_info.script.version}
-                    <i onClick={quit}
-                       style={{marginLeft: "15px", color: "red"}} className="icon ion-close-round"/>
-                </h4>
-            </TitleDiv>
+            {showModal && (
+                <Modal>
+                    <ModalContent>
+                        <ModalTitle>설정 복원</ModalTitle>
+                        <ModalInput
+                            placeholder="백업된 설정 데이터를 붙여넣으세요"
+                            value={modalData}
+                            onChange={(e) => setModalData(e.target.value)}
+                            autoFocus
+                        />
+                        <ModalActions>
+                            <ActionButton
+                                variant="secondary"
+                                onClick={() => {
+                                    setShowModal(false);
+                                    setModalData("");
+                                }}
+                            >
+                                취소
+                            </ActionButton>
+                            <ActionButton variant="primary" onClick={restore}>
+                                복원
+                            </ActionButton>
+                        </ModalActions>
+                    </ModalContent>
+                </Modal>
+            )}
 
-            <div className="" style={{fontSize: "12px"}}>
-                <div className="am-mainpanel"
-                     style={{maxWidth: "1200px", margin: "0px auto 0px auto", padding: "0px 20px"}}>
-                    <div className="row mg-t-20 mg-b-20">
-                        {
-                            ModulesInfo.configs.map(value =>
-                                <Card key={value.head}>
-                                    <CardHead label={value.head}/>
-                                    <CardBody>
-                                        {
-                                            Object.entries(value.configs).map(([key, value2]) =>
-                                                value2.type === "text"
-                                                    ? <TextBox key={key} config={key as Config}
-                                                               label={value2.label}/>
-                                                    : value2.type === "checkbox"
-                                                        ? <Checkbox key={key} config={key as Config} label={value2.label}/>
-                                                        : value2.type === "int" &&
-                                                        <NumberBox key={key} config={key as Config} label={value2.label}
-                                                                   min={value2.min} max={value2.max}/>
-                                            )
-                                        }
-                                    </CardBody>
-                                </Card>
-                            )
-                        }
-                    </div>
-                </div>
-            </div>
+            <AppBar>
+                <AppTitle>
+                    <ModuleIcon className="icon ion-ios-gear"/>
+                    설정
+                    <VersionBadge>v{GM_info.script.version}</VersionBadge>
+                </AppTitle>
+                <CloseButton onClick={quit}>
+                    <i className="icon ion-close-round"/>
+                </CloseButton>
+            </AppBar>
 
-            <UnderDiv>
-                <div style={{display: "flex", float: "right"}}>
-                    <button onClick={backup}>백업</button>
-                    <button onClick={() => setInputHide(false)} style={{marginLeft: "5px"}}>복원</button>
-                    <button style={{marginLeft: "5px", marginRight: "5px"}} onDoubleClick={() => reset()}>초기화
-                    </button>
-                </div>
-            </UnderDiv>
-        </MainDiv>
+            <ContentArea>
+                {ModulesInfo.configs.length === 0 ? (
+                    <EmptyMessage>설정할 항목이 없습니다.</EmptyMessage>
+                ) : (
+                    ModulesInfo.configs.map((module: ModuleConfig) => (
+                        <ModuleCard key={module.head}>
+                            <ModuleHeader>
+                                <ModuleTitle>
+                                    <ModuleIcon className="icon ion-ios-gear"/>
+                                    {module.head}
+                                </ModuleTitle>
+                            </ModuleHeader>
+                            <ModuleBody>
+                                {Object.entries(module.configs).map(([key, config]) => (
+                                    <SettingItem key={key}>
+                                        {config.type === "checkbox" ? (
+                                            <Checkbox config={key} label={config.label}/>
+                                        ) : config.type === "text" ? (
+                                            <TextBox config={key} label={config.label}/>
+                                        ) : config.type === "int" && (
+                                            <NumberBox
+                                                config={key}
+                                                label={config.label}
+                                                min={config.min as number}
+                                                max={config.max as number}
+                                            />
+                                        )}
+                                    </SettingItem>
+                                ))}
+                            </ModuleBody>
+                        </ModuleCard>
+                    ))
+                )}
+            </ContentArea>
+
+            <BottomBar>
+                <ButtonsGroup>
+                    <ActionButton variant="secondary" onClick={backup}>
+                        <ButtonIcon className="icon ion-ios-download-outline"/>
+                        백업
+                    </ActionButton>
+                    <ActionButton variant="secondary" onClick={() => setShowModal(true)}>
+                        <ButtonIcon className="icon ion-ios-upload-outline"/>
+                        복원
+                    </ActionButton>
+                </ButtonsGroup>
+                <ActionButton variant="danger" onClick={reset}>
+                    <ButtonIcon className="icon ion-ios-refresh-empty"/>
+                    초기화
+                </ActionButton>
+            </BottomBar>
+        </AppContainer>
     );
 }
 
@@ -259,4 +585,4 @@ export default {
         const root = createRoot(appContainer);
         root.render(<Setting/>);
     }
-} as Module;
+};
