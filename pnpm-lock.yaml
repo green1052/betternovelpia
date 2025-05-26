@@ -63,8 +63,8 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
       use-force-update:
-        specifier: ^1.0.11
-        version: 1.0.11(react@19.1.0)
+        specifier: ^2.0.0
+        version: 2.0.0(react@19.1.0)
       use-long-press:
         specifier: ^3.3.0
         version: 3.3.0(react@19.1.0)
@@ -1433,10 +1433,10 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  use-force-update@1.0.11:
-    resolution: {integrity: sha512-h4SICYgTJHon8w9dFIqdqR1Vrzdgl4YaRfRwhmAh01kBGljzTICanyfaFU8C4etuEfRdYpE+04XX2ZrEhOWKXQ==}
+  use-force-update@2.0.0:
+    resolution: {integrity: sha512-wEaziFSw/LvU3CiiK+SbnuENdgi3ho+JssEN8MHIFW4KVEqatcwFLmtFxRPUZ9htK6qoV9aMhMblvGoaWMmYzA==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: '>=16.8.0'
 
   use-long-press@3.3.0:
     resolution: {integrity: sha512-Yedz46ILxsb1BTS6kUzpV/wyEZPUlJDq+8Oat0LP1eOZQHbS887baJHJbIGENqCo8wTKNxmoTHLdY8lU/e+wvw==}
@@ -2891,7 +2891,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-force-update@1.0.11(react@19.1.0):
+  use-force-update@2.0.0(react@19.1.0):
     dependencies:
       react: 19.1.0
 
