@@ -21,7 +21,7 @@
         "react-dom": "^19.1.0",
         "react-is": "^19.1.0",
         "regenerator-runtime": "^0.14.1",
-        "styled-components": "^6.1.18",
+        "styled-components": "^6.1.19",
         "swc-loader": "^0.2.6",
         "terser-webpack-plugin": "^5.3.14",
         "typescript": "^5.8.3",
