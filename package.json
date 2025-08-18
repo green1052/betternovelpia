@@ -27,7 +27,7 @@
         "typescript": "^5.9.2",
         "use-force-update": "^2.0.0",
         "use-long-press": "^3.3.0",
-        "webpack": "^5.101.2",
+        "webpack": "^5.101.3",
         "webpack-cli": "^6.0.1",
         "webpack-dev-server": "^5.2.2",
         "webpack-merge": "^6.0.1",
