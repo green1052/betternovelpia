@@ -36,8 +36,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5
       ky:
-        specifier: ^1.12.0
-        version: 1.12.0
+        specifier: ^1.13.0
+        version: 1.13.0
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -938,8 +938,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  ky@1.12.0:
-    resolution: {integrity: sha512-YRLmSUHCwOJRBMArtqMRLOmO7fewn3yOoui6aB8ERkRVXupa0UiaQaKbIXteMt4jUElhbdqTMsLFHs8APxxUoQ==}
+  ky@1.13.0:
+    resolution: {integrity: sha512-JeNNGs44hVUp2XxO3FY9WV28ymG7LgO4wju4HL/dCq1A8eKDcFgVrdCn1ssn+3Q/5OQilv5aYsL0DMt5mmAV9w==}
     engines: {node: '>=18'}
 
   launch-editor@2.6.1:
@@ -2423,7 +2423,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  ky@1.12.0: {}
+  ky@1.13.0: {}
 
   launch-editor@2.6.1:
     dependencies:
