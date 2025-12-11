@@ -23,7 +23,7 @@
         "regenerator-runtime": "^0.14.1",
         "styled-components": "^6.1.19",
         "swc-loader": "^0.2.6",
-        "terser-webpack-plugin": "^5.3.15",
+        "terser-webpack-plugin": "^5.3.16",
         "typescript": "^5.9.3",
         "use-force-update": "^2.0.0",
         "use-long-press": "^3.3.0",
