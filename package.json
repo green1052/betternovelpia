@@ -22,7 +22,7 @@
         "react-is": "^19.2.3",
         "regenerator-runtime": "^0.14.1",
         "styled-components": "^6.3.6",
-        "swc-loader": "^0.2.6",
+        "swc-loader": "^0.2.7",
         "terser-webpack-plugin": "^5.3.16",
         "typescript": "^5.9.3",
         "use-force-update": "^2.0.0",
