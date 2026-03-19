@@ -51,8 +51,8 @@ importers:
         specifier: ^0.14.1
         version: 0.14.1
       styled-components:
-        specifier: ^6.3.11
-        version: 6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^6.3.12
+        version: 6.3.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       swc-loader:
         specifier: ^0.2.7
         version: 0.2.7(@swc/core@1.15.18)(webpack@5.105.4)
@@ -1426,8 +1426,8 @@ packages:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
     engines: {node: '>=8'}
 
-  styled-components@6.3.11:
-    resolution: {integrity: sha512-opzgceGlQ5rdZdGwf9ddLW7EM2F4L7tgsgLn6fFzQ2JgE5EVQ4HZwNkcgB1p8WfOBx1GEZP3fa66ajJmtXhSrA==}
+  styled-components@6.3.12:
+    resolution: {integrity: sha512-hFR6xsVkVYbsdcUlzPYFvFfoc6o2KlV0VvgRIQwSYMtdThM7SCxnjX9efh/cWce2kTq16I/Kl3xM98xiLptsXA==}
     engines: {node: '>= 16'}
     peerDependencies:
       react: '>= 16.8.0'
@@ -3084,7 +3084,7 @@ snapshots:
     dependencies:
       ansi-regex: 5.0.1
 
-  styled-components@6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  styled-components@6.3.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@emotion/is-prop-valid': 1.4.0
       '@emotion/unitless': 0.10.0
