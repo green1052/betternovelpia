@@ -24,7 +24,7 @@
         "styled-components": "^6.3.12",
         "swc-loader": "^0.2.7",
         "terser-webpack-plugin": "^5.4.0",
-        "typescript": "^5.9.3",
+        "typescript": "^6.0.2",
         "use-force-update": "^2.0.0",
         "use-long-press": "^3.3.0",
         "webpack": "^5.105.4",
