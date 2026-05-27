@@ -70,13 +70,13 @@ importers:
         version: 3.3.0(react@19.2.6)
       webpack:
         specifier: ^5.107.2
-        version: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+        version: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
       webpack-cli:
-        specifier: ^7.0.2
-        version: 7.0.2(webpack-dev-server@5.2.4)(webpack@5.107.2)
+        specifier: ^7.0.3
+        version: 7.0.3(webpack-dev-server@5.2.4)(webpack@5.107.2)
       webpack-dev-server:
         specifier: ^5.2.4
-        version: 5.2.4(webpack-cli@7.0.2)(webpack@5.107.2)
+        version: 5.2.4(webpack-cli@7.0.3)(webpack@5.107.2)
       webpack-merge:
         specifier: ^6.0.1
         version: 6.0.1
@@ -86,8 +86,8 @@ importers:
 
 packages:
 
-  '@discoveryjs/json-ext@1.0.0':
-    resolution: {integrity: sha512-dDlz3W405VMFO4w5kIP9DOmELBcvFQGmLoKSdIRstBDubKFYwaNHV1NnlzMCQpXQFGWVALmeMORAuiLx18AvZQ==}
+  '@discoveryjs/json-ext@1.1.0':
+    resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
     engines: {node: '>=14.17.0'}
 
   '@emotion/is-prop-valid@1.4.0':
@@ -726,10 +726,6 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-
-  fastest-levenshtein@1.0.16:
-    resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
-    engines: {node: '>= 4.9.1'}
 
   faye-websocket@0.11.4:
     resolution: {integrity: sha512-CzbClwlXAuiRQAlUyfqPgvPoNKTckTPGfwZV4ZdAhVcP2lh9KUxJg2b5GkE7XbjKQ3YJnQ9z6D9ntLAlB+tP8g==}
@@ -1560,8 +1556,8 @@ packages:
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
-  webpack-cli@7.0.2:
-    resolution: {integrity: sha512-dB0R4T+C/8YuvM+fabdvil6QE44/ChDXikV5lOOkrUeCkW5hTJv2pGLE3keh+D5hjYw8icBaJkZzpFoaHV4T+g==}
+  webpack-cli@7.0.3:
+    resolution: {integrity: sha512-2E2C6A1e2El7791zQgTH7LPIuwLjRliow9OHS/qlJc9pwhZlCoL/uiwqd/1WSlXT83wJfmfDbkcqHXuXoPJZ3g==}
     engines: {node: '>=20.9.0'}
     hasBin: true
     peerDependencies:
@@ -1656,7 +1652,7 @@ packages:
 
 snapshots:
 
-  '@discoveryjs/json-ext@1.0.0': {}
+  '@discoveryjs/json-ext@1.1.0': {}
 
   '@emotion/is-prop-valid@1.4.0':
     dependencies:
@@ -2357,8 +2353,6 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fastest-levenshtein@1.0.16: {}
-
   faye-websocket@0.11.4:
     dependencies:
       websocket-driver: 0.7.4
@@ -2994,7 +2988,7 @@ snapshots:
     dependencies:
       '@swc/core': 1.15.40
       '@swc/counter': 0.1.3
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
 
   table@6.8.1:
     dependencies:
@@ -3014,7 +3008,7 @@ snapshots:
       jest-worker: 27.5.1
       schema-utils: 4.3.3
       terser: 5.37.0
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
     optionalDependencies:
       '@swc/core': 1.15.40
 
@@ -3103,20 +3097,19 @@ snapshots:
 
   webidl-conversions@3.0.1: {}
 
-  webpack-cli@7.0.2(webpack-dev-server@5.2.4)(webpack@5.107.2):
+  webpack-cli@7.0.3(webpack-dev-server@5.2.4)(webpack@5.107.2):
     dependencies:
-      '@discoveryjs/json-ext': 1.0.0
+      '@discoveryjs/json-ext': 1.1.0
       commander: 14.0.3
       cross-spawn: 7.0.6
       envinfo: 7.14.0
-      fastest-levenshtein: 1.0.16
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
       webpack-merge: 6.0.1
     optionalDependencies:
-      webpack-dev-server: 5.2.4(webpack-cli@7.0.2)(webpack@5.107.2)
+      webpack-dev-server: 5.2.4(webpack-cli@7.0.3)(webpack@5.107.2)
 
   webpack-dev-middleware@7.4.2(webpack@5.107.2):
     dependencies:
@@ -3127,9 +3120,9 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.3.3
     optionalDependencies:
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
 
-  webpack-dev-server@5.2.4(webpack-cli@7.0.2)(webpack@5.107.2):
+  webpack-dev-server@5.2.4(webpack-cli@7.0.3)(webpack@5.107.2):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -3160,8 +3153,8 @@ snapshots:
       webpack-dev-middleware: 7.4.2(webpack@5.107.2)
       ws: 8.18.0
     optionalDependencies:
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
-      webpack-cli: 7.0.2(webpack-dev-server@5.2.4)(webpack@5.107.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
+      webpack-cli: 7.0.3(webpack-dev-server@5.2.4)(webpack@5.107.2)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -3187,11 +3180,11 @@ snapshots:
       table: 6.8.1
       tapable: 2.2.1
       tslib: 2.6.2
-      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2)
+      webpack: 5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3)
     transitivePeerDependencies:
       - encoding
 
-  webpack@5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.2):
+  webpack@5.107.2(@swc/core@1.15.40)(webpack-cli@7.0.3):
     dependencies:
       '@types/estree': 1.0.8
       '@types/json-schema': 7.0.15
@@ -3217,7 +3210,7 @@ snapshots:
       watchpack: 2.5.1
       webpack-sources: 3.5.0
     optionalDependencies:
-      webpack-cli: 7.0.2(webpack-dev-server@5.2.4)(webpack@5.107.2)
+      webpack-cli: 7.0.3(webpack-dev-server@5.2.4)(webpack@5.107.2)
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/core'
