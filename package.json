@@ -15,7 +15,7 @@
         "@types/webpack-env": "^1.18.8",
         "cash-dom": "^8.1.5",
         "html-entities": "^2.6.0",
-        "js-cookie": "^3.0.6",
+        "js-cookie": "^3.0.8",
         "ky": "^2.0.2",
         "react": "^19.2.6",
         "react-dom": "^19.2.6",
