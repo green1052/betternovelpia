@@ -12,6 +12,7 @@ export const ModulesInfo: {
     configs: []
 };
 
+// @ts-ignore
 const context = require.context("./module/", true, /\.tsx?$/);
 
 function start(moduleInfo: ModuleInfo) {
@@ -47,10 +48,17 @@ for (const key of context.keys()) {
         ModulesInfo.configs.push(module.config);
 }
 
-for (const moduleInfo of ModulesInfo.modules.start)
-    start(moduleInfo);
+Promise.all(ModulesInfo.modules.start.map((moduleInfo) => start(moduleInfo)));
 
 window.addEventListener("load", () => {
-    for (const moduleInfo of ModulesInfo.modules.end)
-        start(moduleInfo);
+    Promise.all(ModulesInfo.modules.end.map((moduleInfo) => start(moduleInfo)));
+});
+
+unsafeWindow.setInterval = new Proxy(unsafeWindow.setInterval, {
+    apply(target, thisArg, argArray) {
+        if (argArray[2].includes("user-select")) {
+            return;
+        }
+        return Reflect.apply(target, thisArg, argArray);
+    }
 });

@@ -58,9 +58,6 @@ declare global {
         "PreviousBookmark_First" |
         "PrivateMode" |
         "RecommendAllNovel" |
-        "ViewNovelToCookie_LOGINKEY" |
-        "ViewNovelToCookie_USERKEY" |
-        "ViewNovelToCookie" |
         "AllowDrag";
 
     interface Configs {

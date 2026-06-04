@@ -65,7 +65,7 @@ export default {
             }
         }
     },
-    property: "start",
+    property: "end",
     start: function () {
         const hideAdEnable = GM_getValue<boolean>("HideAd", false);
         const hideEventEnable = GM_getValue<boolean>("HideEvent", false);

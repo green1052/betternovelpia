@@ -1,5 +1,5 @@
 import $ from "cash-dom";
-import {NOVEL_BOX} from "../util/Selectors";
+import {HEADER_BAR, NOVEL_BOX} from "../util/Selectors";
 
 export default {
     include: /^\/viewer\//,
@@ -23,7 +23,7 @@ export default {
 
             scrollTop = currentScrollTop;
 
-            if (unsafeWindow.toggle_navi === 0 && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
+            if ($(HEADER_BAR).css("display") === "block" && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
                 unsafeWindow.navi_view();
         });
     }
