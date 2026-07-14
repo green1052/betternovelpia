@@ -1,27 +1,19 @@
-export function waitElement(element: HTMLElement | null, code: () => void | Promise<void>, timeout: number = 5000) {
-    if (element === null)
-        throw "element is null";
+export function waitElement(element: HTMLElement | null, code: () => void | Promise<void>, timeout = 5000) {
+    if (!element) return;
 
-    let isDone = false;
+    if (element.childNodes.length > 0) {
+        code();
+        return;
+    }
 
     const observer = new MutationObserver(() => {
-        try {
-            code();
-        } finally {
+        if (element.childNodes.length > 0) {
             observer.disconnect();
-            isDone = true;
+            code();
         }
     });
 
-    observer.observe(element, {
-        childList: true,
-        attributes: true,
-        characterData: true,
-        subtree: true
-    });
+    observer.observe(element, {childList: true, subtree: true});
 
-    setTimeout(() => {
-        if (!isDone)
-            observer.disconnect();
-    }, timeout);
+    setTimeout(() => observer.disconnect(), timeout);
 }

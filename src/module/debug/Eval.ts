@@ -1,16 +1,13 @@
 import {appendSide} from "../../util/AppendSide";
+import {defineModule} from "../../util/config";
 
-export default {
+export default defineModule({
     exclude: /^\/viewer\//,
     enable: ["Eval"],
     config: {
         head: "eval 사용",
         configs: {
-            Eval: {
-                label: "활성화",
-                type: "checkbox",
-                default: false
-            }
+            Eval: {label: "활성화", type: "checkbox", default: false}
         }
     },
     start() {
@@ -27,4 +24,4 @@ export default {
             }
         });
     }
-} as Module;
+});

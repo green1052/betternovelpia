@@ -9,6 +9,7 @@ declare global {
         scrollTop: number;
         title: string;
         chapter: string;
+        url?: string;
     }
 
     interface PreviousBookmark {

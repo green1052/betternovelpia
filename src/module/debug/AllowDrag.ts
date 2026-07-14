@@ -1,16 +1,13 @@
 import {novelLoaded} from "../../util/NovelLoaded";
+import {defineModule} from "../../util/config";
 
-export default {
+export default defineModule({
     include: /^\/viewer\//,
     enable: ["AllowDrag"],
     config: {
         head: "드래그 허용",
         configs: {
-            AllowDrag: {
-                label: "활성화",
-                type: "checkbox",
-                default: false
-            }
+            AllowDrag: {label: "활성화", type: "checkbox", default: false}
         }
     },
     start() {
@@ -41,4 +38,4 @@ export default {
             }, 1000);
         });
     }
-} as Module;
+});

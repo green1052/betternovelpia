@@ -8,6 +8,6 @@ export const NOVEL_BOX = "#novel_box";
 
 export const NOVEL_EP = ".menu-top-tag";
 
-export const EP_List = "#episode_list";
+export const EP_LIST = "#episode_list";
 
 export const FOOTER_BAR = "#footer_bar";

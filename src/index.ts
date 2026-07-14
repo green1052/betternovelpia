@@ -1,67 +1,51 @@
 import {asObject as modulesTs} from "./module/**/*.ts";
 import {asObject as modulesTsx} from "./module/**/*.tsx";
+import {registeredModules, configs} from "./util/registry";
+import {resolveSettings} from "./util/config";
 
-export const ModulesInfo: {
-    modules: {
-        start: ModuleInfo[],
-        end: ModuleInfo[]
-    },
-    configs: Configs[]
-} = {
-    modules: {
-        start: [],
-        end: []
-    },
-    configs: []
-};
+for (const [path, mod] of Object.entries({...modulesTs, ...modulesTsx})) {
+    const module = mod.default as Module;
+    if (!module || typeof module.start !== "function") continue;
 
-const modules = {...modulesTs, ...modulesTsx};
+    const name = /(\w*)\.tsx?$/i.exec(path)?.[1] ?? path;
+    registeredModules.push({name, module});
 
-const moduleList: { name: string, module: Module }[] = Object.entries(modules)
-    .map(([path, mod]) => ({
-        name: /(\w*)\.tsx?$/i.exec(path)?.[1] ?? path,
-        module: mod.default as Module
-    }));
+    if (module.config) configs.push(module.config);
+}
 
-function start(moduleInfo: ModuleInfo) {
-    const module = moduleInfo.module;
-
-    const start = performance.now();
+function runModule({name, module}: ModuleInfo) {
+    const startTime = performance.now();
 
     try {
-        if ((module.include === undefined || module.include.test(location.pathname)) &&
-            (module.exclude === undefined || !module.exclude.test(location.pathname)) &&
-            (module.enable === undefined || module.enable.every(setting => GM_getValue<boolean>(setting, false)))) {
-            module.start();
-            console.log(`${moduleInfo.name}: 로드됨 ${(performance.now() - start).toFixed(2)}ms`);
+        const included = !module.include || module.include.test(location.pathname);
+        const excluded = !!module.exclude?.test(location.pathname);
+        const enabled = !module.enable?.length || module.enable.every(s => GM_getValue<boolean>(s, false));
+
+        if (included && !excluded && enabled) {
+            const settings = module.config ? resolveSettings(module.config.configs) : {};
+            module.start(settings);
+            console.log(`${name}: ${performance.now() - startTime | 0}ms`);
         }
     } catch (e) {
-        console.error(`${moduleInfo.name}: ${e}`);
+        console.error(`${name}:`, e);
     }
 }
 
-for (const { name, module } of moduleList) {
-    if (!module || typeof module.start !== "function") continue;
-
-    ModulesInfo.modules[module.property ?? "end"].push({
-        name,
-        module
-    });
-
-    if (module.config)
-        ModulesInfo.configs.push(module.config);
+for (const m of registeredModules) {
+    if (m.module.runAt === "document-start") runModule(m);
 }
 
-Promise.all(ModulesInfo.modules.start.map((moduleInfo) => start(moduleInfo)));
-
 window.addEventListener("load", () => {
-    Promise.all(ModulesInfo.modules.end.map((moduleInfo) => start(moduleInfo)));
+    for (const m of registeredModules) {
+        if (m.module.runAt !== "document-start") runModule(m);
+    }
 });
 
 unsafeWindow.setInterval = new Proxy(unsafeWindow.setInterval, {
     apply(target, thisArg, argArray) {
-        if (argArray[2].includes("user-select")) {
-            return;
+        const third = argArray[2];
+        if (typeof third === "string" && third.includes("user-select")) {
+            return 0 as unknown as ReturnType<typeof setInterval>;
         }
         return Reflect.apply(target, thisArg, argArray);
     }

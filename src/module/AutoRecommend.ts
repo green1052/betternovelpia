@@ -1,16 +1,13 @@
 import {novelLoaded} from "../util/NovelLoaded";
+import {defineModule} from "../util/config";
 
-export default {
+export default defineModule({
     include: /^\/viewer\//,
     enable: ["AutoRecommend"],
     config: {
         head: "자동으로 소설 추천",
         configs: {
-            AutoRecommend: {
-                label: "활성화",
-                type: "checkbox",
-                default: false
-            }
+            AutoRecommend: {label: "활성화", type: "checkbox", default: false}
         }
     },
     start() {
@@ -18,4 +15,4 @@ export default {
             unsafeWindow.episode_vote?.();
         });
     }
-} as Module;
+});

@@ -1,22 +1,19 @@
-import {EP_List} from "../util/Selectors";
-import {element} from "../util/Element";
+import {EP_LIST} from "../util/Selectors";
+import {waitElement} from "../util/WaitElement";
+import {defineModule} from "../util/config";
 import ky from "ky";
 
-export default {
+export default defineModule({
     include: /^\/novel\//,
     enable: ["RecommendAllNovel"],
     config: {
         head: "소설 일괄 추천/비추천",
         configs: {
-            RecommendAllNovel: {
-                label: "활성화",
-                type: "checkbox",
-                default: false
-            }
+            RecommendAllNovel: {label: "활성화", type: "checkbox", default: false}
         }
     },
     start() {
-        element(document.querySelector(EP_List), () => {
+        waitElement(document.querySelector(EP_LIST), () => {
             const csrf = /"csrf": "(.*)"/.exec(unsafeWindow.alarm_btn.toString())?.[1];
 
             if (!csrf) return;
@@ -77,7 +74,9 @@ export default {
                 unsafeWindow.toastr.info("완료", "소설 일괄 추천/비추천");
             };
 
-            const center = document.querySelector(`ul[style=""][class=mobile_center]`)!;
+            const center = document.querySelector('ul[style=""][class=mobile_center]');
+
+            if (!center) return;
 
             const upvote = document.createElement("li");
             upvote.innerHTML = `<button>일괄 추천</button>`;
@@ -88,8 +87,7 @@ export default {
             downvote.addEventListener("click", () => recommendList(false));
 
             center.appendChild(downvote);
-
             center.appendChild(upvote);
         });
     }
-} as Module;
+});

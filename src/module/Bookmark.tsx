@@ -1,489 +1,32 @@
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {createRoot} from "react-dom/client";
-import styled, {createGlobalStyle, keyframes} from "styled-components";
-import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
-import {isDarkMode} from "../util/IsDarkMode";
+import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
 import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {novelLoaded} from "../util/NovelLoaded";
 import {NovelContinueBox} from "../util/NovelContinueBox";
+import {injectCSS, ThemedApp} from "../util/ui";
+import {defineModule, type Settings} from "../util/config";
+import bookmarkCSS from "../styles/bookmark.css" with {type: "text"};
 
-interface Bookmark {
-    scrollTop: number;
-    title: string;
-    chapter: string;
-    url?: string;
-}
+const bookmarkConfig = {
+    Bookmark: {label: "북마크 활성화", type: "checkbox", default: false},
+    Bookmark_OneUse: {label: "북마크 한번만 사용", type: "checkbox", default: false},
+    Bookmark_AutoUse: {label: "북마크 자동 이동", type: "checkbox", default: false},
+    Bookmark_Sort: {label: "북마크 올림차순 정렬", type: "checkbox", default: false},
+    PreviousBookmark: {label: "이전 회차 북마크 활성화", type: "checkbox", default: false},
+    PreviousBookmark_First: {label: "이전 회차 북마크 우선", type: "checkbox", default: false},
+    PreviousBookmark_AutoUse: {label: "이전 회차 북마크 자동 이동", type: "checkbox", default: false}
+} as const satisfies Record<string, ConfigType>;
 
-interface StyledProps {
-    hide?: boolean;
-    active?: boolean;
-    variant?: "danger" | "primary" | "secondary" | "outline";
-}
+type BookmarkSettings = Settings<typeof bookmarkConfig>;
 
 function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
-    const aTitle = a[1].title;
-    const bTitle = b[1].title;
-
-    return aTitle < bTitle
-        ? -1
-        : aTitle > bTitle
-            ? 1
-            : 0;
+    return a[1].title < b[1].title ? -1 : a[1].title > b[1].title ? 1 : 0;
 }
 
-const fadeIn = keyframes`
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-`;
-
-const slideUp = keyframes`
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-`;
-
-const GlobalStyles = createGlobalStyle`
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    .no-overflow {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
-    .no-overflow a {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
-    .bookmark-container {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-`;
-
-const MainDiv = styled.div<StyledProps>`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 99999;
-    background-color: ${() => isDarkMode() ? "#121212" : "#f0f0f0"};
-    color: ${() => isDarkMode() ? "#ffffff" : "#121212"};
-    display: ${props => props.hide ? "none" : "flex"};
-    flex-direction: column;
-    animation: ${fadeIn} 0.3s ease;
-    overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-`;
-
-const AppBar = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 5;
-`;
-
-const AppTitle = styled.h1`
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-`;
-
-const BookmarkIcon = styled.i`
-    margin-right: 8px;
-    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-`;
-
-const CloseButton = styled.button`
-    background: none;
-    border: none;
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-    font-size: 24px;
-    cursor: pointer;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-right: -8px;
-
-    &:active {
-        background-color: ${() => isDarkMode() ? "#333333" : "#eeeeee"};
-    }
-`;
-
-const ContentArea = styled.div`
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-
-    &::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-    }
-`;
-
-const BookmarkCard = styled.div`
-    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
-    margin: 12px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    animation: ${slideUp} 0.3s ease;
-`;
-
-const BookmarkHeader = styled.div`
-    background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
-    padding: 12px 16px;
-    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
-
-const BookmarkTitle = styled.h2`
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-    display: flex;
-    align-items: center;
-`;
-
-const BookmarkCount = styled.span`
-    font-size: 14px;
-    font-weight: normal;
-    color: ${() => isDarkMode() ? "#bbbbbb" : "#666666"};
-    margin-left: 8px;
-`;
-
-const BookmarkList = styled.ul`
-    list-style: none;
-    padding: 0;
-    margin: 0;
-`;
-
-const BookmarkItem = styled.li<StyledProps>`
-    padding: 16px;
-    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
-    position: relative;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
-    &:active {
-        background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
-    }
-`;
-
-const BookmarkItemContent = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const BookmarkChapter = styled.div`
-    font-size: 14px;
-    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-    margin-bottom: 4px;
-    font-weight: 500;
-`;
-
-const BookmarkLink = styled.a`
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 4px;
-
-    &:active {
-        color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-    }
-`;
-
-const BookmarkActions = styled.div`
-    display: flex;
-    margin-top: 8px;
-    justify-content: flex-end;
-`;
-
-const DeleteButton = styled.button`
-    background-color: ${() => isDarkMode() ? "#333333" : "#f2f2f2"};
-    border: none;
-    color: ${() => isDarkMode() ? "#FF3B30" : "#FF3B30"};
-    cursor: pointer;
-    font-size: 14px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:active {
-        opacity: 0.8;
-    }
-`;
-
-const DeleteButtonIcon = styled.i`
-    margin-right: 6px;
-`;
-
-const EmptyState = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-`;
-
-const EmptyIcon = styled.i`
-    font-size: 48px;
-    color: ${() => isDarkMode() ? "#555555" : "#cccccc"};
-    margin-bottom: 16px;
-`;
-
-const EmptyText = styled.p`
-    font-size: 16px;
-    color: ${() => isDarkMode() ? "#bbbbbb" : "#999999"};
-    margin: 0 0 8px 0;
-`;
-
-const ActionBar = styled.div`
-    display: flex;
-    padding: 12px;
-    background-color: ${() => isDarkMode() ? "#1e1e1e" : "#ffffff"};
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 5;
-`;
-
-const ActionButton = styled.button<StyledProps>`
-    background-color: ${props => {
-        if (props.variant === "primary") return "#007AFF";
-        if (props.variant === "danger") return "#FF3B30";
-        if (props.variant === "outline") return "transparent";
-        return isDarkMode() ? "#333333" : "#f2f2f2";
-    }};
-    color: ${props => {
-        if (props.variant === "primary" || props.variant === "danger") return "#ffffff";
-        if (props.variant === "outline") return isDarkMode() ? "#007AFF" : "#007AFF";
-        return isDarkMode() ? "#ffffff" : "#333333";
-    }};
-    border: ${props => props.variant === "outline" ?
-            `1px solid ${isDarkMode() ? "#007AFF" : "#007AFF"}` : "none"};
-    border-radius: 8px;
-    padding: 12px 0;
-    font-size: 15px;    
-    font-weight: 500;
-    flex: 1;
-    margin: 0 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:active {
-        opacity: 0.8;
-    }
-`;
-
-const ActionButtonIcon = styled.i`
-    margin-right: 6px;
-`;
-
-const Modal = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    animation: ${fadeIn} 0.3s ease;
-    padding: 20px;
-`;
-
-const ModalContent = styled.div`
-    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
-    width: 100%;
-    max-width: 320px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    animation: ${slideUp} 0.3s ease;
-`;
-
-const ModalHeader = styled.div`
-    padding: 16px;
-    border-bottom: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
-`;
-
-const ModalTitle = styled.h3`
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-`;
-
-const ModalBody = styled.div`
-    padding: 16px;
-`;
-
-const ModalInput = styled.textarea`
-    width: 100%;
-    height: 120px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid ${() => isDarkMode() ? "#444444" : "#dddddd"};
-    background-color: ${() => isDarkMode() ? "#333333" : "#f8f8f8"};
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-    font-size: 14px;
-    resize: none;
-    box-sizing: border-box;
-    font-family: inherit;
-
-    &:focus {
-        outline: none;
-        border-color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-    }
-`;
-
-const ModalFooter = styled.div`
-    display: flex;
-    padding: 12px 16px;
-    border-top: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
-`;
-
-const ModalButton = styled.button<StyledProps>`
-    background-color: ${props => {
-        if (props.variant === "primary") return "#007AFF";
-        if (props.variant === "danger") return "#FF3B30";
-        if (props.variant === "outline") return "transparent";
-        return isDarkMode() ? "#333333" : "#f2f2f2";
-    }};
-    color: ${props => {
-        if (props.variant === "primary" || props.variant === "danger") return "#ffffff";
-        if (props.variant === "outline") return isDarkMode() ? "#007AFF" : "#007AFF";
-        return isDarkMode() ? "#ffffff" : "#333333";
-    }};
-    border: ${props => props.variant === "outline" ?
-            `1px solid ${isDarkMode() ? "#007AFF" : "#007AFF"}` : "none"};
-    border-radius: 8px;
-    padding: 12px 0;
-    font-size: 15px;
-    font-weight: 500;
-    flex: 1;
-    margin: 0 4px;
-    cursor: pointer;
-
-    &:active {
-        opacity: 0.8;
-    }
-`;
-
-const PreviousBookmarkToast = styled.div`
-    position: fixed;
-    bottom: 76px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: ${() => isDarkMode() ? "#2a2a2a" : "#ffffff"};
-    padding: 12px 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: calc(100% - 24px);
-    max-width: 320px;
-    z-index: 100;
-    animation: ${slideUp} 0.3s ease;
-    border: 1px solid ${() => isDarkMode() ? "#444444" : "#eeeeee"};
-`;
-
-const PreviousBookmarkContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const PreviousBookmarkIcon = styled.i`
-    color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-    font-size: 18px;
-    margin-right: 12px;
-`;
-
-const PreviousBookmarkInfo = styled.div`
-    flex: 1;
-    overflow: hidden;
-`;
-
-const PreviousBookmarkLabel = styled.div`
-    font-size: 12px;
-    color: ${() => isDarkMode() ? "#bbbbbb" : "#999999"};
-    margin-bottom: 4px;
-`;
-
-const PreviousBookmarkLink = styled.a`
-    color: ${() => isDarkMode() ? "#ffffff" : "#333333"};
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    display: block;
-
-    &:active {
-        color: ${() => isDarkMode() ? "#007AFF" : "#007AFF"};
-    }
-`;
-
-const ViewerBookmarkIcon = styled.i<StyledProps>`
-    color: ${props => props.active
-            ? "#007AFF"
-            : isDarkMode() ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
-    font-size: 1.3rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:active {
-        transform: scale(0.9);
-    }
-`;
-
-function Bookmark() {
+function BookmarkList_({settings}: {settings: BookmarkSettings}) {
     const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
     const [previousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
     const [hide, setHide] = useState(true);
@@ -587,140 +130,137 @@ function Bookmark() {
     const bookmarkCount = Object.entries(bookmarks).length;
 
     return (
-        <MainDiv hide={hide} className="bookmark-container">
-            <GlobalStyles/>
-
-            {showModal && (
-                <Modal>
-                    <ModalContent>
-                        <ModalHeader>
-                            <ModalTitle>북마크 복원</ModalTitle>
-                        </ModalHeader>
-                        <ModalBody>
-                            <ModalInput
+        <ThemedApp>
+            <div className={`bn-app ${hide ? "bn-app--hidden" : ""}`} style={{zIndex: 99999}}>
+                {showModal && (
+                    <div className="bn-modal bn-modal--center">
+                        <div className="bn-modal-content bn-modal-content--center">
+                            <h3 className="bn-modal-title">북마크 복원</h3>
+                            <textarea
+                                className="bn-modal-input"
                                 placeholder="백업된 북마크 데이터를 붙여넣으세요"
                                 value={data}
                                 onChange={(e) => setData(e.target.value)}
                                 autoFocus
                             />
-                        </ModalBody>
-                        <ModalFooter>
-                            <ModalButton
-                                variant="outline"
-                                onClick={() => {
-                                    setShowModal(false);
-                                    setData("");
-                                }}
-                            >
-                                취소
-                            </ModalButton>
-                            <ModalButton variant="primary" onClick={restore}>
-                                복원
-                            </ModalButton>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            )}
+                            <div className="bn-modal-actions">
+                                <button
+                                    className="bn-btn bn-btn--outline"
+                                    onClick={() => {
+                                        setShowModal(false);
+                                        setData("");
+                                    }}
+                                >
+                                    취소
+                                </button>
+                                <button className="bn-btn bn-btn--primary" onClick={restore}>
+                                    복원
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-            <AppBar>
-                <AppTitle>
-                    <BookmarkIcon className="icon ion-bookmark"/>
-                    북마크
-                </AppTitle>
-                <CloseButton onClick={quit}>
-                    <i className="icon ion-close-round"/>
-                </CloseButton>
-            </AppBar>
+                <div className="bn-app-bar">
+                    <h1 className="bn-app-title">
+                        <i className="icon ion-bookmark" style={{marginRight: 8, color: "#007AFF"}}/>
+                        북마크
+                    </h1>
+                    <button className="bn-close-btn" onClick={quit}>
+                        <i className="icon ion-close-round"/>
+                    </button>
+                </div>
 
-            <ContentArea>
-                <BookmarkCard>
-                    <BookmarkHeader>
-                        <BookmarkTitle>
-                            북마크 목록
-                            {bookmarkCount > 0 && <BookmarkCount>({bookmarkCount})</BookmarkCount>}
-                        </BookmarkTitle>
-                    </BookmarkHeader>
+                <div className="bn-content-area" style={{padding: 0}}>
+                    <div className="bn-bookmark-card">
+                        <div className="bn-bookmark-header">
+                            <h2 className="bn-bookmark-title">
+                                북마크 목록
+                                {bookmarkCount > 0 && <span className="bn-bookmark-count">({bookmarkCount})</span>}
+                            </h2>
+                        </div>
 
-                    {bookmarkCount === 0 ? (
-                        <EmptyState>
-                            <EmptyIcon className="icon ion-bookmark"/>
-                            <EmptyText>저장된 북마크가 없습니다</EmptyText>
-                        </EmptyState>
-                    ) : (
-                        <BookmarkList ref={bookmarkList}>
-                            {(GM_getValue("Bookmark_Sort", false)
-                                    ? Object.entries(bookmarks).sort(sortBookmark)
-                                    : Object.entries(bookmarks)
-                            ).map(([key, value]) => (
-                                <BookmarkItem key={key}>
-                                    <BookmarkItemContent>
-                                        <BookmarkChapter>{value.chapter}</BookmarkChapter>
-                                        <BookmarkLink href={key}>
-                                            {value.title}
-                                        </BookmarkLink>
-                                        <BookmarkActions>
-                                            <DeleteButton onClick={() => deleteBookmark(key)}>
-                                                <DeleteButtonIcon className="icon ion-ios-trash-outline"/>
-                                            </DeleteButton>
-                                        </BookmarkActions>
-                                    </BookmarkItemContent>
-                                </BookmarkItem>
-                            ))}
-                        </BookmarkList>
-                    )}
-                </BookmarkCard>
-            </ContentArea>
+                        {bookmarkCount === 0 ? (
+                            <div className="bn-empty-state">
+                                <i className="bn-empty-icon icon ion-bookmark"/>
+                                <p className="bn-empty-text">저장된 북마크가 없습니다</p>
+                            </div>
+                        ) : (
+                            <ul className="bn-bookmark-list" ref={bookmarkList}>
+                                {(settings.Bookmark_Sort
+                                        ? Object.entries(bookmarks).sort(sortBookmark)
+                                        : Object.entries(bookmarks)
+                                ).map(([key, value]) => (
+                                    <li className="bn-bookmark-item" key={key}>
+                                        <div className="bn-bookmark-item-content">
+                                            <div className="bn-bookmark-chapter">{value.chapter}</div>
+                                            <a className="bn-bookmark-link" href={key}>
+                                                {value.title}
+                                            </a>
+                                            <div className="bn-bookmark-actions">
+                                                <button className="bn-delete-btn" onClick={() => deleteBookmark(key)}>
+                                                    <i className="icon ion-ios-trash-outline" style={{marginRight: 6}}/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
 
-            <ActionBar>
-                <ActionButton variant="secondary" onClick={backup}>
-                    <ActionButtonIcon className="icon ion-ios-cloud-upload"/>
-                    백업
-                </ActionButton>
-                <ActionButton variant="secondary" onClick={() => setShowModal(true)}>
-                    <ActionButtonIcon className="icon ion-ios-cloud-download"/>
-                    복원
-                </ActionButton>
-                <ActionButton variant="secondary" onClick={clean}>
-                    <ActionButtonIcon className="icon ion-ios-compose"/>
-                    정리
-                </ActionButton>
-                <ActionButton variant="danger" onClick={reset}>
-                    <ActionButtonIcon className="icon ion-ios-trash"/>
-                    초기화
-                </ActionButton>
-            </ActionBar>
+                <div className="bn-bottom-bar">
+                    <button className="bn-btn bn-btn--secondary bn-btn--flex" onClick={backup}>
+                        <i className="bn-btn-icon icon ion-ios-cloud-upload"/>
+                        백업
+                    </button>
+                    <button className="bn-btn bn-btn--secondary bn-btn--flex" onClick={() => setShowModal(true)}>
+                        <i className="bn-btn-icon icon ion-ios-cloud-download"/>
+                        복원
+                    </button>
+                    <button className="bn-btn bn-btn--secondary bn-btn--flex" onClick={clean}>
+                        <i className="bn-btn-icon icon ion-ios-compose"/>
+                        정리
+                    </button>
+                    <button className="bn-btn bn-btn--danger bn-btn--flex" onClick={reset}>
+                        <i className="bn-btn-icon icon ion-ios-trash"/>
+                        초기화
+                    </button>
+                </div>
 
-            {previousBookmark && (
-                <PreviousBookmarkToast>
-                    <PreviousBookmarkContent>
-                        <PreviousBookmarkIcon className="icon ion-ios-arrow-back"/>
-                        <PreviousBookmarkInfo>
-                            <PreviousBookmarkLabel>이전 소설</PreviousBookmarkLabel>
-                            <PreviousBookmarkLink href={previousBookmark?.url ?? "#"}>
-                                {previousBookmark?.title && previousBookmark?.chapter
-                                    ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
-                                    : "없음"
-                                }
-                            </PreviousBookmarkLink>
-                        </PreviousBookmarkInfo>
-                    </PreviousBookmarkContent>
-                </PreviousBookmarkToast>
-            )}
-        </MainDiv>
+                {previousBookmark && (
+                    <div className="bn-prev-bookmark-toast">
+                        <div className="bn-prev-bookmark-content">
+                            <i className="bn-prev-bookmark-icon icon ion-ios-arrow-back"/>
+                            <div className="bn-prev-bookmark-info">
+                                <div className="bn-prev-bookmark-label">이전 소설</div>
+                                <a className="bn-prev-bookmark-link" href={previousBookmark?.url ?? "#"}>
+                                    {previousBookmark?.title && previousBookmark?.chapter
+                                        ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
+                                        : "없음"
+                                    }
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </ThemedApp>
     );
 }
 
 function Novel() {
     useEffect(() => {
         function addBookmark() {
-            for (const element of document.querySelectorAll(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
+            for (const element of document.querySelectorAll(`${EP_LIST} > table > tbody > tr td:nth-child(2)`)) {
                 const url = /'\/viewer\/(\d*)'/.exec(element.getAttribute("onclick") ?? "")?.[1];
 
                 if (!url) continue;
 
                 if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
 
-                const bookmarkIcon = element.querySelector("b > .ion-bookmark") as HTMLElement | null;
+                const bookmarkIcon = element.querySelector<HTMLElement>("b > .ion-bookmark");
                 if (bookmarkIcon) bookmarkIcon.style.display = "";
             }
         }
@@ -729,14 +269,14 @@ function Novel() {
 
         const observer = new MutationObserver(addBookmark);
 
-        observer.observe(document.querySelector(EP_List)!, {
-            childList: true
-        });
+        const epList = document.querySelector(EP_LIST);
+        if (epList) observer.observe(epList, {childList: true});
     }, []);
 
     const bookmarks = GM_getValue<Record<string, Bookmark>>("bookmarks", {});
 
-    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === (document.title.split("-")[2] ?? "").trimStart()).pop();
+    const novelTitle = (document.title.split("-")[2] ?? "").trimStart();
+    const bookmark = Object.entries(bookmarks).findLast(([, value]) => value.title === novelTitle);
     const previousBookmark = GM_getValue<Bookmark | undefined>("previousBookmark", undefined);
 
     return (
@@ -747,7 +287,7 @@ function Novel() {
                     : null
             }
             {
-                previousBookmark && previousBookmark.title === (document.title.split("-")[2] ?? "").trimStart()
+                previousBookmark && previousBookmark.title === novelTitle
                     ? <NovelContinueBox url={previousBookmark.url ?? ""} chapter={previousBookmark.chapter}/>
                     : null
             }
@@ -755,7 +295,7 @@ function Novel() {
     );
 }
 
-function Viewer() {
+function Viewer({settings}: {settings: BookmarkSettings}) {
     const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
     const [previousBookmark, setPreviousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
 
@@ -765,13 +305,13 @@ function Viewer() {
     let scrollTop = -1;
     let askAlert = true;
 
-    if (bookmarks.hasOwnProperty(location.href) && (!GM_getValue("PreviousBookmark_First", false) && previousBookmark?.url !== location.href)) {
+    if (bookmarks.hasOwnProperty(location.href) && (!settings.PreviousBookmark_First && previousBookmark?.url !== location.href)) {
         scrollTop = bookmarks[location.href]?.scrollTop ?? -1;
 
-        if (GM_getValue("Bookmark_AutoUse", false))
+        if (settings.Bookmark_AutoUse)
             askAlert = false;
 
-        if (GM_getValue("Bookmark_OneUse", false)) {
+        if (settings.Bookmark_OneUse) {
             const bookmarks1 = {...bookmarks};
             delete bookmarks1[location.href];
 
@@ -781,7 +321,7 @@ function Viewer() {
     } else if (previousBookmark?.url === location.href) {
         scrollTop = previousBookmark.scrollTop;
 
-        if (GM_getValue("PreviousBookmark_AutoUse", false))
+        if (settings.PreviousBookmark_AutoUse)
             askAlert = false;
     }
 
@@ -808,7 +348,7 @@ function Viewer() {
             });
         }
 
-        if (GM_getValue("PreviousBookmark", false)) {
+        if (settings.PreviousBookmark) {
             const url = location.href;
 
             window.addEventListener("beforeunload", () => {
@@ -863,63 +403,26 @@ function Viewer() {
     const isActive = bookmarks.hasOwnProperty(location.href);
 
     return (
-        <ViewerBookmarkIcon
-            className="icon ion-bookmark"
+        <i
+            className="bn-viewer-bookmark-icon icon ion-bookmark"
+            data-active={isActive ? "true" : undefined}
             onClick={click}
-            active={isActive}
             {...longClick}
         />
     );
 }
 
-export default {
-    config: {
-        head: "북마크 설정",
-        configs: {
-            Bookmark: {
-                label: "북마크 활성화",
-                type: "checkbox",
-                default: false
-            },
-            Bookmark_OneUse: {
-                label: "북마크 한번만 사용",
-                type: "checkbox",
-                default: false
-            },
-            Bookmark_AutoUse: {
-                label: "북마크 자동 이동",
-                type: "checkbox",
-                default: false
-            },
-            Bookmark_Sort: {
-                label: "북마크 올림차순 정렬",
-                type: "checkbox",
-                default: false
-            },
-            PreviousBookmark: {
-                label: "이전 회차 북마크 활성화",
-                type: "checkbox",
-                default: false
-            },
-            PreviousBookmark_First: {
-                label: "이전 회차 북마크 우선",
-                type: "checkbox",
-                default: false
-            },
-            PreviousBookmark_AutoUse: {
-                label: "이전 회차 북마크 자동 이동",
-                type: "checkbox",
-                default: false
-            }
-        }
-    },
-    start() {
-        if (!GM_getValue("Bookmark", false) && !GM_getValue("PreviousBookmark", false)) return;
+export default defineModule({
+    config: {head: "북마크 설정", configs: bookmarkConfig},
+    start(settings) {
+        if (!settings.Bookmark && !settings.PreviousBookmark) return;
 
         if (isPageViewer()) {
             unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
             return;
         }
+
+        injectCSS(bookmarkCSS);
 
         if (/^\/novel\//.test(location.pathname)) {
             const tr = document.querySelector("div:not(.mobile_hidden) > .info-graybox");
@@ -944,7 +447,7 @@ export default {
             }
 
             const root = createRoot(appContainer);
-            root.render(<Viewer/>);
+            root.render(<Viewer settings={settings}/>);
         }
 
         if (!/^\/viewer\//.test(location.pathname)) {
@@ -952,7 +455,7 @@ export default {
             document.body.prepend(appContainer);
 
             const root = createRoot(appContainer);
-            root.render(<Bookmark/>);
+            root.render(<BookmarkList_ settings={settings}/>);
         }
     }
-};
+});

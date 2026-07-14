@@ -1,17 +1,14 @@
 import {commentLoaded} from "../util/CommentLoaded";
+import {defineModule} from "../util/config";
 import ky from "ky";
 
-export default {
+export default defineModule({
     include: /^\/viewer\//,
     enable: ["CommentBlockUser"],
     config: {
         head: "댓글에 차단 버튼 추가",
         configs: {
-            CommentBlockUser: {
-                label: "활성화",
-                type: "checkbox",
-                default: false
-            }
+            CommentBlockUser: {label: "활성화", type: "checkbox", default: false}
         }
     },
     start() {
@@ -32,8 +29,10 @@ export default {
 
                     const memberNo = /'\/user\/(\d*)';$/.exec(onclickAttr)?.[1];
 
+                    if (!memberNo) return;
+
                     const params = new URLSearchParams();
-                    params.set("member_no", memberNo!);
+                    params.set("member_no", memberNo);
                     const csrfEl = document.querySelector("#csrf") as HTMLInputElement | HTMLTextAreaElement | null;
                     params.set("csrf", csrfEl?.value ?? "");
 
@@ -59,4 +58,4 @@ export default {
             }
         });
     }
-} as Module;
+});
