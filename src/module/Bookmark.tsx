@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "
 import {createRoot} from "react-dom/client";
 import styled, {createGlobalStyle, keyframes} from "styled-components";
 import {EP_List, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
-import $ from "cash-dom";
 import {isDarkMode} from "../util/IsDarkMode";
 import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";
@@ -562,8 +561,11 @@ function Bookmark() {
         const result: Record<string, Bookmark> = {};
 
         for (const [, value] of Object.entries(sorted)) {
-            const [url, bookmark] = value[value.length - 1];
-            result[url] = bookmark;
+            const last = value[value.length - 1];
+            if (last) {
+                const [url, bookmark] = last;
+                result[url] = bookmark;
+            }
         }
 
         GM_setValue("bookmarks", result);
@@ -711,19 +713,15 @@ function Bookmark() {
 function Novel() {
     useEffect(() => {
         function addBookmark() {
-            for (const element of $(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
-                const $element = $(element);
-
-                const url = /'\/viewer\/(\d*)'/.exec($element.attr("onclick")!)?.[1];
+            for (const element of document.querySelectorAll(`${EP_List} > table > tbody > tr td:nth-child(2)`)) {
+                const url = /'\/viewer\/(\d*)'/.exec(element.getAttribute("onclick") ?? "")?.[1];
 
                 if (!url) continue;
 
                 if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
 
-                $element
-                    .children("b")
-                    .children(".ion-bookmark")
-                    .show();
+                const bookmarkIcon = element.querySelector("b > .ion-bookmark") as HTMLElement | null;
+                if (bookmarkIcon) bookmarkIcon.style.display = "";
             }
         }
 
@@ -736,10 +734,10 @@ function Novel() {
         });
     }, []);
 
-    const bookmarks = GM_getValue("bookmarks", {});
+    const bookmarks = GM_getValue<Record<string, Bookmark>>("bookmarks", {});
 
-    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === document.title.split("-")[2].trimStart()).pop();
-    const previousBookmark = GM_getValue("previousBookmark", undefined);
+    const bookmark = Object.entries(bookmarks).filter(([, value]) => value.title === (document.title.split("-")[2] ?? "").trimStart()).pop();
+    const previousBookmark = GM_getValue<Bookmark | undefined>("previousBookmark", undefined);
 
     return (
         <>
@@ -749,8 +747,8 @@ function Novel() {
                     : null
             }
             {
-                previousBookmark && previousBookmark.title === document.title.split("-")[2].trimStart()
-                    ? <NovelContinueBox url={previousBookmark.url} chapter={previousBookmark.chapter}/>
+                previousBookmark && previousBookmark.title === (document.title.split("-")[2] ?? "").trimStart()
+                    ? <NovelContinueBox url={previousBookmark.url ?? ""} chapter={previousBookmark.chapter}/>
                     : null
             }
         </>
@@ -761,14 +759,14 @@ function Viewer() {
     const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
     const [previousBookmark, setPreviousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
 
-    const chapter = $(NOVEL_EP).text().trim() ?? "EP.알 수 없음";
-    const title = document.title.split("-")[2].trimStart() ?? "알 수 없음";
+    const chapter = document.querySelector(NOVEL_EP)?.textContent?.trim() ?? "EP.알 수 없음";
+    const title = (document.title.split("-")[2] ?? "알 수 없음").trimStart();
 
     let scrollTop = -1;
     let askAlert = true;
 
     if (bookmarks.hasOwnProperty(location.href) && (!GM_getValue("PreviousBookmark_First", false) && previousBookmark?.url !== location.href)) {
-        scrollTop = bookmarks[location.href].scrollTop;
+        scrollTop = bookmarks[location.href]?.scrollTop ?? -1;
 
         if (GM_getValue("Bookmark_AutoUse", false))
             askAlert = false;
@@ -924,7 +922,7 @@ export default {
         }
 
         if (/^\/novel\//.test(location.pathname)) {
-            const tr = $("div:not(.mobile_hidden) > .info-graybox");
+            const tr = document.querySelector("div:not(.mobile_hidden) > .info-graybox");
 
             if (!tr) return;
 
@@ -940,7 +938,10 @@ export default {
             appContainer.style.width = "20px";
             appContainer.style.height = "20px";
 
-            $(`${HEADER_BAR} .menu-top-right`).children().eq(2).before(appContainer);
+            const menuTopRight = document.querySelector(`${HEADER_BAR} .menu-top-right`);
+            if (menuTopRight && menuTopRight.children[2]) {
+                menuTopRight.children[2].before(appContainer);
+            }
 
             const root = createRoot(appContainer);
             root.render(<Viewer/>);

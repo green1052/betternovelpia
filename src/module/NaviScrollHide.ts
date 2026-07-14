@@ -1,4 +1,3 @@
-import $ from "cash-dom";
 import {HEADER_BAR, NOVEL_BOX} from "../util/Selectors";
 
 export default {
@@ -17,13 +16,14 @@ export default {
     start() {
         let scrollTop = -1;
 
-        $(NOVEL_BOX).on("scroll", (e) => {
-            const currentScrollTop = e.currentTarget.scrollTop;
+        document.querySelector(NOVEL_BOX)?.addEventListener("scroll", (e) => {
+            const currentScrollTop = (e.currentTarget as HTMLElement).scrollTop;
             const calc = Number((currentScrollTop - scrollTop).toFixed(0));
 
             scrollTop = currentScrollTop;
 
-            if ($(HEADER_BAR).css("display") === "block" && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
+            const headerEl = document.querySelector(HEADER_BAR);
+            if (headerEl && getComputedStyle(headerEl).display === "block" && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
                 unsafeWindow.navi_view();
         });
     }

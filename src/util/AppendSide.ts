@@ -1,17 +1,22 @@
-import $ from "cash-dom";
 import {SIDE_LEFT} from "./Selectors";
-import {Cash} from "cash-dom/dist/cash";
 
 let isFirst = true;
-let $SideMenu: Cash;
+let sideMenu: HTMLElement | null = null;
 
 export function appendSide(title: string, onclick: () => void | Promise<void>) {
-    const $Code = $(`<p>${title}</p>`).on("click", onclick);
+    const code = document.createElement("p");
+    code.textContent = title;
+    code.addEventListener("click", onclick);
 
     if (isFirst) {
         isFirst = false;
-        $SideMenu = $("<div class=sidemenu-service><p class=sidemenu-link-title>BetterNovelpia<div class=sidemenu-link-grid></div></div>").insertAfter(SIDE_LEFT);
+        const sideMenuService = document.createElement("div");
+        sideMenuService.className = "sidemenu-service";
+        sideMenuService.innerHTML = `<p class="sidemenu-link-title">BetterNovelpia</p><div class="sidemenu-link-grid"></div>`;
+
+        document.querySelector(SIDE_LEFT)?.after(sideMenuService);
+        sideMenu = sideMenuService;
     }
 
-    $SideMenu.find(".sidemenu-link-grid").append($Code);
+    sideMenu?.querySelector(".sidemenu-link-grid")?.appendChild(code);
 }

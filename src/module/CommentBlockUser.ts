@@ -1,4 +1,3 @@
-import $ from "cash-dom";
 import {commentLoaded} from "../util/CommentLoaded";
 import ky from "ky";
 
@@ -17,49 +16,46 @@ export default {
     },
     start() {
         commentLoaded(() => {
-            for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_footer > div")) {
-                const $element = $(element);
+            for (const element of document.querySelectorAll("#comment_load > div[class*=comment] > .comment_wrap > .comment_footer > div")) {
+                const hasBlockSpan = Array.from(element.children).some(
+                    child => child.tagName === "SPAN" && child.textContent?.includes("차단")
+                );
 
-                if ($element.children(`span:contains("차단")`).length > 0) return;
+                if (hasBlockSpan) return;
 
-                $element
-                    .append("<span class=line>|</span>")
-                    .append(`<span class="comment_option option_rpt">차단</span>`)
-                    .on("click", () => {
-                        const memberNo = /'\/user\/(\d*)';$/
-                            .exec(
-                                $element
-                                    .parent()
-                                    .parent()
-                                    .children(".comment_header")
-                                    .children(".user_name")
-                                    .children("b")
-                                    .attr("onclick")!
-                            )?.[1];
+                element.insertAdjacentHTML("beforeend", "<span class=line>|</span>");
+                element.insertAdjacentHTML("beforeend", `<span class="comment_option option_rpt">차단</span>`);
+                element.addEventListener("click", () => {
+                    const commentWrap = element.parentElement?.parentElement;
+                    const userNameB = commentWrap?.querySelector(".comment_header .user_name b");
+                    const onclickAttr = userNameB?.getAttribute("onclick") ?? "";
 
-                        const params = new URLSearchParams();
-                        params.set("member_no", memberNo!);
-                        params.set("csrf", $("#csrf").val() as string);
+                    const memberNo = /'\/user\/(\d*)';$/.exec(onclickAttr)?.[1];
 
-                        ky
-                            .post("/proc/member_block", {
-                                body: params
-                            })
-                            .text()
-                            .then((data) => {
-                                switch (data.split("|")[0]) {
-                                    case "on":
-                                        unsafeWindow.toastr.info("차단되었습니다.", "댓글 유저 차단");
-                                        break;
-                                    case "off":
-                                        unsafeWindow.toastr.info("차단이 해제되었습니다.", "댓글 유저 차단");
-                                        break;
-                                    case "login":
-                                        unsafeWindow.toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
-                                        break;
-                                }
-                            });
-                    });
+                    const params = new URLSearchParams();
+                    params.set("member_no", memberNo!);
+                    const csrfEl = document.querySelector("#csrf") as HTMLInputElement | HTMLTextAreaElement | null;
+                    params.set("csrf", csrfEl?.value ?? "");
+
+                    ky
+                        .post("/proc/member_block", {
+                            body: params
+                        })
+                        .text()
+                        .then((data) => {
+                            switch (data.split("|")[0]) {
+                                case "on":
+                                    unsafeWindow.toastr.info("차단되었습니다.", "댓글 유저 차단");
+                                    break;
+                                case "off":
+                                    unsafeWindow.toastr.info("차단이 해제되었습니다.", "댓글 유저 차단");
+                                    break;
+                                case "login":
+                                    unsafeWindow.toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
+                                    break;
+                            }
+                        });
+                });
             }
         });
     }

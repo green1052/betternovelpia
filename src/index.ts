@@ -1,3 +1,6 @@
+import {asObject as modulesTs} from "./module/**/*.ts";
+import {asObject as modulesTsx} from "./module/**/*.tsx";
+
 export const ModulesInfo: {
     modules: {
         start: ModuleInfo[],
@@ -12,8 +15,13 @@ export const ModulesInfo: {
     configs: []
 };
 
-// @ts-ignore
-const context = require.context("./module/", true, /\.tsx?$/);
+const modules = {...modulesTs, ...modulesTsx};
+
+const moduleList: { name: string, module: Module }[] = Object.entries(modules)
+    .map(([path, mod]) => ({
+        name: /(\w*)\.tsx?$/i.exec(path)?.[1] ?? path,
+        module: mod.default as Module
+    }));
 
 function start(moduleInfo: ModuleInfo) {
     const module = moduleInfo.module;
@@ -32,11 +40,7 @@ function start(moduleInfo: ModuleInfo) {
     }
 }
 
-for (const key of context.keys()) {
-    const name = /(\w*)\.tsx?$/gi.exec(key)?.[1] ?? key;
-
-    const module: Module = context(key).default;
-
+for (const { name, module } of moduleList) {
     if (!module || typeof module.start !== "function") continue;
 
     ModulesInfo.modules[module.property ?? "end"].push({

@@ -1,4 +1,3 @@
-import $ from "cash-dom";
 import {EP_List} from "../util/Selectors";
 import {element} from "../util/Element";
 import ky from "ky";
@@ -22,7 +21,9 @@ export default {
 
             if (!csrf) return;
 
-            const lastPageString = $(".page-link:last").attr("onclick");
+            const pageLinks = document.querySelectorAll(".page-link");
+            const lastPageLink = pageLinks[pageLinks.length - 1] as HTMLElement | undefined;
+            const lastPageString = lastPageLink?.getAttribute("onclick") ?? null;
 
             if (!lastPageString) return;
 
@@ -54,18 +55,19 @@ export default {
                 unsafeWindow.toastr.info("진행 중...", "소설 일괄 추천/비추천");
 
                 for (let i = 0; i <= lastPage; i++) {
-                    const $response = $(
-                        await ky.post("/proc/episode_list", {
-                            body: new URLSearchParams({
-                                novel_no: String(novelNumber),
-                                sort: localStorage[`novel_sort_${novelNumber}`],
-                                page: String(i)
-                            })
-                        }).text()
-                    );
+                    const responseHtml = await ky.post("/proc/episode_list", {
+                        body: new URLSearchParams({
+                            novel_no: String(novelNumber),
+                            sort: localStorage[`novel_sort_${novelNumber}`],
+                            page: String(i)
+                        })
+                    }).text();
 
-                    for (const element of $response.find("tr > td:nth-child(2)")) {
-                        const url = /\/viewer\/(\d*)'$/.exec($(element).attr("onclick")!)?.[1];
+                    const wrapper = document.createElement("div");
+                    wrapper.innerHTML = responseHtml;
+
+                    for (const el of wrapper.querySelectorAll("tr > td:nth-child(2)")) {
+                        const url = /\/viewer\/(\d*)'$/.exec(el.getAttribute("onclick") ?? "")?.[1];
 
                         if (url)
                             await recommend(url, on);

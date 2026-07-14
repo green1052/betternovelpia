@@ -1,6 +1,5 @@
 import {EP_List, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 import {commentLoaded} from "../util/CommentLoaded";
-import $ from "cash-dom";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 
@@ -119,16 +118,19 @@ export default {
         }
 
         if (infoUnfoldEnable && /^\/novel\//.test(location.pathname))
-            $(".more-synopsis").get(0)?.click();
+            document.querySelector<HTMLElement>(".more-synopsis")?.click();
 
         if (naviColorEnable && /^\/viewer\//.test(location.pathname)) {
             const changeTheme = () => {
-                const color = $("#viewer_no_drag").css("background-color");
+                const viewerNoDrag = document.querySelector("#viewer_no_drag") as HTMLElement | null;
+                const color = viewerNoDrag ? getComputedStyle(viewerNoDrag).backgroundColor : "";
 
                 if (!color) return;
 
-                $(HEADER_BAR).css("background-color", color);
-                $(FOOTER_BAR).css("background-color", color);
+                const headerEl = document.querySelector(HEADER_BAR) as HTMLElement | null;
+                if (headerEl) headerEl.style.backgroundColor = color;
+                const footerEl = document.querySelector(FOOTER_BAR) as HTMLElement | null;
+                if (footerEl) footerEl.style.backgroundColor = color;
             };
 
             unsafeWindow.viewer_display =
@@ -145,7 +147,7 @@ export default {
         if (hidePlusEnable && /^\/search\//.test(location.pathname)) {
             let plusCount = 0;
 
-            for (const element of $(".b_plus")) {
+            for (const element of document.querySelectorAll(".b_plus")) {
                 element.closest("div[class=mobile_show]")?.remove();
                 plusCount++;
             }
@@ -159,11 +161,16 @@ export default {
                 </>
             );
 
-            $(`span[style="font-size: 14px;font-weight: 600;"]`).append(ReactDOMServer.renderToStaticMarkup(html));
+            document.querySelector(`span[style="font-size: 14px;font-weight: 600;"]`)?.insertAdjacentHTML("beforeend", ReactDOMServer.renderToStaticMarkup(html));
         }
 
         if (hideNoticeEnable && /^\/novel/.test(location.pathname)) {
-            $(".notice_toggle_btn").on("click", () => $("#upNotice").show());
+            document.querySelectorAll(".notice_toggle_btn").forEach(el => {
+                el.addEventListener("click", () => {
+                    const upNotice = document.querySelector("#upNotice") as HTMLElement | null;
+                    if (upNotice) upNotice.style.display = "";
+                });
+            });
 
             const html = (
                 <tr className="notice_toggle_btn" id="upNotice" style={{
@@ -182,74 +189,81 @@ export default {
                     </td>
                 </tr>
             );
-            $(".notice_table > tbody")
-                .append(
-                    $(ReactDOMServer.renderToStaticMarkup(html))
-                        .on("click", () => {
-                            for (const element of $(".notice_toggle_btn").show().nextAll()) {
-                                const $element = $(element);
-
-                                if ($element.hasClass("ep_style4"))
-                                    $element.hide();
+            const trHtml = ReactDOMServer.renderToStaticMarkup(html);
+            const tbody = document.querySelector(".notice_table > tbody");
+            if (tbody) {
+                const wrapper = document.createElement("tbody");
+                wrapper.innerHTML = trHtml;
+                const trElement = wrapper.firstElementChild as HTMLElement | null;
+                if (trElement) {
+                    trElement.addEventListener("click", () => {
+                        document.querySelectorAll(".notice_toggle_btn").forEach(btn => {
+                            (btn as HTMLElement).style.display = "";
+                            let next = btn.nextElementSibling;
+                            while (next) {
+                                if (next.classList.contains("ep_style4"))
+                                    (next as HTMLElement).style.display = "none";
+                                next = next.nextElementSibling;
                             }
-
-                            $("#upNotice").hide();
-                        })
-                );
+                        });
+                        const upNotice = document.querySelector("#upNotice") as HTMLElement | null;
+                        if (upNotice) upNotice.style.display = "none";
+                    });
+                    tbody.appendChild(trElement);
+                }
+            }
         }
 
         if (hideOnlyEmojiCommentEnable && /^\/viewer\//.test(location.pathname)) {
             commentLoaded(() => {
-                for (const element of $("#comment_load > div[class*=comment] > .comment_wrap > .comment_content > .comment_img")) {
-                    const $element = $(element);
+                for (const element of document.querySelectorAll("#comment_load > div[class*=comment] > .comment_wrap > .comment_content > .comment_img")) {
+                    const el = element as HTMLElement;
 
                     if (
-                        $element.css("display") === "none" ||
-                        $element.parent().children(".comment_text").text().length > 0 ||
-                        $element.closest(".comment").attr("data-status") !== "1"
+                        getComputedStyle(el).display === "none" ||
+                        (el.parentElement?.querySelector(".comment_text")?.textContent?.length ?? 0) > 0 ||
+                        el.closest(".comment")?.getAttribute("data-status") !== "1"
                     ) continue;
 
+                    const commentEl = el.closest(".comment");
+                    if (!commentEl) continue;
+
                     if (hideOnlyEmojiCommentRemoveEnable) {
-                        $element.closest(".comment").remove();
+                        commentEl.remove();
                         continue;
                     }
 
-                    $element
-                        .closest(".comment")
-                        .attr("data-status", "0");
+                    commentEl.setAttribute("data-status", "0");
 
-                    const regDate = $element
-                        .parent()
-                        .children(".comment_regdate")
-                        .nextAll();
+                    const regDate = el.parentElement?.querySelector(".comment_regdate");
+                    const siblings: Element[] = [];
+                    if (regDate) {
+                        let next = regDate.nextElementSibling;
+                        while (next) {
+                            siblings.push(next);
+                            next = next.nextElementSibling;
+                        }
+                    }
 
-                    regDate
-                        .parent()
-                        .append(`<span style="color: #999;">노벨티콘만 있는 댓글 입니다.</span><br>`);
-
-                    regDate.remove();
+                    el.parentElement?.insertAdjacentHTML("beforeend", `<span style="color: #999;">노벨티콘만 있는 댓글 입니다.</span><br>`);
+                    siblings.forEach(s => s.remove());
                 }
             });
         }
 
         if (disableNovelAlertEnable && /^\/novel\//.test(location.pathname)) {
             function disableNovelAlert() {
-                for (const element of $(`${EP_List} > table > tbody > tr`)) {
-                    const $element = $(element);
+                for (const tr of document.querySelectorAll(`${EP_List} > table > tbody > tr`)) {
+                    const td = tr.children[1] as HTMLElement | undefined;
 
-                    const $td = $element.children().eq(1);
-
-                    if (!$td.attr("onclick")!.includes("modal_background"))
+                    if (!td?.getAttribute("onclick")?.includes("modal_background"))
                         continue;
 
-                    const attr = Array.from(
-                        $element
-                            .children()
-                            .eq(0)
-                            .children("div")
-                            .get(0)
-                            ?.attributes!
-                    ).find(attr => attr.name.startsWith("novel_on_"))?.name;
+                    const firstChildDiv = tr.children[0]?.querySelector("div");
+                    if (!firstChildDiv) continue;
+
+                    const attr = Array.from(firstChildDiv.attributes)
+                        .find(attr => attr.name.startsWith("novel_on_"))?.name;
 
                     if (!attr)
                         continue;
@@ -258,7 +272,7 @@ export default {
 
                     if (!url) continue;
 
-                    $td.attr("onclick", `$('.loads').show(); location ='/viewer/${url}'`);
+                    td.setAttribute("onclick", `document.querySelectorAll('.loads').forEach(function(el){el.style.display='';});location='/viewer/${url}'`);
                 }
             }
 
@@ -268,7 +282,7 @@ export default {
 
                     const observer = new MutationObserver(disableNovelAlert);
 
-                    observer.observe($(EP_List).get(0)!, {
+                    observer.observe(document.querySelector(EP_List)!, {
                         childList: true
                     });
                 }, 1000);

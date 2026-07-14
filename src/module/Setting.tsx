@@ -8,18 +8,6 @@ import useForceUpdate from "use-force-update";
 import {exportConfig} from "../util/ExportConfig";
 
 type Config = string;
-type ConfigData = {
-    label: string;
-    type: string;
-    default?: boolean;
-    min?: number;
-    max?: number;
-};
-
-interface ModuleConfig {
-    head: string;
-    configs: Record<string, ConfigData>;
-}
 
 const fadeIn = keyframes`
     from {
@@ -46,7 +34,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-const AppContainer = styled.div`
+const AppContainer = styled.div<{ hide: boolean }>`
     position: fixed;
     top: 0;
     left: 0;
@@ -55,7 +43,7 @@ const AppContainer = styled.div`
     z-index: 9999;
     background-color: ${() => isDarkMode() ? "#121212" : "#f0f0f0"};
     color: ${() => isDarkMode() ? "#ffffff" : "#121212"};
-    display: ${(props: { hide: boolean }) => props.hide ? "none" : "flex"};
+    display: ${(props) => props.hide ? "none" : "flex"};
     flex-direction: column;
     animation: ${fadeIn} 0.3s ease;
     overflow: hidden;
@@ -525,7 +513,7 @@ function Setting() {
                 {ModulesInfo.configs.length === 0 ? (
                     <EmptyMessage>설정할 항목이 없습니다.</EmptyMessage>
                 ) : (
-                    ModulesInfo.configs.map((module: ModuleConfig) => (
+                    ModulesInfo.configs.map((module: Configs) => (
                         <ModuleCard key={module.head}>
                             <ModuleHeader>
                                 <ModuleTitle>

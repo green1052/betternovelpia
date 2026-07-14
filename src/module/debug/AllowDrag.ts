@@ -1,4 +1,3 @@
-import $ from "cash-dom";
 import {novelLoaded} from "../../util/NovelLoaded";
 
 export default {
@@ -24,18 +23,18 @@ export default {
             }, true);
 
             setTimeout(() => {
-                $(".no-drag").each((_, e) => e.classList.remove("no-drag"));
-                $("#viewer_no_drag").each((_, e) => e.classList.remove("viewer_no_drag"));
+                document.querySelectorAll(".no-drag").forEach(e => e.classList.remove("no-drag"));
+                document.querySelectorAll("#viewer_no_drag").forEach(e => e.classList.remove("viewer_no_drag"));
 
-                $(`[style*="user-select"]`).each((_, e) => $(e).css("user-select", "text"));
+                document.querySelectorAll(`[style*="user-select"]`).forEach(e => (e as HTMLElement).style.setProperty("user-select", "text"));
 
                 for (const attr of ["ononcontextmenu", "oncontextmenu", "onselectstart", "ondragstart", "ondrop"]) {
-                    $(`[${attr}]`).each((_, e) => {
+                    document.querySelectorAll(`[${attr}]`).forEach(e => {
                         e.removeAttribute(attr);
                     });
                 }
 
-                $(".line").each((_, e) => {
+                document.querySelectorAll(".line").forEach(e => {
                     e.classList.remove("line");
                     e.setAttribute("style", "user-select: text !important;");
                 });

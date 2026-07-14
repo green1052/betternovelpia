@@ -1,9 +1,8 @@
 import React, {useCallback} from "react";
-import $ from "cash-dom";
 
 export function NovelContinueBox(props: { url: string, chapter: string, isBookmark?: boolean }) {
     const onClick = useCallback(() => {
-        $(".loads").show();
+        document.querySelectorAll(".loads").forEach(el => (el as HTMLElement).style.display = "");
         location.href = props.url;
     }, []);
 
