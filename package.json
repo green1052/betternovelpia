@@ -14,7 +14,7 @@
         "bun-plugin-glob-import": "^1.1.1",
         "js-cookie": "^3.0.8",
         "ky": "^2.0.2",
-        "react": "^19.2.7",
+        "react": "^19.2.8",
         "react-dom": "^19.2.7",
         "use-long-press": "^3.3.0"
     }
