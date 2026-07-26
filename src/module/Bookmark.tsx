@@ -339,9 +339,7 @@ function Viewer({settings}: {settings: BookmarkSettings}) {
         if (scrollTop !== -1) {
             novelLoaded(() => {
                 setTimeout(() => {
-                    const a = !confirm("북마크로 이동하시겠습니까?");
-
-                    if (askAlert && a) return;
+                    if (askAlert && !confirm("북마크로 이동하시겠습니까?")) return;
 
                     document.querySelector(NOVEL_BOX)?.scroll(0, scrollTop);
                 }, 500);

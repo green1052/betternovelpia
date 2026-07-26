@@ -18,11 +18,14 @@ export default defineModule({
                     child => child.tagName === "SPAN" && child.textContent?.includes("차단")
                 );
 
-                if (hasBlockSpan) return;
+                if (hasBlockSpan) continue;
 
-                element.insertAdjacentHTML("beforeend", "<span class=line>|</span>");
-                element.insertAdjacentHTML("beforeend", `<span class="comment_option option_rpt">차단</span>`);
-                element.addEventListener("click", () => {
+                element.insertAdjacentHTML("beforeend", `<span class=line>|</span><span class="comment_option option_rpt">차단</span>`);
+
+                const blockButton = element.lastElementChild;
+                if (!blockButton) continue;
+
+                blockButton.addEventListener("click", () => {
                     const commentWrap = element.parentElement?.parentElement;
                     const userNameB = commentWrap?.querySelector(".comment_header .user_name b");
                     const onclickAttr = userNameB?.getAttribute("onclick") ?? "";

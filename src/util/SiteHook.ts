@@ -31,11 +31,17 @@ export function hookSiteFunction(
             if (!callbacks) return;
 
             const run = () => {
-                for (const fn of callbacks) fn();
+                for (const fn of callbacks) {
+                    try {
+                        fn();
+                    } catch (e) {
+                        console.error(`${fnName} hook:`, e);
+                    }
+                }
             };
 
             if (options.delay) setTimeout(run, options.delay);
-            else try { run(); } catch { /* noop */ }
+            else run();
         };
     };
 

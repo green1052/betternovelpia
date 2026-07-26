@@ -33,18 +33,17 @@ export default defineModule({
             if (isNaN(lastPage)) return;
 
             const recommend = async (url: string, on: boolean) => {
-                const response = await ky.post("/proc/board_option", {
-                    body: new URLSearchParams({
-                        option: "vote_novel",
-                        value: url,
-                        csrf: csrf
-                    })
-                }).text();
+                // ponytail: 2번까지만 토글 재시도. 서버가 계속 반대 상태 주면 무한 재귀 대신 포기
+                for (let i = 0; i < 2; i++) {
+                    const response = await ky.post("/proc/board_option", {
+                        body: new URLSearchParams({
+                            option: "vote_novel",
+                            value: url,
+                            csrf: csrf
+                        })
+                    }).text();
 
-                if (on && response.startsWith("off")) {
-                    await recommend(url, true);
-                } else if (!on && response.startsWith("on")) {
-                    await recommend(url, false);
+                    if (response.startsWith(on ? "on" : "off")) return;
                 }
             };
 

@@ -21,7 +21,6 @@ export default defineModule({
 
             setTimeout(() => {
                 document.querySelectorAll(".no-drag").forEach(e => e.classList.remove("no-drag"));
-                document.querySelectorAll("#viewer_no_drag").forEach(e => e.classList.remove("viewer_no_drag"));
 
                 document.querySelectorAll(`[style*="user-select"]`).forEach(e => (e as HTMLElement).style.setProperty("user-select", "text"));
 

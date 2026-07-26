@@ -4,7 +4,7 @@ export function NovelContinueBox(props: { url: string, chapter: string, isBookma
     const onClick = useCallback(() => {
         document.querySelectorAll(".loads").forEach(el => (el as HTMLElement).style.display = "");
         location.href = props.url;
-    }, []);
+    }, [props.url]);
 
     return (
         <button
