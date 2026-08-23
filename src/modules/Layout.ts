@@ -2,6 +2,7 @@ import {GM_addStyle, unsafeWindow} from "$";
 import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 import {commentLoaded} from "../util/CommentLoaded";
 import {defineModule} from "../util/config";
+import hideAdCSS from "../styles/hide-ad.css?raw";
 
 let viewerDisplayHooked = false;
 
@@ -28,25 +29,7 @@ export default defineModule({
               HideOnlyEmojiComment, HideOnlyEmojiComment_Remove, DisableNovelAlert
           }) {
         if (HideAd) {
-            GM_addStyle(`
-                img[alt=우최공] { display: none!important; }
-                img[src$="bnr_subtop_contest2023_m_3.jpg"] { display: none!important; }
-                .main-slide-wrapper { display: none!important; }
-                .swiper-container { display: none!important; }
-                img[alt="내서재 광고"] { display: none!important; }
-                .ad_banner { display: none!important; }
-                img[alt=광고] { display: none!important; }
-                .story_bnr { display: none!important; }
-                .comic_bnr { display: none!important; }
-                .novel_banner { display: none!important; }
-                img[alt="자유연재 광고"] { display: none!important; }
-                .calc-event-wrapper { display: none!important; }
-                #slide-banner-box-mobile { display: none!important; }
-                #top-swiper-banner { display: none!important; }
-                #sub_sale_modal_v2 { display: none!important; }
-                .comic-banner-wrap { display: none!important; }
-                .bottom_banner_wrapper { display: none!important; }
-            `);
+            GM_addStyle(hideAdCSS);
         }
 
         if (HideEvent && /^\/contest_list$/.test(location.pathname)) {
