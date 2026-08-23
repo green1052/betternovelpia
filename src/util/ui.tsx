@@ -1,6 +1,6 @@
 import type {ReactNode} from "react";
 import {isDarkMode} from "./IsDarkMode";
-import sharedCSS from "../styles/ui.css" with {type: "text"};
+import sharedCSS from "../styles/ui.css?raw";
 
 const injected = new Set<string>();
 

@@ -1,10 +1,9 @@
-import {asObject as modulesTs} from "./module/**/*.ts";
-import {asObject as modulesTsx} from "./module/**/*.tsx";
 import {registeredModules, configs} from "./util/registry";
 import {resolveSettings} from "./util/config";
 
-for (const [path, mod] of Object.entries({...modulesTs, ...modulesTsx})) {
-    const module = mod.default as Module;
+const modules = import.meta.glob("./module/**/*.{ts,tsx}", {eager: true, import: "default"}) as Record<string, Module>;
+
+for (const [path, module] of Object.entries(modules)) {
     if (!module || typeof module.start !== "function") continue;
 
     const name = /(\w*)\.tsx?$/i.exec(path)?.[1] ?? path;

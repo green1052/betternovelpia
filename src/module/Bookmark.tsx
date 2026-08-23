@@ -8,7 +8,7 @@ import {novelLoaded} from "../util/NovelLoaded";
 import {NovelContinueBox} from "../util/NovelContinueBox";
 import {injectCSS, ThemedApp} from "../util/ui";
 import {defineModule, type Settings} from "../util/config";
-import bookmarkCSS from "../styles/bookmark.css" with {type: "text"};
+import bookmarkCSS from "../styles/bookmark.css?raw";
 
 const bookmarkConfig = {
     Bookmark: {label: "북마크 활성화", type: "checkbox", default: false},
@@ -59,7 +59,7 @@ function BookmarkList_({settings}: {settings: BookmarkSettings}) {
     const backup = useCallback(() => {
         if (!Object.keys(bookmarks).length) return;
 
-        GM_setClipboard(JSON.stringify(bookmarks));
+        GM_setClipboard(JSON.stringify(bookmarks), "text");
 
         unsafeWindow.toastr.info("클립보드로 복사되었습니다.", "북마크");
     }, [bookmarks]);
@@ -140,7 +140,7 @@ function BookmarkList_({settings}: {settings: BookmarkSettings}) {
                                 className="bn-modal-input"
                                 placeholder="백업된 북마크 데이터를 붙여넣으세요"
                                 value={data}
-                                onChange={(e) => setData(e.target.value)}
+                                onChange={(e) => setData((e.target as HTMLTextAreaElement).value)}
                                 autoFocus
                             />
                             <div className="bn-modal-actions">

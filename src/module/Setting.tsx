@@ -5,7 +5,7 @@ import {appendSide} from "../util/AppendSide";
 import {exportConfig} from "../util/ExportConfig";
 import {injectCSS, ThemedApp} from "../util/ui";
 import {defineModule} from "../util/config";
-import settingCSS from "../styles/setting.css" with {type: "text"};
+import settingCSS from "../styles/setting.css?raw";
 
 function Checkbox({config, label}: { config: string, label: string }) {
     const [checked, setChecked] = useState(GM_getValue<boolean>(config, false));
@@ -31,7 +31,7 @@ function TextBox({config, label}: { config: string, label: string }) {
     const [value, setValue] = useState(GM_getValue<string>(config, ""));
 
     const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
+            const newValue = (e.target as HTMLInputElement).value;
         GM_setValue(config, newValue);
         setValue(newValue);
     }, [config]);
@@ -48,7 +48,7 @@ function NumberBox({config, label, min, max}: { config: string, label: string, m
     const [value, setValue] = useState(GM_getValue<number>(config, 0));
 
     const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
+            const newValue = (e.target as HTMLInputElement).value;
 
         if (!newValue) return;
 
@@ -83,7 +83,7 @@ function Setting() {
             return;
         }
 
-        GM_setClipboard(JSON.stringify(data, null, 2));
+        GM_setClipboard(JSON.stringify(data, null, 2), "text");
         unsafeWindow.toastr.info("설정이 클립보드에 복사되었습니다.", "설정");
     }, []);
 
@@ -132,7 +132,7 @@ function Setting() {
                                 className="bn-modal-input"
                                 placeholder="백업된 설정 데이터를 붙여넣으세요"
                                 value={modalData}
-                                onChange={(e) => setModalData(e.target.value)}
+                                onChange={(e) => setModalData((e.target as HTMLTextAreaElement).value)}
                                 autoFocus
                             />
                             <div className="bn-modal-actions">
