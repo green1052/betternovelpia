@@ -4,9 +4,9 @@ import {createRoot} from "preact/compat/client";
 import {configs} from "../util/registry";
 import {appendSide} from "../util/AppendSide";
 import {exportConfig} from "../util/ExportConfig";
-import {injectCSS, ThemedApp} from "../util/ui";
+import {ThemedApp} from "../util/ui";
 import {defineModule} from "../util/config";
-import settingCSS from "../styles/setting.css?raw";
+import "../styles/setting.css";
 
 function Checkbox({config, label}: { config: string, label: string }) {
     const [checked, setChecked] = useState(GM_getValue<boolean>(config, false));

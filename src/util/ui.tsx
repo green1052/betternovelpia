@@ -1,18 +1,8 @@
-import {GM_addStyle} from "$";
 import type {ReactNode} from "preact/compat";
 import {isDarkMode} from "./IsDarkMode";
-import sharedCSS from "../styles/ui.css?raw";
-
-const injected = new Set<string>();
-
-export function injectCSS(css: string) {
-    if (injected.has(css)) return;
-    injected.add(css);
-    GM_addStyle(css);
-}
+import "../styles/ui.css";
 
 export function ThemedApp({children}: {children: ReactNode}) {
-    injectCSS(sharedCSS);
     const theme = isDarkMode() ? "dark" : "light";
     return <div data-theme={theme} className="bn-root">{children}</div>;
 }

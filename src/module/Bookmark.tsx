@@ -7,9 +7,9 @@ import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {novelLoaded} from "../util/NovelLoaded";
 import {NovelContinueBox} from "../util/NovelContinueBox";
-import {injectCSS, ThemedApp} from "../util/ui";
+import {ThemedApp} from "../util/ui";
 import {defineModule, type Settings} from "../util/config";
-import bookmarkCSS from "../styles/bookmark.css?raw";
+import "../styles/bookmark.css";
 
 const bookmarkConfig = {
     Bookmark: {label: "북마크 활성화", type: "checkbox", default: false},
