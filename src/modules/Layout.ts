@@ -3,6 +3,7 @@ import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 import {commentLoaded} from "../util/CommentLoaded";
 import {defineModule} from "../util/config";
 import hideAdCSS from "../styles/hide-ad.css?raw";
+import Cookies from "js-cookie";
 
 let viewerDisplayHooked = false;
 
@@ -29,6 +30,20 @@ export default defineModule({
               HideOnlyEmojiComment, HideOnlyEmojiComment_Remove, DisableNovelAlert
           }) {
         if (HideAd) {
+            Cookies.set("is_mybook_banner_modal", "1", {
+                expires: 7,
+                path: "/",
+                domain: "novelpia.com",
+                secure: false
+            });
+
+            Cookies.set("is_viewer_banner_modal", "1", {
+                expires: 7,
+                path: "/",
+                domain: "novelpia.com",
+                secure: false
+            });
+
             GM_addStyle(hideAdCSS);
         }
 

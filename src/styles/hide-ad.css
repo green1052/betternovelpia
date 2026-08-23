@@ -1,67 +1,9 @@
-img[alt=우최공] {
-    display: none !important;
-}
-
-img[src$="bnr_subtop_contest2023_m_3.jpg"] {
-    display: none !important;
-}
-
-.main-slide-wrapper {
-    display: none !important;
-}
-
-.swiper-container {
-    display: none !important;
-}
-
-img[alt="내서재 광고"] {
-    display: none !important;
-}
-
-.ad_banner {
-    display: none !important;
-}
-
-img[alt=광고] {
-    display: none !important;
-}
-
-.story_bnr {
-    display: none !important;
-}
-
-.comic_bnr {
-    display: none !important;
-}
-
-.novel_banner {
-    display: none !important;
-}
-
-img[alt="자유연재 광고"] {
-    display: none !important;
-}
-
-.calc-event-wrapper {
-    display: none !important;
-}
-
-#slide-banner-box-mobile {
-    display: none !important;
-}
-
-#top-swiper-banner {
-    display: none !important;
-}
-
-#sub_sale_modal_v2 {
-    display: none !important;
-}
-
-.comic-banner-wrap {
-    display: none !important;
-}
-
-.bottom_banner_wrapper {
+#slide-banner-box,
+div:has(> .banner-box-content),
+div[class="bt-nv-menu event"],
+.novellist-swiper-banner,
+.bottom_banner_wrapper,
+div:has(> a > img[alt="자유연재 광고"]),
+div:has(> a > img[alt="노벨피아 멤버십"]){
     display: none !important;
 }
