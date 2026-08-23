@@ -224,8 +224,6 @@ function Setting() {
 export default defineModule({
     exclude: /^\/viewer\//,
     start() {
-        injectCSS(settingCSS);
-
         const appContainer = document.createElement("div");
         document.body.prepend(appContainer);
 

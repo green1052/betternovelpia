@@ -421,8 +421,6 @@ export default defineModule({
             return;
         }
 
-        injectCSS(bookmarkCSS);
-
         if (/^\/novel\//.test(location.pathname)) {
             const tr = document.querySelector("div:not(.mobile_hidden) > .info-graybox");
 
