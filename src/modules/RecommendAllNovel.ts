@@ -74,7 +74,7 @@ export default defineModule({
                 unsafeWindow.toastr.info("완료", "소설 일괄 추천/비추천");
             };
 
-            const center = document.querySelector('ul[style=""][class=mobile_center]');
+            const center = document.querySelector("ul[style=\"\"][class=mobile_center]");
 
             if (!center) return;
 

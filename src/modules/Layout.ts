@@ -23,10 +23,10 @@ export default defineModule({
         }
     },
     start({
-        HideAd, HideEvent, HideRecommendEffect, HideViewerThumbnail,
-        InfoUnfold, NaviColor, HidePlus, HideNotice,
-        HideOnlyEmojiComment, HideOnlyEmojiComment_Remove, DisableNovelAlert
-    }) {
+              HideAd, HideEvent, HideRecommendEffect, HideViewerThumbnail,
+              InfoUnfold, NaviColor, HidePlus, HideNotice,
+              HideOnlyEmojiComment, HideOnlyEmojiComment_Remove, DisableNovelAlert
+          }) {
         if (HideAd) {
             GM_addStyle(`
                 img[alt=우최공] { display: none!important; }

@@ -1,5 +1,5 @@
 import {GM_deleteValue, GM_getValue, GM_info, GM_listValues, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
-import {useCallback, useEffect, useState, type ChangeEvent} from "preact/compat";
+import {type ChangeEvent, useCallback, useEffect, useState} from "preact/compat";
 import {createRoot} from "preact/compat/client";
 import {configs} from "../util/registry";
 import {appendSide} from "../util/AppendSide";
@@ -32,7 +32,7 @@ function TextBox({config, label}: { config: string, label: string }) {
     const [value, setValue] = useState(GM_getValue<string>(config, ""));
 
     const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-            const newValue = (e.target as HTMLInputElement).value;
+        const newValue = (e.target as HTMLInputElement).value;
         GM_setValue(config, newValue);
         setValue(newValue);
     }, [config]);
@@ -49,7 +49,7 @@ function NumberBox({config, label, min, max}: { config: string, label: string, m
     const [value, setValue] = useState(GM_getValue<number>(config, 0));
 
     const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-            const newValue = (e.target as HTMLInputElement).value;
+        const newValue = (e.target as HTMLInputElement).value;
 
         if (!newValue) return;
 

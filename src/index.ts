@@ -1,8 +1,8 @@
 import {GM_getValue, unsafeWindow} from "$";
-import {registeredModules, configs} from "./util/registry";
+import {configs, registeredModules} from "./util/registry";
 import {resolveSettings} from "./util/config";
 
-const modules = import.meta.glob("./module/**/*.{ts,tsx}", {eager: true, import: "default"}) as Record<string, Module>;
+const modules = import.meta.glob("./modules/*.{ts,tsx}", {eager: true, import: "default"}) as Record<string, Module>;
 
 for (const [path, module] of Object.entries(modules)) {
     if (!module || typeof module.start !== "function") continue;

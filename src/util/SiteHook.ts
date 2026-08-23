@@ -48,7 +48,7 @@ export function hookSiteFunction(
     };
 
     if (options.onWindowLoad)
-        window.addEventListener("load", setupHook, { once: true });
+        window.addEventListener("load", setupHook, {once: true});
     else
         setupHook();
 }

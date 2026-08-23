@@ -2,7 +2,7 @@ import {GM_getValue} from "$";
 
 type ConfigValue<C extends ConfigType> =
     C extends Checkbox ? boolean :
-    C extends Int ? number : string;
+        C extends Int ? number : string;
 
 export type Settings<T extends Record<string, ConfigType>> = {
     [K in keyof T]: ConfigValue<T[K]>;

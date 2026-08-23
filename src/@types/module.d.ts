@@ -40,6 +40,7 @@ declare global {
         enable?: string[];
         config?: Configs;
         runAt?: "document-start" | "document-end";
+
         start(settings: Record<string, boolean | number | string>): void | Promise<void>;
     }
 }

@@ -27,7 +27,7 @@ function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
     return a[1].title < b[1].title ? -1 : a[1].title > b[1].title ? 1 : 0;
 }
 
-function BookmarkList_({settings}: {settings: BookmarkSettings}) {
+function BookmarkList_({settings}: { settings: BookmarkSettings }) {
     const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
     const [previousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
     const [hide, setHide] = useState(true);
@@ -296,7 +296,7 @@ function Novel() {
     );
 }
 
-function Viewer({settings}: {settings: BookmarkSettings}) {
+function Viewer({settings}: { settings: BookmarkSettings }) {
     const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
     const [previousBookmark, setPreviousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
 

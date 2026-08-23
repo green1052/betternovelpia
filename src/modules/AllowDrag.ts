@@ -1,5 +1,5 @@
-import {novelLoaded} from "../../util/NovelLoaded";
-import {defineModule} from "../../util/config";
+import {novelLoaded} from "../util/NovelLoaded";
+import {defineModule} from "../util/config";
 
 export default defineModule({
     include: /^\/viewer\//,
