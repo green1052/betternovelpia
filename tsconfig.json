@@ -1,46 +1,28 @@
 {
     "compilerOptions": {
+        "target": "ESNext",
+        "jsx": "preserve",
+        "jsxImportSource": "preact",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
         "lib": [
             "ESNext",
-            "dom",
-            "dom.iterable"
+            "DOM"
         ],
-        "target": "ESNext",
-        "module": "Preserve",
-        "moduleDetection": "force",
-        "jsx": "react-jsx",
-        "jsxImportSource": "preact",
-        "allowJs": true,
-        "types": [
-            "vite/client",
-            "vite-plugin-monkey/global",
-            "node"
-        ],
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "verbatimModuleSyntax": true,
-        "noEmit": true,
+        "moduleResolution": "Bundler",
+        "noUncheckedSideEffectImports": true,
         "strict": true,
-        "skipLibCheck": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedIndexedAccess": true,
-        "noImplicitOverride": true,
-        "noUnusedLocals": false,
-        "noUnusedParameters": false,
-        "noPropertyAccessFromIndexSignature": false,
-        "paths": {
-            "react": ["./node_modules/preact/compat"],
-            "react-dom": ["./node_modules/preact/compat"],
-            "react-dom/client": ["./node_modules/preact/compat/client"],
-            "react/jsx-runtime": ["./node_modules/preact/jsx-runtime"]
-        }
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true
     },
     "include": [
-        "src",
-        "vite.config.ts",
-        "vite-env.d.ts"
-    ],
-    "exclude": [
-        "node_modules"
+        "src"
     ]
 }

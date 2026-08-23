@@ -2,6 +2,7 @@
     "name": "betternovelpia",
     "version": "10.7.8",
     "author": "green1052",
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -11,15 +12,13 @@
     "dependencies": {
         "js-cookie": "^3.0.8",
         "ky": "^2.0.2",
-        "preact": "^10.26.0",
+        "preact": "^10.29.8",
         "use-long-press": "^3.3.0"
     },
     "devDependencies": {
-        "@preact/preset-vite": "^2.10.2",
+        "@preact/preset-vite": "^2.10.6",
         "@types/js-cookie": "^3.0.6",
-        "@types/node": "^24.0.0",
-        "typescript": "^5.9.0",
-        "vite": "^6.3.0",
-        "vite-plugin-monkey": "^5.0.0"
+        "vite": "^8.2.2",
+        "vite-plugin-monkey": "^8.1.0"
     }
 }
