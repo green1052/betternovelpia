@@ -4,6 +4,6 @@ div[class="bt-nv-menu event"],
 .novellist-swiper-banner,
 .bottom_banner_wrapper,
 div:has(> a > img[alt="자유연재 광고"]),
-div:has(> a > img[alt="노벨피아 멤버십"]){
+div:has(> a > img[alt="노벨피아 멤버십"]) {
     display: none !important;
 }
