@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import {useCallback} from "preact/hooks";
 
 export function NovelContinueBox(props: { url: string, chapter: string, isBookmark?: boolean }) {
     const onClick = useCallback(() => {

@@ -1,3 +1,4 @@
+import {unsafeWindow} from "$";
 import {HEADER_BAR, NOVEL_BOX} from "../util/Selectors";
 import {defineModule} from "../util/config";
 

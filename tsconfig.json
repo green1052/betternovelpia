@@ -7,7 +7,8 @@
         "module": "ESNext",
         "lib": [
             "ESNext",
-            "DOM"
+            "DOM",
+            "DOM.Iterable"
         ],
         "moduleResolution": "Bundler",
         "noUncheckedSideEffectImports": true,

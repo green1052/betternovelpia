@@ -1,3 +1,5 @@
+import {GM_getValue} from "$";
+
 type ConfigValue<C extends ConfigType> =
     C extends Checkbox ? boolean :
     C extends Int ? number : string;

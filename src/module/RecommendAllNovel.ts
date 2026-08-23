@@ -1,3 +1,4 @@
+import {unsafeWindow} from "$";
 import {EP_LIST} from "../util/Selectors";
 import {waitElement} from "../util/WaitElement";
 import {defineModule} from "../util/config";

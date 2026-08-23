@@ -1,5 +1,6 @@
 import {novelLoaded} from "../util/NovelLoaded";
 import {defineModule} from "../util/config";
+import {unsafeWindow} from "$";
 
 export default defineModule({
     include: /^\/viewer\//,

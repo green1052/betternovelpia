@@ -16,7 +16,6 @@
         "use-long-press": "^3.3.0"
     },
     "devDependencies": {
-        "@preact/preset-vite": "^2.10.6",
         "@types/js-cookie": "^3.0.6",
         "vite": "^8.2.2",
         "vite-plugin-monkey": "^8.1.0"

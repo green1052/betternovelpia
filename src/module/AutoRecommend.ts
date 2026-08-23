@@ -1,3 +1,4 @@
+import {unsafeWindow} from "$";
 import {novelLoaded} from "../util/NovelLoaded";
 import {defineModule} from "../util/config";
 

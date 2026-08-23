@@ -1,3 +1,4 @@
+import {GM_addStyle, unsafeWindow} from "$";
 import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
 import {commentLoaded} from "../util/CommentLoaded";
 import {defineModule} from "../util/config";

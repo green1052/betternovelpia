@@ -1,3 +1,4 @@
+import {GM_getValue, unsafeWindow} from "$";
 import {registeredModules, configs} from "./util/registry";
 import {resolveSettings} from "./util/config";
 

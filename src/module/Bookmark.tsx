@@ -1,5 +1,6 @@
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {createRoot} from "react-dom/client";
+import {GM_getValue, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "preact/compat";
+import {createRoot} from "preact/compat/client";
 import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
 import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";

@@ -1,4 +1,5 @@
-import type {ReactNode} from "react";
+import {GM_addStyle} from "$";
+import type {ReactNode} from "preact/compat";
 import {isDarkMode} from "./IsDarkMode";
 import sharedCSS from "../styles/ui.css?raw";
 

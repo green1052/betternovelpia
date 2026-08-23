@@ -1,5 +1,6 @@
-import {useCallback, useEffect, useState, type ChangeEvent} from "react";
-import {createRoot} from "react-dom/client";
+import {GM_deleteValue, GM_getValue, GM_info, GM_listValues, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
+import {useCallback, useEffect, useState, type ChangeEvent} from "preact/compat";
+import {createRoot} from "preact/compat/client";
 import {configs} from "../util/registry";
 import {appendSide} from "../util/AppendSide";
 import {exportConfig} from "../util/ExportConfig";

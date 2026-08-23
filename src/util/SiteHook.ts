@@ -1,3 +1,5 @@
+import {unsafeWindow} from "$";
+
 const hooks = new Map<string, Array<() => void | Promise<void>>>();
 const hooked = new Set<string>();
 
