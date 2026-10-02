@@ -1,11 +1,9 @@
-import {GM_addStyle, unsafeWindow} from "$";
+import {GM_addStyle} from "$";
 import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
-import {commentLoaded} from "../util/SiteHook";
+import {commentLoaded, hookSiteFunction} from "../util/SiteHook";
 import {defineModule} from "../util/config";
 import hideAdCSS from "../styles/hide-ad.css?raw";
 import Cookies from "js-cookie";
-
-let viewerDisplayHooked = false;
 
 export default defineModule({
     config: {
@@ -30,19 +28,8 @@ export default defineModule({
               HideOnlyEmojiComment, HideOnlyEmojiComment_Remove, DisableNovelAlert
           }) {
         if (HideAd) {
-            Cookies.set("is_mybook_banner_modal", "1", {
-                expires: 7,
-                path: "/",
-                domain: "novelpia.com",
-                secure: false
-            });
-
-            Cookies.set("is_viewer_banner_modal", "1", {
-                expires: 7,
-                path: "/",
-                domain: "novelpia.com",
-                secure: false
-            });
+            for (const name of ["is_mybook_banner_modal", "is_viewer_banner_modal"])
+                Cookies.set(name, "1", {expires: 7, path: "/", domain: "novelpia.com", secure: false});
 
             GM_addStyle(hideAdCSS);
         }
@@ -75,15 +62,7 @@ export default defineModule({
                 if (footerEl) footerEl.style.backgroundColor = color;
             };
 
-            if (!viewerDisplayHooked) {
-                viewerDisplayHooked = true;
-                const original = unsafeWindow.viewer_display;
-                unsafeWindow.viewer_display = function (...args: unknown[]) {
-                    Reflect.apply(original, this, args);
-                    changeTheme();
-                };
-            }
-
+            hookSiteFunction("viewer_display", changeTheme);
             changeTheme();
         }
 
