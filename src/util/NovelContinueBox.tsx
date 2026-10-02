@@ -1,10 +1,8 @@
-import {useCallback} from "preact/hooks";
-
 export function NovelContinueBox(props: { url: string, chapter: string, isBookmark?: boolean }) {
-    const onClick = useCallback(() => {
-        document.querySelectorAll(".loads").forEach(el => (el as HTMLElement).style.display = "");
+    const onClick = () => {
+        document.querySelectorAll<HTMLElement>(".loads").forEach(el => el.style.display = "");
         location.href = props.url;
-    }, [props.url]);
+    };
 
     return (
         <button

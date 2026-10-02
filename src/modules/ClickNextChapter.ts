@@ -11,8 +11,8 @@ export default defineModule({
     },
     start({ClickNextChapter}) {
         if (ClickNextChapter !== 0)
-            document.querySelector(NOVEL_BOX)?.addEventListener("click", (ev: Event) => {
-                if ((ev as CustomEvent).detail === ClickNextChapter)
+            document.querySelector<HTMLElement>(NOVEL_BOX)?.addEventListener("click", (ev) => {
+                if (ev.detail === ClickNextChapter)
                     document.querySelector<HTMLElement>(".menu-next-item")?.click();
             });
     }

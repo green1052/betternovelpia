@@ -21,7 +21,7 @@ export default defineModule({
             scrollTop = currentScrollTop;
 
             const headerEl = document.querySelector(HEADER_BAR);
-            if (headerEl && getComputedStyle(headerEl).display === "block" && (calc > 0 && calc >= 5 || calc < 0 && calc <= -5))
+            if (headerEl && getComputedStyle(headerEl).display === "block" && Math.abs(calc) >= 5)
                 unsafeWindow.navi_view();
         });
     }

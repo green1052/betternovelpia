@@ -3,6 +3,12 @@ import {commentLoaded} from "../util/SiteHook";
 import {defineModule} from "../util/config";
 import ky from "ky";
 
+const BLOCK_MESSAGES: Record<string, string> = {
+    on: "차단되었습니다.",
+    off: "차단이 해제되었습니다.",
+    login: "로그인이 필요합니다."
+};
+
 export default defineModule({
     include: /^\/viewer\//,
     enable: ["CommentBlockUser"],
@@ -35,28 +41,14 @@ export default defineModule({
 
                     if (!memberNo) return;
 
-                    const params = new URLSearchParams();
-                    params.set("member_no", memberNo);
-                    const csrfEl = document.querySelector("#csrf") as HTMLInputElement | HTMLTextAreaElement | null;
-                    params.set("csrf", csrfEl?.value ?? "");
+                    const csrf = document.querySelector<HTMLInputElement>("#csrf")?.value ?? "";
 
                     ky
-                        .post("/proc/member_block", {
-                            body: params
-                        })
+                        .post("/proc/member_block", {body: new URLSearchParams({member_no: memberNo, csrf})})
                         .text()
                         .then((data) => {
-                            switch (data.split("|")[0]) {
-                                case "on":
-                                    unsafeWindow.toastr.info("차단되었습니다.", "댓글 유저 차단");
-                                    break;
-                                case "off":
-                                    unsafeWindow.toastr.info("차단이 해제되었습니다.", "댓글 유저 차단");
-                                    break;
-                                case "login":
-                                    unsafeWindow.toastr.info("로그인이 필요합니다.", "댓글 유저 차단");
-                                    break;
-                            }
+                            const message = BLOCK_MESSAGES[data.split("|")[0] ?? ""];
+                            if (message) unsafeWindow.toastr.info(message, "댓글 유저 차단");
                         });
                 });
             }
