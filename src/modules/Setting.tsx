@@ -3,7 +3,7 @@ import {type ChangeEvent, useCallback, useEffect, useState} from "preact/compat"
 import {createRoot} from "preact/compat/client";
 import {configs} from "../util/registry";
 import {appendSide} from "../util/AppendSide";
-import {ThemedApp} from "../util/ui";
+import {RestoreModal, ThemedApp} from "../util/ui";
 import {defineModule} from "../util/config";
 import "../styles/setting.css";
 
@@ -70,7 +70,6 @@ function NumberBox({config, label, min, max}: { config: string, label: string, m
 function Setting() {
     const [hide, setHide] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [modalData, setModalData] = useState("");
     const [configVersion, setConfigVersion] = useState(0);
 
     const quit = useCallback(() => location.reload(), []);
@@ -87,27 +86,24 @@ function Setting() {
         unsafeWindow.toastr.info("설정이 클립보드에 복사되었습니다.", "설정");
     }, []);
 
-    const restore = useCallback(() => {
-        if (!modalData.trim()) {
+    const restore = useCallback((data: string) => {
+        setShowModal(false);
+
+        if (!data.trim()) {
             unsafeWindow.toastr.info("데이터가 비어있습니다.", "설정");
-            setShowModal(false);
             return;
         }
 
         try {
-            const config = JSON.parse(modalData);
-            for (const [key, value] of Object.entries(config)) {
+            for (const [key, value] of Object.entries(JSON.parse(data))) {
                 GM_setValue(key, value);
             }
             setConfigVersion(v => v + 1);
             unsafeWindow.toastr.info("설정이 복원되었습니다.", "설정");
-        } catch (e) {
+        } catch {
             unsafeWindow.toastr.info("잘못된 데이터 형식입니다.", "설정");
         }
-
-        setShowModal(false);
-        setModalData("");
-    }, [modalData]);
+    }, []);
 
     const reset = useCallback(() => {
         if (confirm("모든 설정을 초기화하시겠습니까?")) {
@@ -125,32 +121,13 @@ function Setting() {
         <ThemedApp>
             <div className={`bn-app ${hide ? "bn-app--hidden" : ""}`}>
                 {showModal && (
-                    <div className="bn-modal bn-modal--bottom">
-                        <div className="bn-modal-content bn-modal-content--bottom">
-                            <h3 className="bn-modal-title">설정 복원</h3>
-                            <textarea
-                                className="bn-modal-input"
-                                placeholder="백업된 설정 데이터를 붙여넣으세요"
-                                value={modalData}
-                                onChange={(e) => setModalData((e.target as HTMLTextAreaElement).value)}
-                                autoFocus
-                            />
-                            <div className="bn-modal-actions">
-                                <button
-                                    className="bn-btn bn-btn--outline"
-                                    onClick={() => {
-                                        setShowModal(false);
-                                        setModalData("");
-                                    }}
-                                >
-                                    취소
-                                </button>
-                                <button className="bn-btn bn-btn--primary" onClick={restore}>
-                                    복원
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <RestoreModal
+                        title="설정 복원"
+                        placeholder="백업된 설정 데이터를 붙여넣으세요"
+                        position="bottom"
+                        onClose={() => setShowModal(false)}
+                        onRestore={restore}
+                    />
                 )}
 
                 <div className="bn-app-bar">
@@ -187,8 +164,8 @@ function Setting() {
                                                 <NumberBox
                                                     config={key}
                                                     label={config.label}
-                                                    min={config.min as number}
-                                                    max={config.max as number}
+                                                    min={config.min}
+                                                    max={config.max}
                                                 />
                                             )}
                                         </div>
