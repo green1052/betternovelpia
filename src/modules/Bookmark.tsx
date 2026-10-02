@@ -2,10 +2,9 @@ import {GM_getValue, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "preact/compat";
 import {createRoot} from "preact/compat/client";
 import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
-import {isPageViewer} from "../util/IsPageViewer";
 import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
-import {novelLoaded} from "../util/NovelLoaded";
+import {novelLoaded} from "../util/SiteHook";
 import {NovelContinueBox} from "../util/NovelContinueBox";
 import {ThemedApp} from "../util/ui";
 import {defineModule, type Settings} from "../util/config";
@@ -416,7 +415,7 @@ export default defineModule({
     start(settings) {
         if (!settings.Bookmark && !settings.PreviousBookmark) return;
 
-        if (isPageViewer()) {
+        if (localStorage.getItem("viewer_paging") === "1") {
             unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
             return;
         }

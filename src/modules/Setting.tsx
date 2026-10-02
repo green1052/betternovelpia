@@ -3,7 +3,6 @@ import {type ChangeEvent, useCallback, useEffect, useState} from "preact/compat"
 import {createRoot} from "preact/compat/client";
 import {configs} from "../util/registry";
 import {appendSide} from "../util/AppendSide";
-import {exportConfig} from "../util/ExportConfig";
 import {ThemedApp} from "../util/ui";
 import {defineModule} from "../util/config";
 import "../styles/setting.css";
@@ -77,7 +76,7 @@ function Setting() {
     const quit = useCallback(() => location.reload(), []);
 
     const backup = useCallback(() => {
-        const data = exportConfig();
+        const data = Object.fromEntries(GM_listValues().map(key => [key, GM_getValue(key)]));
 
         if (!Object.keys(data).length) {
             unsafeWindow.toastr.info("백업할 설정이 없습니다.", "설정");

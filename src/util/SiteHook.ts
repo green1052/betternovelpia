@@ -52,3 +52,11 @@ export function hookSiteFunction(
     else
         setupHook();
 }
+
+export function novelLoaded(func: () => void | Promise<void>) {
+    hookSiteFunction("novel_drawing", func, {requireViewer: true, onWindowLoad: true});
+}
+
+export function commentLoaded(func: () => void | Promise<void>) {
+    hookSiteFunction("get_comment_load", func, {requireViewer: true, delay: 500});
+}

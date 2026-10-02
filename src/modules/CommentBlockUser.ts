@@ -1,5 +1,5 @@
 import {unsafeWindow} from "$";
-import {commentLoaded} from "../util/CommentLoaded";
+import {commentLoaded} from "../util/SiteHook";
 import {defineModule} from "../util/config";
 import ky from "ky";
 

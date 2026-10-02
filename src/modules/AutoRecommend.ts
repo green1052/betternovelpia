@@ -1,5 +1,5 @@
 import {unsafeWindow} from "$";
-import {novelLoaded} from "../util/NovelLoaded";
+import {novelLoaded} from "../util/SiteHook";
 import {defineModule} from "../util/config";
 
 export default defineModule({

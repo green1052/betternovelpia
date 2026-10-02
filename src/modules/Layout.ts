@@ -1,6 +1,6 @@
 import {GM_addStyle, unsafeWindow} from "$";
 import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
-import {commentLoaded} from "../util/CommentLoaded";
+import {commentLoaded} from "../util/SiteHook";
 import {defineModule} from "../util/config";
 import hideAdCSS from "../styles/hide-ad.css?raw";
 import Cookies from "js-cookie";
