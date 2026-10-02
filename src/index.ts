@@ -1,6 +1,5 @@
-import {GM_getValue, unsafeWindow} from "$";
-import {configs, registeredModules} from "./util/registry";
-import {resolveSettings} from "./util/config";
+import {unsafeWindow} from "$";
+import {type Module, type ModuleInfo, registeredModules, resolveSettings} from "./core/module";
 
 const modules = import.meta.glob("./modules/*.{ts,tsx}", {eager: true, import: "default"}) as Record<string, Module>;
 
@@ -9,23 +8,20 @@ for (const [path, module] of Object.entries(modules)) {
 
     const name = /(\w*)\.tsx?$/i.exec(path)?.[1] ?? path;
     registeredModules.push({name, module});
-
-    if (module.config) configs.push(module.config);
 }
 
 function runModule({name, module}: ModuleInfo) {
     const startTime = performance.now();
 
     try {
-        const included = !module.include || module.include.test(location.pathname);
-        const excluded = !!module.exclude?.test(location.pathname);
-        const enabled = !module.enable?.length || module.enable.every(s => GM_getValue<boolean>(s, false));
+        if (module.include && !module.include.test(location.pathname)) return;
+        if (module.exclude?.test(location.pathname)) return;
 
-        if (included && !excluded && enabled) {
-            const settings = module.config ? resolveSettings(module.config.configs) : {};
-            module.start(settings);
-            console.log(`${name}: ${performance.now() - startTime | 0}ms`);
-        }
+        const settings = module.config ? resolveSettings(module.config.configs) : {};
+        if (module.enable && !module.enable.every(key => settings[key])) return;
+
+        module.start(settings);
+        console.log(`${name}: ${performance.now() - startTime | 0}ms`);
     } catch (e) {
         console.error(`${name}:`, e);
     }

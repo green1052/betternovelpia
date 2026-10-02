@@ -1,6 +1,6 @@
 import {unsafeWindow} from "$";
-import {commentLoaded} from "../util/SiteHook";
-import {defineModule} from "../util/config";
+import {commentLoaded} from "../core/site";
+import {defineModule} from "../core/module";
 import ky from "ky";
 
 const BLOCK_MESSAGES: Record<string, string> = {

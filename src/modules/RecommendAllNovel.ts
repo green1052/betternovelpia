@@ -1,7 +1,7 @@
 import {unsafeWindow} from "$";
-import {EP_LIST} from "../util/Selectors";
-import {waitElement} from "../util/WaitElement";
-import {defineModule} from "../util/config";
+import {EP_LIST} from "../core/site";
+import {waitElement} from "../core/dom";
+import {defineModule} from "../core/module";
 import ky from "ky";
 
 export default defineModule({

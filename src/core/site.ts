@@ -1,5 +1,12 @@
 import {unsafeWindow} from "$";
 
+export const SIDE_LEFT = "#m-sidemenu .sidemenu-support";
+export const HEADER_BAR = "#header_bar";
+export const FOOTER_BAR = "#footer_bar";
+export const NOVEL_BOX = "#novel_box";
+export const NOVEL_EP = ".menu-top-tag";
+export const EP_LIST = "#episode_list";
+
 const hooks = new Map<string, Array<() => void | Promise<void>>>();
 const hooked = new Set<string>();
 

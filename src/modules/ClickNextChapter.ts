@@ -1,5 +1,5 @@
-import {NOVEL_BOX} from "../util/Selectors";
-import {defineModule} from "../util/config";
+import {NOVEL_BOX} from "../core/site";
+import {defineModule} from "../core/module";
 
 export default defineModule({
     include: /^\/viewer\//,

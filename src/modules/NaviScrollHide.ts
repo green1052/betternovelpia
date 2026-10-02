@@ -1,6 +1,6 @@
 import {unsafeWindow} from "$";
-import {HEADER_BAR, NOVEL_BOX} from "../util/Selectors";
-import {defineModule} from "../util/config";
+import {HEADER_BAR, NOVEL_BOX} from "../core/site";
+import {defineModule} from "../core/module";
 
 export default defineModule({
     include: /^\/viewer\//,

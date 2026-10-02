@@ -1,4 +1,4 @@
-import {SIDE_LEFT} from "./Selectors";
+import {SIDE_LEFT} from "./site";
 
 let isFirst = true;
 let sideMenu: HTMLElement | null = null;
@@ -19,4 +19,24 @@ export function appendSide(title: string, onclick: () => void | Promise<void>) {
     }
 
     sideMenu?.querySelector(".sidemenu-link-grid")?.appendChild(code);
+}
+
+export function waitElement(element: HTMLElement | null, code: () => void | Promise<void>, timeout = 5000) {
+    if (!element) return;
+
+    if (element.childNodes.length > 0) {
+        code();
+        return;
+    }
+
+    const observer = new MutationObserver(() => {
+        if (element.childNodes.length > 0) {
+            observer.disconnect();
+            code();
+        }
+    });
+
+    observer.observe(element, {childList: true, subtree: true});
+
+    setTimeout(() => observer.disconnect(), timeout);
 }

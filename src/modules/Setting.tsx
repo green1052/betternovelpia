@@ -1,24 +1,22 @@
 import {GM_deleteValue, GM_getValue, GM_info, GM_listValues, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
-import {type ChangeEvent, useCallback, useEffect, useState} from "preact/compat";
+import {type ChangeEvent, useEffect, useState} from "preact/compat";
 import {createRoot} from "preact/compat/client";
-import {configs} from "../util/registry";
-import {appendSide} from "../util/AppendSide";
-import {RestoreModal, ThemedApp} from "../util/ui";
-import {defineModule} from "../util/config";
+import {appendSide} from "../core/dom";
+import {RestoreModal, ThemedApp} from "../components/ui";
+import {type CheckboxField, type ConfigField, defineModule, type IntField, registeredModules, type TextField} from "../core/module";
 import "../styles/setting.css";
 
-function Checkbox({config, label}: { config: string, label: string }) {
-    const [checked, setChecked] = useState(GM_getValue<boolean>(config, false));
+function Checkbox({name, field}: { name: string, field: CheckboxField }) {
+    const [checked, setChecked] = useState(GM_getValue(name, field.default));
 
-    const change = useCallback(() => {
-        const newValue = !checked;
-        setChecked(newValue);
-        GM_setValue(config, newValue);
-    }, [checked, config]);
+    const change = () => {
+        setChecked(!checked);
+        GM_setValue(name, !checked);
+    };
 
     return (
         <div className="bn-setting-row" onClick={change}>
-            <span className="bn-setting-label">{label}</span>
+            <span className="bn-setting-label">{field.label}</span>
             <div className="bn-toggle-switch">
                 <input className="bn-toggle-input" type="checkbox" checked={checked} readOnly/>
                 <span className="bn-toggle-slider"/>
@@ -27,27 +25,27 @@ function Checkbox({config, label}: { config: string, label: string }) {
     );
 }
 
-function TextBox({config, label}: { config: string, label: string }) {
-    const [value, setValue] = useState(GM_getValue<string>(config, ""));
+function TextBox({name, field}: { name: string, field: TextField }) {
+    const [value, setValue] = useState(GM_getValue(name, field.default ?? ""));
 
-    const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const change = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = (e.target as HTMLInputElement).value;
-        GM_setValue(config, newValue);
+        GM_setValue(name, newValue);
         setValue(newValue);
-    }, [config]);
+    };
 
     return (
         <div className="bn-setting-item">
-            <label className="bn-input-label">{label}</label>
+            <label className="bn-input-label">{field.label}</label>
             <input className="bn-input-field" type="text" value={value} onChange={change}/>
         </div>
     );
 }
 
-function NumberBox({config, label, min, max}: { config: string, label: string, min: number, max: number }) {
-    const [value, setValue] = useState(GM_getValue<number>(config, 0));
+function NumberBox({name, field: {label, min, max, default: def}}: { name: string, field: IntField }) {
+    const [value, setValue] = useState(GM_getValue(name, def ?? 0));
 
-    const change = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const change = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = (e.target as HTMLInputElement).value;
 
         if (!newValue) return;
@@ -55,9 +53,9 @@ function NumberBox({config, label, min, max}: { config: string, label: string, m
         const numValue = Number(newValue);
         if (isNaN(numValue) || min > numValue || max < numValue) return;
 
-        GM_setValue(config, numValue);
+        GM_setValue(name, numValue);
         setValue(numValue);
-    }, [config, min, max]);
+    };
 
     return (
         <div className="bn-setting-item">
@@ -67,14 +65,25 @@ function NumberBox({config, label, min, max}: { config: string, label: string, m
     );
 }
 
+function Field({name, field}: { name: string, field: ConfigField }) {
+    switch (field.type) {
+        case "checkbox":
+            return <Checkbox name={name} field={field}/>;
+        case "text":
+            return <TextBox name={name} field={field}/>;
+        case "int":
+            return <NumberBox name={name} field={field}/>;
+    }
+}
+
 function Setting() {
     const [hide, setHide] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [configVersion, setConfigVersion] = useState(0);
 
-    const quit = useCallback(() => location.reload(), []);
+    const configs = registeredModules.flatMap(({module}) => module.config ?? []);
 
-    const backup = useCallback(() => {
+    const backup = () => {
         const data = Object.fromEntries(GM_listValues().map(key => [key, GM_getValue(key)]));
 
         if (!Object.keys(data).length) {
@@ -84,9 +93,9 @@ function Setting() {
 
         GM_setClipboard(JSON.stringify(data, null, 2), "text");
         unsafeWindow.toastr.info("설정이 클립보드에 복사되었습니다.", "설정");
-    }, []);
+    };
 
-    const restore = useCallback((data: string) => {
+    const restore = (data: string) => {
         setShowModal(false);
 
         if (!data.trim()) {
@@ -103,9 +112,9 @@ function Setting() {
         } catch {
             unsafeWindow.toastr.info("잘못된 데이터 형식입니다.", "설정");
         }
-    }, []);
+    };
 
-    const reset = useCallback(() => {
+    const reset = () => {
         if (confirm("모든 설정을 초기화하시겠습니까?")) {
             for (const config of GM_listValues()) {
                 GM_deleteValue(config);
@@ -113,7 +122,7 @@ function Setting() {
             setConfigVersion(v => v + 1);
             unsafeWindow.toastr.info("모든 설정이 초기화되었습니다.", "설정");
         }
-    }, []);
+    };
 
     useEffect(() => appendSide("설정", () => setHide(false)), []);
 
@@ -136,7 +145,7 @@ function Setting() {
                         설정
                         <span className="bn-version-badge">v{GM_info.script.version}</span>
                     </h1>
-                    <button className="bn-close-btn" onClick={quit}>
+                    <button className="bn-close-btn" onClick={() => location.reload()}>
                         <i className="icon ion-close-round"/>
                     </button>
                 </div>
@@ -145,29 +154,18 @@ function Setting() {
                     {configs.length === 0 ? (
                         <div className="bn-empty-message">설정할 항목이 없습니다.</div>
                     ) : (
-                        configs.map((module: Configs) => (
-                            <div className="bn-module-card" key={module.head}>
+                        configs.map(({head, configs}) => (
+                            <div className="bn-module-card" key={head}>
                                 <div className="bn-module-header">
                                     <h2 className="bn-module-title">
                                         <i className="bn-module-icon icon ion-ios-gear"/>
-                                        {module.head}
+                                        {head}
                                     </h2>
                                 </div>
                                 <div className="bn-module-body">
-                                    {Object.entries(module.configs).map(([key, config]) => (
-                                        <div className="bn-setting-item" key={key}>
-                                            {config.type === "checkbox" ? (
-                                                <Checkbox config={key} label={config.label}/>
-                                            ) : config.type === "text" ? (
-                                                <TextBox config={key} label={config.label}/>
-                                            ) : config.type === "int" && (
-                                                <NumberBox
-                                                    config={key}
-                                                    label={config.label}
-                                                    min={config.min}
-                                                    max={config.max}
-                                                />
-                                            )}
+                                    {Object.entries(configs).map(([name, field]) => (
+                                        <div className="bn-setting-item" key={name}>
+                                            <Field name={name} field={field}/>
                                         </div>
                                     ))}
                                 </div>
@@ -203,7 +201,6 @@ export default defineModule({
         const appContainer = document.createElement("div");
         document.body.prepend(appContainer);
 
-        const root = createRoot(appContainer);
-        root.render(<Setting/>);
+        createRoot(appContainer).render(<Setting/>);
     }
 });

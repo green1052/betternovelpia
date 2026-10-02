@@ -1,13 +1,12 @@
 import {GM_getValue, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
 import {useEffect, useLayoutEffect, useRef, useState} from "preact/compat";
 import {createRoot} from "preact/compat/client";
-import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
-import {appendSide} from "../util/AppendSide";
+import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP, novelLoaded} from "../core/site";
+import {appendSide} from "../core/dom";
 import {useLongPress} from "use-long-press";
-import {novelLoaded} from "../util/SiteHook";
-import {NovelContinueBox} from "../util/NovelContinueBox";
-import {RestoreModal, ThemedApp} from "../util/ui";
-import {defineModule, type Settings} from "../util/config";
+import {NovelContinueBox} from "../components/NovelContinueBox";
+import {RestoreModal, ThemedApp} from "../components/ui";
+import {type ConfigFields, defineModule, type Settings} from "../core/module";
 import "../styles/bookmark.css";
 
 const bookmarkConfig = {
@@ -18,9 +17,16 @@ const bookmarkConfig = {
     PreviousBookmark: {label: "이전 회차 북마크 활성화", type: "checkbox", default: false},
     PreviousBookmark_First: {label: "이전 회차 북마크 우선", type: "checkbox", default: false},
     PreviousBookmark_AutoUse: {label: "이전 회차 북마크 자동 이동", type: "checkbox", default: false}
-} as const satisfies Record<string, ConfigType>;
+} as const satisfies ConfigFields;
 
 type BookmarkSettings = Settings<typeof bookmarkConfig>;
+interface Bookmark {
+    scrollTop: number;
+    title: string;
+    chapter: string;
+    url?: string;
+}
+
 type Bookmarks = Record<string, Bookmark>;
 
 const toast = (message: string) => unsafeWindow.toastr.info(message, "북마크");

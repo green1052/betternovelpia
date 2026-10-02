@@ -1,7 +1,6 @@
 import {GM_addStyle} from "$";
-import {EP_LIST, FOOTER_BAR, HEADER_BAR} from "../util/Selectors";
-import {commentLoaded, hookSiteFunction} from "../util/SiteHook";
-import {defineModule} from "../util/config";
+import {commentLoaded, EP_LIST, FOOTER_BAR, HEADER_BAR, hookSiteFunction} from "../core/site";
+import {defineModule} from "../core/module";
 import hideAdCSS from "../styles/hide-ad.css?raw";
 import Cookies from "js-cookie";
 
