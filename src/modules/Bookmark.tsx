@@ -1,12 +1,12 @@
 import {GM_getValue, GM_setClipboard, GM_setValue, unsafeWindow} from "$";
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "preact/compat";
+import {useEffect, useLayoutEffect, useRef, useState} from "preact/compat";
 import {createRoot} from "preact/compat/client";
 import {EP_LIST, HEADER_BAR, NOVEL_BOX, NOVEL_EP} from "../util/Selectors";
 import {appendSide} from "../util/AppendSide";
 import {useLongPress} from "use-long-press";
 import {novelLoaded} from "../util/SiteHook";
 import {NovelContinueBox} from "../util/NovelContinueBox";
-import {ThemedApp} from "../util/ui";
+import {RestoreModal, ThemedApp} from "../util/ui";
 import {defineModule, type Settings} from "../util/config";
 import "../styles/bookmark.css";
 
@@ -21,17 +21,35 @@ const bookmarkConfig = {
 } as const satisfies Record<string, ConfigType>;
 
 type BookmarkSettings = Settings<typeof bookmarkConfig>;
+type Bookmarks = Record<string, Bookmark>;
+
+const toast = (message: string) => unsafeWindow.toastr.info(message, "북마크");
 
 function sortBookmark(a: [string, Bookmark], b: [string, Bookmark]) {
     return a[1].title < b[1].title ? -1 : a[1].title > b[1].title ? 1 : 0;
 }
 
-function BookmarkList_({settings}: { settings: BookmarkSettings }) {
-    const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
+function omit(bookmarks: Bookmarks, url: string): Bookmarks {
+    const {[url]: _, ...rest} = bookmarks;
+    return rest;
+}
+
+function useBookmarks() {
+    const [bookmarks, setBookmarks] = useState<Bookmarks>(GM_getValue("bookmarks", {}));
+
+    const save = (next: Bookmarks) => {
+        GM_setValue("bookmarks", next);
+        setBookmarks(next);
+    };
+
+    return [bookmarks, save] as const;
+}
+
+function BookmarkList({settings}: { settings: BookmarkSettings }) {
+    const [bookmarks, save] = useBookmarks();
     const [previousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
     const [hide, setHide] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState("");
     const [scrollTop, setScrollTop] = useState(0);
 
     const bookmarkList = useRef<HTMLUListElement | null>(null);
@@ -43,122 +61,72 @@ function BookmarkList_({settings}: { settings: BookmarkSettings }) {
 
     useEffect(() => appendSide("북마크", () => setHide(false)), []);
 
-    const deleteBookmark = useCallback((url: string) => {
+    const keepScroll = () => {
         if (bookmarkList.current)
-            setScrollTop(bookmarkList.current.scrollTop ?? 0);
+            setScrollTop(bookmarkList.current.scrollTop);
+    };
 
-        const bookmarks1 = {...bookmarks};
-        delete bookmarks1[url];
+    const deleteBookmark = (url: string) => {
+        keepScroll();
+        save(omit(bookmarks, url));
+        toast("삭제되었습니다.");
+    };
 
-        GM_setValue("bookmarks", bookmarks1);
-        setBookmarks(bookmarks1);
-
-        unsafeWindow.toastr.info("삭제되었습니다.", "북마크");
-    }, [bookmarks]);
-
-    const backup = useCallback(() => {
+    const backup = () => {
         if (!Object.keys(bookmarks).length) return;
 
         GM_setClipboard(JSON.stringify(bookmarks), "text");
+        toast("클립보드로 복사되었습니다.");
+    };
 
-        unsafeWindow.toastr.info("클립보드로 복사되었습니다.", "북마크");
-    }, [bookmarks]);
+    const restore = (data: string) => {
+        setShowModal(false);
 
-    const restore = useCallback(() => {
         if (!data) {
-            unsafeWindow.toastr.info("데이터가 비어있습니다.", "북마크");
-            setShowModal(false);
+            toast("데이터가 비어있습니다.");
             return;
         }
 
         try {
-            const json = JSON.parse(data);
-            GM_setValue("bookmarks", json);
-            setBookmarks(json);
-            unsafeWindow.toastr.info("복원되었습니다.", "북마크");
-        } catch (e) {
-            unsafeWindow.toastr.info("잘못된 데이터 형식입니다.", "북마크");
+            save(JSON.parse(data));
+            toast("복원되었습니다.");
+        } catch {
+            toast("잘못된 데이터 형식입니다.");
         }
+    };
 
-        setShowModal(false);
-        setData("");
-    }, [data]);
-
-    const clean = useCallback(() => {
+    // 같은 소설은 정렬 순서상 마지막 북마크만 남긴다
+    const clean = () => {
         if (!Object.keys(bookmarks).length) return;
 
-        if (bookmarkList.current)
-            setScrollTop(bookmarkList.current.scrollTop ?? 0);
+        keepScroll();
 
-        const bookmarks1 = {...bookmarks};
+        const latest = new Map(Object.entries(bookmarks).sort(sortBookmark).map(entry => [entry[1].title, entry]));
+        save(Object.fromEntries(latest.values()));
 
-        const sorted: Record<string, [string, Bookmark][]> = {};
+        toast("정리되었습니다.");
+    };
 
-        for (const [key, value] of Object.entries(bookmarks1).sort(sortBookmark)) {
-            const title = value.title;
-
-            sorted[title] ??= [];
-            sorted[title].push([key, value]);
-        }
-
-        const result: Record<string, Bookmark> = {};
-
-        for (const [, value] of Object.entries(sorted)) {
-            const last = value[value.length - 1];
-            if (last) {
-                const [url, bookmark] = last;
-                result[url] = bookmark;
-            }
-        }
-
-        GM_setValue("bookmarks", result);
-        setBookmarks(result);
-
-        unsafeWindow.toastr.info("정리되었습니다.", "북마크");
-    }, [bookmarks]);
-
-    const reset = useCallback(() => {
+    const reset = () => {
         if (confirm("정말로 모든 북마크를 삭제하시겠습니까?")) {
-            GM_setValue("bookmarks", {});
-            setBookmarks({});
-            unsafeWindow.toastr.info("모든 북마크가 삭제되었습니다.", "북마크");
+            save({});
+            toast("모든 북마크가 삭제되었습니다.");
         }
-    }, []);
+    };
 
-    const quit = useCallback(() => setHide(true), []);
-
-    const bookmarkCount = Object.entries(bookmarks).length;
+    const entries = settings.Bookmark_Sort ? Object.entries(bookmarks).sort(sortBookmark) : Object.entries(bookmarks);
 
     return (
         <ThemedApp>
             <div className={`bn-app ${hide ? "bn-app--hidden" : ""}`} style={{zIndex: 99999}}>
                 {showModal && (
-                    <div className="bn-modal bn-modal--center">
-                        <div className="bn-modal-content bn-modal-content--center">
-                            <h3 className="bn-modal-title">북마크 복원</h3>
-                            <textarea
-                                className="bn-modal-input"
-                                placeholder="백업된 북마크 데이터를 붙여넣으세요"
-                                value={data}
-                                onChange={(e) => setData((e.target as HTMLTextAreaElement).value)}
-                                autoFocus
-                            />
-                            <div className="bn-modal-actions">
-                                <button
-                                    className="bn-btn bn-btn--outline"
-                                    onClick={() => {
-                                        setShowModal(false);
-                                        setData("");
-                                    }}
-                                >
-                                    취소
-                                </button>
-                                <button className="bn-btn bn-btn--primary" onClick={restore}>
-                                    복원
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <RestoreModal
+                        title="북마크 복원"
+                        placeholder="백업된 북마크 데이터를 붙여넣으세요"
+                        position="center"
+                        onClose={() => setShowModal(false)}
+                        onRestore={restore}
+                    />
                 )}
 
                 <div className="bn-app-bar">
@@ -166,7 +134,7 @@ function BookmarkList_({settings}: { settings: BookmarkSettings }) {
                         <i className="icon ion-bookmark" style={{marginRight: 8, color: "#007AFF"}}/>
                         북마크
                     </h1>
-                    <button className="bn-close-btn" onClick={quit}>
+                    <button className="bn-close-btn" onClick={() => setHide(true)}>
                         <i className="icon ion-close-round"/>
                     </button>
                 </div>
@@ -176,21 +144,18 @@ function BookmarkList_({settings}: { settings: BookmarkSettings }) {
                         <div className="bn-bookmark-header">
                             <h2 className="bn-bookmark-title">
                                 북마크 목록
-                                {bookmarkCount > 0 && <span className="bn-bookmark-count">({bookmarkCount})</span>}
+                                {entries.length > 0 && <span className="bn-bookmark-count">({entries.length})</span>}
                             </h2>
                         </div>
 
-                        {bookmarkCount === 0 ? (
+                        {entries.length === 0 ? (
                             <div className="bn-empty-state">
                                 <i className="bn-empty-icon icon ion-bookmark"/>
                                 <p className="bn-empty-text">저장된 북마크가 없습니다</p>
                             </div>
                         ) : (
                             <ul className="bn-bookmark-list" ref={bookmarkList}>
-                                {(settings.Bookmark_Sort
-                                        ? Object.entries(bookmarks).sort(sortBookmark)
-                                        : Object.entries(bookmarks)
-                                ).map(([key, value]) => (
+                                {entries.map(([key, value]) => (
                                     <li className="bn-bookmark-item" key={key}>
                                         <div className="bn-bookmark-item-content">
                                             <div className="bn-bookmark-chapter">{value.chapter}</div>
@@ -235,9 +200,9 @@ function BookmarkList_({settings}: { settings: BookmarkSettings }) {
                             <i className="bn-prev-bookmark-icon icon ion-ios-arrow-back"/>
                             <div className="bn-prev-bookmark-info">
                                 <div className="bn-prev-bookmark-label">이전 소설</div>
-                                <a className="bn-prev-bookmark-link" href={previousBookmark?.url ?? "#"}>
-                                    {previousBookmark?.title && previousBookmark?.chapter
-                                        ? `${previousBookmark?.chapter} - ${previousBookmark?.title}`
+                                <a className="bn-prev-bookmark-link" href={previousBookmark.url ?? "#"}>
+                                    {previousBookmark.title && previousBookmark.chapter
+                                        ? `${previousBookmark.chapter} - ${previousBookmark.title}`
                                         : "없음"
                                     }
                                 </a>
@@ -251,14 +216,14 @@ function BookmarkList_({settings}: { settings: BookmarkSettings }) {
 }
 
 function Novel() {
+    const bookmarks = GM_getValue<Bookmarks>("bookmarks", {});
+
     useEffect(() => {
         function addBookmark() {
             for (const element of document.querySelectorAll(`${EP_LIST} > table > tbody > tr td:nth-child(2)`)) {
                 const url = /'\/viewer\/(\d*)'/.exec(element.getAttribute("onclick") ?? "")?.[1];
 
-                if (!url) continue;
-
-                if (!Object.keys(bookmarks).find(key => key.endsWith(url))) continue;
+                if (!url || !Object.keys(bookmarks).some(key => key.endsWith(url))) continue;
 
                 const bookmarkIcon = element.querySelector<HTMLElement>("b > .ion-bookmark");
                 if (bookmarkIcon) bookmarkIcon.style.display = "";
@@ -267,13 +232,9 @@ function Novel() {
 
         addBookmark();
 
-        const observer = new MutationObserver(addBookmark);
-
         const epList = document.querySelector(EP_LIST);
-        if (epList) observer.observe(epList, {childList: true});
+        if (epList) new MutationObserver(addBookmark).observe(epList, {childList: true});
     }, []);
-
-    const bookmarks = GM_getValue<Record<string, Bookmark>>("bookmarks", {});
 
     const novelTitle = (document.title.split("-")[2] ?? "").trimStart();
     const bookmark = Object.entries(bookmarks).findLast(([, value]) => value.title === novelTitle);
@@ -281,44 +242,32 @@ function Novel() {
 
     return (
         <>
-            {
-                bookmark
-                    ? <NovelContinueBox url={bookmark[0]} chapter={bookmark[1].chapter} isBookmark={true}/>
-                    : null
-            }
-            {
-                previousBookmark && previousBookmark.title === novelTitle
-                    ? <NovelContinueBox url={previousBookmark.url ?? ""} chapter={previousBookmark.chapter}/>
-                    : null
-            }
+            {bookmark && <NovelContinueBox url={bookmark[0]} chapter={bookmark[1].chapter} isBookmark={true}/>}
+            {previousBookmark?.title === novelTitle && <NovelContinueBox url={previousBookmark.url ?? ""} chapter={previousBookmark.chapter}/>}
         </>
     );
 }
 
 function Viewer({settings}: { settings: BookmarkSettings }) {
-    const [bookmarks, setBookmarks] = useState<Record<string, Bookmark>>(GM_getValue("bookmarks", {}));
-    const [previousBookmark, setPreviousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
+    const [bookmarks, save] = useBookmarks();
+    const [previousBookmark] = useState<Bookmark | undefined>(GM_getValue("previousBookmark", undefined));
 
+    const url = location.href;
     const chapter = document.querySelector(NOVEL_EP)?.textContent?.trim() ?? "EP.알 수 없음";
     const title = (document.title.split("-")[2] ?? "알 수 없음").trimStart();
 
     let scrollTop = -1;
     let askAlert = true;
 
-    if (bookmarks.hasOwnProperty(location.href) && (!settings.PreviousBookmark_First && previousBookmark?.url !== location.href)) {
-        scrollTop = bookmarks[location.href]?.scrollTop ?? -1;
+    if (Object.hasOwn(bookmarks, url) && !settings.PreviousBookmark_First && previousBookmark?.url !== url) {
+        scrollTop = bookmarks[url]?.scrollTop ?? -1;
 
         if (settings.Bookmark_AutoUse)
             askAlert = false;
 
-        if (settings.Bookmark_OneUse) {
-            const bookmarks1 = {...bookmarks};
-            delete bookmarks1[location.href];
-
-            setBookmarks(bookmarks1);
-            GM_setValue("bookmarks", bookmarks1);
-        }
-    } else if (previousBookmark?.url === location.href) {
+        if (settings.Bookmark_OneUse)
+            save(omit(bookmarks, url));
+    } else if (previousBookmark?.url === url) {
         scrollTop = previousBookmark.scrollTop;
 
         if (settings.PreviousBookmark_AutoUse)
@@ -347,63 +296,36 @@ function Viewer({settings}: { settings: BookmarkSettings }) {
         }
 
         if (settings.PreviousBookmark) {
-            const url = location.href;
-
             window.addEventListener("beforeunload", () => {
-                scrollTop = document.querySelector(NOVEL_BOX)?.scrollTop ?? -1;
+                const scrollTop = document.querySelector(NOVEL_BOX)?.scrollTop;
+                if (scrollTop === undefined) return;
 
-                if (scrollTop === -1)
-                    return;
-
-                const previousBookmark1 = {url, scrollTop, title, chapter};
-
-                setPreviousBookmark(previousBookmark1);
-                GM_setValue("previousBookmark", previousBookmark1);
+                GM_setValue("previousBookmark", {url, scrollTop, title, chapter});
             });
         }
     }, []);
 
-    const click = useCallback(() => {
-        if (location.hash !== "")
-            return;
+    const click = () => {
+        if (location.hash !== "") return;
 
         const scrollTop = document.querySelector(NOVEL_BOX)?.scrollTop;
+        if (scrollTop === undefined) return;
 
-        if (scrollTop === undefined)
-            return;
-
-        const bookmark1 = {...bookmarks};
-
-        bookmark1[location.href] = {scrollTop, title, chapter};
-
-        GM_setValue("bookmarks", bookmark1);
-        setBookmarks(bookmark1);
-
-        unsafeWindow.toastr.info("저장되었습니다.", "북마크");
-    }, [bookmarks]);
+        save({...bookmarks, [url]: {scrollTop, title, chapter}});
+        toast("저장되었습니다.");
+    };
 
     const longClick = useLongPress(() => {
-        if (location.hash !== "")
-            return;
+        if (location.hash !== "" || !Object.hasOwn(bookmarks, url)) return;
 
-        const bookmark1 = {...bookmarks};
-
-        if (!bookmark1.hasOwnProperty(location.href)) return;
-
-        delete bookmark1[location.href];
-
-        GM_setValue("bookmarks", bookmark1);
-        setBookmarks(bookmark1);
-
-        unsafeWindow.toastr.info("삭제되었습니다.", "북마크");
+        save(omit(bookmarks, url));
+        toast("삭제되었습니다.");
     });
-
-    const isActive = bookmarks.hasOwnProperty(location.href);
 
     return (
         <i
             className="bn-viewer-bookmark-icon icon ion-bookmark"
-            data-active={isActive ? "true" : undefined}
+            data-active={Object.hasOwn(bookmarks, url) ? "true" : undefined}
             onClick={click}
             {...longClick}
         />
@@ -416,42 +338,32 @@ export default defineModule({
         if (!settings.Bookmark && !settings.PreviousBookmark) return;
 
         if (localStorage.getItem("viewer_paging") === "1") {
-            unsafeWindow.toastr.info("페이지 방식은 지원하지 않습니다.", "북마크");
+            toast("페이지 방식은 지원하지 않습니다.");
             return;
         }
 
         if (/^\/novel\//.test(location.pathname)) {
-            const tr = document.querySelector("div:not(.mobile_hidden) > .info-graybox");
+            const infoBox = document.querySelector("div:not(.mobile_hidden) > .info-graybox");
+            if (!infoBox) return;
 
-            if (!tr) return;
-
-            const appContainer = document.createElement("div");
-            tr.after(appContainer);
-
-            const root = createRoot(appContainer);
-            root.render(<Novel/>);
+            const container = document.createElement("div");
+            infoBox.after(container);
+            createRoot(container).render(<Novel/>);
         }
 
         if (/^\/viewer\//.test(location.pathname)) {
-            const appContainer = document.createElement("div");
-            appContainer.style.width = "20px";
-            appContainer.style.height = "20px";
+            const container = document.createElement("div");
+            container.style.width = "20px";
+            container.style.height = "20px";
 
-            const menuTopRight = document.querySelector(`${HEADER_BAR} .menu-top-right`);
-            if (menuTopRight && menuTopRight.children[2]) {
-                menuTopRight.children[2].before(appContainer);
-            }
+            document.querySelector(`${HEADER_BAR} .menu-top-right`)?.children[2]?.before(container);
 
-            const root = createRoot(appContainer);
-            root.render(<Viewer settings={settings}/>);
-        }
+            createRoot(container).render(<Viewer settings={settings}/>);
+        } else {
+            const container = document.createElement("div");
+            document.body.prepend(container);
 
-        if (!/^\/viewer\//.test(location.pathname)) {
-            const appContainer = document.createElement("div");
-            document.body.prepend(appContainer);
-
-            const root = createRoot(appContainer);
-            root.render(<BookmarkList_ settings={settings}/>);
+            createRoot(container).render(<BookmarkList settings={settings}/>);
         }
     }
 });
