@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "js-cookie": "^3.0.8",
-        "ky": "^2.1.0",
+        "ky": "^2.2.0",
         "preact": "^11.0.1",
         "use-long-press": "^3.3.0"
     },
