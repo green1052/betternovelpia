@@ -11,7 +11,7 @@
     "dependencies": {
         "js-cookie": "^3.0.8",
         "ky": "^2.2.0",
-        "preact": "^11.0.2",
+        "preact": "^11.1.0",
         "use-long-press": "^3.3.0"
     },
     "devDependencies": {
